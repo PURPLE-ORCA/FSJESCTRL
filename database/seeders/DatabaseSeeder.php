@@ -17,40 +17,64 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
-        DB::table('roles')->insert([
-            ['name' => 'admin', 'description' => 'Administrator with full access'],
-            ['name' => 'editor', 'description' => 'Editor with limited access'],
-            ['name' => 'user', 'description' => 'Regular user with basic access'],
-        ]);
+        // Create roles
+        $roles = [
+            ['name' => 'general_manager', 'description' => 'General Manager with all privileges'],
+            ['name' => 'magazine_manager', 'description' => 'Manager overseeing the magazine operations'],
+            ['name' => 'magazine_employee', 'description' => 'Employee working in the magazine'],
+            ['name' => 'it_manager', 'description' => 'IT Manager overseeing IT operations'],
+            ['name' => 'it_employee', 'description' => 'Employee working in IT services'],
+        ];
+
+        foreach ($roles as $role) {
+            Role::create($role);
+        }
 
         // Seed Services Table
         DB::table('services')->insert([
             ['name' => 'Cleaning Service', 'description' => 'Professional cleaning services', 'type' => 'service'],
-            ['name' => 'Magazine A', 'description' => 'Monthly magazine publication', 'type' => 'magazine'],
+            ['name' => 'IT service', 'description' => 'Professional techniciens services', 'type' => 'service'],
+            ['name' => 'Magazine A', 'description' => 'Magazine A services', 'type' => 'magazine'],
             ['name' => 'Maintenance Service', 'description' => 'Building maintenance services', 'type' => 'service'],
+            ['name' => 'Administration service', 'description' => 'Administrative affairs service', 'type' => 'service'],
+            ['name' => 'HR service', 'description' => 'Human resources service', 'type' => 'service'],
         ]);
 
         // Seed Users Table
         DB::table('users')->insert([
             [
                 'name' => 'Admin User',
-                'email' => 'admin@example.com',
+                'email' => 'admin@umpd.com',
                 'password' => Hash::make('password'),
                 'role_id' => 1, // admin role
                 'service_id' => null,
             ],
             [
-                'name' => 'Editor User',
-                'email' => 'editor@example.com',
+                'name' => 'user 1',
+                'email' => 'user1@umpd.com',
                 'password' => Hash::make('password'),
                 'role_id' => 2, // editor role
                 'service_id' => 1, // Cleaning Service
             ],
             [
-                'name' => 'Regular User',
-                'email' => 'user@example.com',
+                'name' => 'user 2',
+                'email' => 'user2@umpd.com',
                 'password' => Hash::make('password'),
                 'role_id' => 3, // user role
+                'service_id' => 2, // Magazine A
+            ],
+            [
+                'name' => 'user 3',
+                'email' => 'user3@umpd.com',
+                'password' => Hash::make('password'),
+                'role_id' => 4, // user role
+                'service_id' => 2, // Magazine A
+            ],
+            [
+                'name' => 'user 4',
+                'email' => 'user5@umpd.com',
+                'password' => Hash::make('password'),
+                'role_id' => 5, // user role
                 'service_id' => 2, // Magazine A
             ],
         ]);
