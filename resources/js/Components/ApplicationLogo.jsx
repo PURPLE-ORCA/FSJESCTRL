@@ -3,7 +3,7 @@ import { Link } from "@inertiajs/react";
 export default function ApplicationLogo() {
     return (
         <Link>
-            <img src="img/logo/umpoujdaLogo.png" alt="University Mohammed Premier" />
+            <img src="img/umpoujdaLogo.png" alt="University Mohammed Premier" />
         </Link>
     );
 }
