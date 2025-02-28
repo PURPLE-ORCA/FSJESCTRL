@@ -40,11 +40,7 @@ const Navbar = () => {
                             >
                                 Dashboard
                             </NavLink>
-                            <NavLink
-                                // href={route("dashboard")}
-                                // active={route().current("dashboard")}
-                                className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700 dark:text-gray-300 dark:hover:text-white"
-                            >
+                            <NavLink className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700 dark:text-gray-300 dark:hover:text-white">
                                 <DropdownMenu>
                                     <DropdownMenuTrigger>
                                         Products
@@ -54,7 +50,11 @@ const Navbar = () => {
                                             Add a product
                                         </DropdownMenuItem>
                                         <DropdownMenuItem>
-                                            products list
+                                            <Link
+                                                href={route("products.index")}
+                                            >
+                                                All products
+                                            </Link>
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>

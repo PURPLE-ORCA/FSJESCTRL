@@ -82,29 +82,157 @@ class DatabaseSeeder extends Seeder
         // Seed Products Table
         DB::table('products')->insert([
             [
-                'name' => 'Mop',
-                'serial_number' => 'SN-001',
-                'Supplier' => 'Supplier A',
+                'name' => 'Laptop - Dell XPS 15',
+                'serial_number' => 'LAP-001',
+                'Supplier' => 'Dell Inc.',
+                'quantity' => 20,
+                'price' => 1899.99,
+                'served_to' => 3, // IT Department
+            ],
+            [
+                'name' => 'Mechanical Keyboard - Keychron K6',
+                'serial_number' => 'KB-001',
+                'Supplier' => 'Keychron',
                 'quantity' => 50,
-                'price' => 15.99,
-                'served_to' => 1, // Cleaning Service
+                'price' => 89.99,
+                'served_to' => 3, // IT Department
             ],
             [
-                'name' => 'Broom',
-                'serial_number' => 'SN-002',
-                'Supplier' => 'Supplier B',
+                'name' => 'Wireless Mouse - Logitech MX Master 3',
+                'serial_number' => 'MOU-001',
+                'Supplier' => 'Logitech',
+                'quantity' => 40,
+                'price' => 99.99,
+                'served_to' => 3, // IT Department
+            ],
+            [
+                'name' => 'Monitor - LG UltraFine 27" 4K',
+                'serial_number' => 'MON-001',
+                'Supplier' => 'LG Electronics',
+                'quantity' => 25,
+                'price' => 549.99,
+                'served_to' => 3, // IT Department
+            ],
+            [
+                'name' => 'External SSD - Samsung T7 1TB',
+                'serial_number' => 'SSD-001',
+                'Supplier' => 'Samsung',
+                'quantity' => 35,
+                'price' => 129.99,
+                'served_to' => 3, // IT Department
+            ],
+            [
+                'name' => 'Webcam - Logitech C920',
+                'serial_number' => 'CAM-001',
+                'Supplier' => 'Logitech',
+                'quantity' => 45,
+                'price' => 79.99,
+                'served_to' => 3, // IT Department
+            ],
+            [
+                'name' => 'Router - TP-Link AX6000',
+                'serial_number' => 'ROU-001',
+                'Supplier' => 'TP-Link',
+                'quantity' => 15,
+                'price' => 249.99,
+                'served_to' => 3, // IT Department
+            ],
+            [
+                'name' => 'Headphones - Sony WH-1000XM4',
+                'serial_number' => 'HP-001',
+                'Supplier' => 'Sony',
                 'quantity' => 30,
-                'price' => 9.99,
-                'served_to' => 1, // Cleaning Service
+                'price' => 349.99,
+                'served_to' => 3, // IT Department
             ],
             [
-                'name' => 'Magazine Issue 1',
-                'serial_number' => 'ISSN-001',
-                'Supplier' => 'Publisher X',
-                'quantity' => 100,
-                'price' => 5.99,
-                'served_to' => 2, // Magazine A
+                'name' => 'Graphics Tablet - Wacom Intuos Pro',
+                'serial_number' => 'TAB-001',
+                'Supplier' => 'Wacom',
+                'quantity' => 20,
+                'price' => 379.99,
+                'served_to' => 3, // IT Department
             ],
+            [
+                'name' => 'Docking Station - CalDigit TS4',
+                'serial_number' => 'DOC-001',
+                'Supplier' => 'CalDigit',
+                'quantity' => 18,
+                'price' => 349.99,
+                'served_to' => 3, // IT Department
+            ],
+            [
+                'name' => 'NAS Storage - Synology DS920+',
+                'serial_number' => 'NAS-001',
+                'Supplier' => 'Synology',
+                'quantity' => 10,
+                'price' => 549.99,
+                'served_to' => 3, // IT Department
+            ],
+            [
+                'name' => 'USB-C Hub - Anker PowerExpand 8-in-1',
+                'serial_number' => 'HUB-001',
+                'Supplier' => 'Anker',
+                'quantity' => 50,
+                'price' => 79.99,
+                'served_to' => 3, // IT Department
+            ],
+            [
+                'name' => 'Smartphone - iPhone 14 Pro',
+                'serial_number' => 'SP-001',
+                'Supplier' => 'Apple',
+                'quantity' => 15,
+                'price' => 1099.99,
+                'served_to' => 3, // IT Department
+            ],
+            [
+                'name' => 'Portable Projector - Anker Nebula Capsule II',
+                'serial_number' => 'PROJ-001',
+                'Supplier' => 'Anker',
+                'quantity' => 10,
+                'price' => 469.99,
+                'served_to' => 3, // IT Department
+            ],
+            [
+                'name' => 'Smartwatch - Garmin Fenix 7',
+                'serial_number' => 'SW-001',
+                'Supplier' => 'Garmin',
+                'quantity' => 25,
+                'price' => 699.99,
+                'served_to' => 3, // IT Department
+            ],
+            [
+                'name' => 'Microphone - Shure SM7B',
+                'serial_number' => 'MIC-001',
+                'Supplier' => 'Shure',
+                'quantity' => 12,
+                'price' => 399.99,
+                'served_to' => 3, // IT Department
+            ],
+            [
+                'name' => 'Server Rack - StarTech 42U',
+                'serial_number' => 'SRV-001',
+                'Supplier' => 'StarTech',
+                'quantity' => 5,
+                'price' => 1299.99,
+                'served_to' => 3, // IT Department
+            ],
+            [
+                'name' => 'Wireless Charger - Belkin BoostCharge',
+                'serial_number' => 'WC-001',
+                'Supplier' => 'Belkin',
+                'quantity' => 40,
+                'price' => 49.99,
+                'served_to' => 3, // IT Department
+            ],
+            [
+                'name' => 'Smart Speaker - Amazon Echo Dot (5th Gen)',
+                'serial_number' => 'SPK-001',
+                'Supplier' => 'Amazon',
+                'quantity' => 30,
+                'price' => 49.99,
+                'served_to' => 3, // IT Department
+            ]
         ]);
 
         // Seed Movements Table

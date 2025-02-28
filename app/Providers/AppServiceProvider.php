@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 
@@ -44,6 +45,9 @@ class AppServiceProvider extends ServiceProvider
             return $user->hasRole('it_employee');
         });
 
+Gate::define('can_manage_products', function ($user) {
+    return in_array($user->role?->name, ['general_manager', 'magazine_manager', 'magazine_employee']);
+});
         // Define Gates for role combinations (e.g. user with multiple roles)
         // Gate::define('is_magazine_staff', function ($user) {
         //     return $user->hasAnyRoles(['magazine_manager', 'magazine_employee']);

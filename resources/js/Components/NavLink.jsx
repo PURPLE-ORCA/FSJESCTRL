@@ -13,7 +13,7 @@ export default function NavLink({
                 "relative inline-flex items-center px-3 py-2 text-sm font-medium transition-all duration-200 ease-in-out focus:outline-none " +
                 (active
                     ? "text-main dark:text-main"
-                    : "text-gray-600 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400") +
+                    : "text-gray-600 hover:text-main dark:text-gray-400 dark:hover:text-main") +
                 " " +
                 className
             }

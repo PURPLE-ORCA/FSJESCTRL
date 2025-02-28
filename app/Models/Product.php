@@ -21,6 +21,11 @@ class Product extends Model
     /**
      * Get stock movements for this product.
      */
+
+     public function service()
+{
+    return $this->belongsTo(Service::class, 'served_to');
+}
     public function stockMovements()
     {
         return $this->hasMany(Movement::class);

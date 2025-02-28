@@ -74,8 +74,8 @@ class User extends Authenticatable
         return $this->hasMany(Notification::class);
     }
     
-    public function hasRole(string $roleName): bool
-    {
-        return $this->role->name === $roleName;
-    }
+public function hasRole($roleName)
+{
+    return $this->role?->name === $roleName;
+}
 }
