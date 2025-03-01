@@ -45,7 +45,7 @@ if (!canManageProducts) {
         { accessorKey: "id", header: "ID" },
         { accessorKey: "name", header: "Name" },
         { accessorKey: "serial_number", header: "Serial Number" },
-        { accessorKey: "Supplier", header: "Supplier" },
+        { accessorKey: "supplier", header: "Supplier" },
         { accessorKey: "quantity", header: "Quantity" },
         { accessorKey: "price", header: "Price" },
         {
@@ -70,7 +70,7 @@ if (!canManageProducts) {
     return (
         <Layout>
             <div className="p-6">
-                <h1 className="text-2xl font-bold mb-4">Product List</h1>
+                <h1 className="text-4xl font-bold mb-4">Product List</h1>
 
                 {/* Search and Filters */}
                 <form

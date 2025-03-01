@@ -84,7 +84,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Laptop - Dell XPS 15',
                 'serial_number' => 'LAP-001',
-                'Supplier' => 'Dell Inc.',
+                'supplier' => 'Dell Inc.',
                 'quantity' => 20,
                 'price' => 1899.99,
                 'served_to' => 3, // IT Department
@@ -92,7 +92,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Mechanical Keyboard - Keychron K6',
                 'serial_number' => 'KB-001',
-                'Supplier' => 'Keychron',
+                'supplier' => 'Keychron',
                 'quantity' => 50,
                 'price' => 89.99,
                 'served_to' => 3, // IT Department
@@ -100,7 +100,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Wireless Mouse - Logitech MX Master 3',
                 'serial_number' => 'MOU-001',
-                'Supplier' => 'Logitech',
+                'supplier' => 'Logitech',
                 'quantity' => 40,
                 'price' => 99.99,
                 'served_to' => 3, // IT Department
@@ -108,7 +108,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Monitor - LG UltraFine 27" 4K',
                 'serial_number' => 'MON-001',
-                'Supplier' => 'LG Electronics',
+                'supplier' => 'LG Electronics',
                 'quantity' => 25,
                 'price' => 549.99,
                 'served_to' => 3, // IT Department
@@ -116,7 +116,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'External SSD - Samsung T7 1TB',
                 'serial_number' => 'SSD-001',
-                'Supplier' => 'Samsung',
+                'supplier' => 'Samsung',
                 'quantity' => 35,
                 'price' => 129.99,
                 'served_to' => 3, // IT Department
@@ -124,7 +124,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Webcam - Logitech C920',
                 'serial_number' => 'CAM-001',
-                'Supplier' => 'Logitech',
+                'supplier' => 'Logitech',
                 'quantity' => 45,
                 'price' => 79.99,
                 'served_to' => 3, // IT Department
@@ -132,7 +132,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Router - TP-Link AX6000',
                 'serial_number' => 'ROU-001',
-                'Supplier' => 'TP-Link',
+                'supplier' => 'TP-Link',
                 'quantity' => 15,
                 'price' => 249.99,
                 'served_to' => 3, // IT Department
@@ -140,7 +140,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Headphones - Sony WH-1000XM4',
                 'serial_number' => 'HP-001',
-                'Supplier' => 'Sony',
+                'supplier' => 'Sony',
                 'quantity' => 30,
                 'price' => 349.99,
                 'served_to' => 3, // IT Department
@@ -148,7 +148,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Graphics Tablet - Wacom Intuos Pro',
                 'serial_number' => 'TAB-001',
-                'Supplier' => 'Wacom',
+                'supplier' => 'Wacom',
                 'quantity' => 20,
                 'price' => 379.99,
                 'served_to' => 3, // IT Department
@@ -156,7 +156,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Docking Station - CalDigit TS4',
                 'serial_number' => 'DOC-001',
-                'Supplier' => 'CalDigit',
+                'supplier' => 'CalDigit',
                 'quantity' => 18,
                 'price' => 349.99,
                 'served_to' => 3, // IT Department
@@ -164,7 +164,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'NAS Storage - Synology DS920+',
                 'serial_number' => 'NAS-001',
-                'Supplier' => 'Synology',
+                'supplier' => 'Synology',
                 'quantity' => 10,
                 'price' => 549.99,
                 'served_to' => 3, // IT Department
@@ -172,7 +172,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'USB-C Hub - Anker PowerExpand 8-in-1',
                 'serial_number' => 'HUB-001',
-                'Supplier' => 'Anker',
+                'supplier' => 'Anker',
                 'quantity' => 50,
                 'price' => 79.99,
                 'served_to' => 3, // IT Department
@@ -180,7 +180,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Smartphone - iPhone 14 Pro',
                 'serial_number' => 'SP-001',
-                'Supplier' => 'Apple',
+                'supplier' => 'Apple',
                 'quantity' => 15,
                 'price' => 1099.99,
                 'served_to' => 3, // IT Department
@@ -188,7 +188,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Portable Projector - Anker Nebula Capsule II',
                 'serial_number' => 'PROJ-001',
-                'Supplier' => 'Anker',
+                'supplier' => 'Anker',
                 'quantity' => 10,
                 'price' => 469.99,
                 'served_to' => 3, // IT Department
@@ -196,7 +196,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Smartwatch - Garmin Fenix 7',
                 'serial_number' => 'SW-001',
-                'Supplier' => 'Garmin',
+                'supplier' => 'Garmin',
                 'quantity' => 25,
                 'price' => 699.99,
                 'served_to' => 3, // IT Department
@@ -204,7 +204,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Microphone - Shure SM7B',
                 'serial_number' => 'MIC-001',
-                'Supplier' => 'Shure',
+                'supplier' => 'Shure',
                 'quantity' => 12,
                 'price' => 399.99,
                 'served_to' => 3, // IT Department
@@ -212,7 +212,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Server Rack - StarTech 42U',
                 'serial_number' => 'SRV-001',
-                'Supplier' => 'StarTech',
+                'supplier' => 'StarTech',
                 'quantity' => 5,
                 'price' => 1299.99,
                 'served_to' => 3, // IT Department
@@ -220,7 +220,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Wireless Charger - Belkin BoostCharge',
                 'serial_number' => 'WC-001',
-                'Supplier' => 'Belkin',
+                'supplier' => 'Belkin',
                 'quantity' => 40,
                 'price' => 49.99,
                 'served_to' => 3, // IT Department
@@ -228,7 +228,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Smart Speaker - Amazon Echo Dot (5th Gen)',
                 'serial_number' => 'SPK-001',
-                'Supplier' => 'Amazon',
+                'supplier' => 'Amazon',
                 'quantity' => 30,
                 'price' => 49.99,
                 'served_to' => 3, // IT Department

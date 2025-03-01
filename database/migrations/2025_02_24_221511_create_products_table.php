@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('name', 150);
             $table->string('serial_number', 100)->unique();
-            $table->string('Supplier', 150);
+            $table->string('supplier', 150);
             $table->unsignedInteger('quantity')->default(0);
             $table->decimal('price', 10, 2);
-            $table->foreignId('served_to')->constrained('services')->nullable();
+            $table->foreignId('served_to')->nullable()->constrained('services');
             $table->timestamps();
         });
     }

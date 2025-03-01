@@ -46,8 +46,12 @@ const Navbar = () => {
                                         Products
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent>
-                                        <DropdownMenuItem>
-                                            Add a product
+                                        <DropdownMenuItem asChild>
+                                            <Link
+                                                href={route("products.create")}
+                                            >
+                                                Add Product
+                                            </Link>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem>
                                             <Link

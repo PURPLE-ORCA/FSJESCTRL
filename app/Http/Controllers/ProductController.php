@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -17,30 +19,13 @@ class ProductController extends Controller
 public function index(Request $request)
 {
     // Pagination, Search, and Sorting
-    $query = Product::query()->with('service'); // Eager-load the service
-
-    // Search by name or supplier
-if ($request->has('search')) {
-    $search = $request->input('search');
-    $query->where(function ($q) use ($search) {
-        $q->where('name', 'like', "%{$search}%")
-          ->orWhere('supplier', 'like', "%{$search}%")
-          ->orWhereHas('service', function ($q) use ($search) {
-              $q->where('name', 'like', "%{$search}%");
-          });
-    });
-}
-
-    // Sorting
-    if ($request->has('sort_by') && $request->has('sort_order')) {
-        $query->orderBy($request->input('sort_by'), $request->input('sort_order'));
-    }
-
-    // Paginate results
-    $products = $query->paginate(20);
-
-    // Debugging: Log the products data
-    Log::info('Products Data:', ['products' => $products]);
+    $products = Product::with('service')
+        ->when($request->search, function($query, $search) {
+            return $query->where('name', 'like', "%{$search}%")
+                         ->orWhere('supplier', 'like', "%{$search}%");
+        })
+        ->orderBy($request->sort_by ?? 'name', $request->sort_order ?? 'asc')
+        ->paginate(10);
 
     return Inertia::render('Products/ProductList', [
         'products' => $products,
@@ -48,21 +33,30 @@ if ($request->has('search')) {
     ]);
 }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+// In ProductController.php
+public function create()
+{
+    $services = Service::all();
+    return Inertia::render('Products/ProductCreate', [
+        'services' => $services,
+    ]);
+}
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreProductRequest $request)
-    {
-        //
-    }
+public function store(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string|max:150',
+        'serial_number' => 'required|string|unique:products|max:100',
+        'supplier' => 'required|string|max:150', // Ensure supplier is required
+        'quantity' => 'required|integer|min:0',
+        'price' => 'required|numeric|min:0',
+        'served_to' => 'nullable|exists:services,id',    
+    ]);
+
+    Product::create($request->all());
+
+    return Redirect::route('products.index')->with('success', 'Product created successfully!');
+}
 
     /**
      * Display the specified resource.
