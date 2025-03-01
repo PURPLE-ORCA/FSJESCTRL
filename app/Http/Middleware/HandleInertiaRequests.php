@@ -59,6 +59,7 @@ class HandleInertiaRequests extends Middleware
             'is_magazine_staff' => Gate::forUser($user)->allows('is_magazine_staff'),
             'is_it_staff' => Gate::forUser($user)->allows('is_it_staff'),
             'can_manage_products' => Gate::forUser($user)->allows('can_manage_products'),
+            'can_manage_users' => Gate::forUser($user)->allows('can_manage_users'),
             'can_view_analytics' => Gate::forUser($user)->allows('can_view_analytics'),
         ];
     }

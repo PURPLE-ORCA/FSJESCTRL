@@ -1,9 +1,9 @@
 import React from "react";
 import { usePage } from "@inertiajs/react";
 import { Link, useForm, router } from "@inertiajs/react";
-import { Table } from "@/components/ui/table"; // Assuming shadcn DataTable
-import { Input } from "@/components/ui/input"; // shadcn Input
-import { Button } from "@/components/ui/button"; // shadcn Button
+import { Table } from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
     Pagination,
     PaginationContent,
@@ -12,39 +12,33 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination";
-import Layout from "@/Layouts/Layout";
-import { cn } from "@/lib/utils";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import {
     AlertDialog,
     AlertDialogAction,
     AlertDialogCancel,
     AlertDialogContent,
     AlertDialogDescription,
-    AlertDialogFooter, // Fixed typo
+    AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
-import { MingcuteDeleteFill } from "@/Components/MingcuteDeleteFill";
-import { MaterialSymbolsEdit } from "@/Components/MaterialSymbolsEdit";
+import Layout from "@/Layouts/Layout";
+import { cn } from "@/lib/utils";
 
-const ProductList = () => {
-    const { props } = usePage();
-    const { products, filters } = props; // Data passed from the backend
-    const { auth } = usePage().props;
-    // const { can_manage_products } = props.auth.user?.abilities || {};
+const UsersList = () => {
+    const { auth, users, roles, services, filters } = usePage().props;
+    const canManageUsers = auth?.abilities?.can_manage_users;
 
-    const form = useForm({
-        search: filters.search || "",
-        sort_by: filters.sort_by || "name",
-        sort_order: filters.sort_order || "asc",
-    });
-
-    const [productToDelete, setProductToDelete] = React.useState(null); // Track product to delete
-    const canManageProducts = auth?.abilities?.can_manage_products;
-
-    if (!canManageProducts) {
+    if (!canManageUsers) {
         return (
             <Layout>
                 <div className="text-center text-2xl font-bold mx-4 my-20">
@@ -53,45 +47,27 @@ const ProductList = () => {
             </Layout>
         );
     }
-    const handleDelete = (product) => {
-        router.delete(route("products.destroy", product.id), {
-            preserveScroll: true,
-            preserveState: true,
-            onSuccess: () => {
-                toast.success("Product deleted successfully!");
-            },
-            onError: () => {
-                toast.error("Failed to delete product");
-            },
-        });
-    };
-    // Confirm deletion
-    // const confirmDelete = () => {
-    //     if (!productToDelete) return;
 
-    //     router.delete(route("products.destroy", productToDelete.id), {
-    //         onSuccess: () => {
-    //             toast.success("Product deleted successfully!");
-    //             setProductToDelete(null);
-    //         },
-    //         onError: () => {
-    //             toast.error("Failed to delete product");
-    //             setProductToDelete(null);
-    //         },
-    //     });
-    // };
+    // Form for search/sorting
+    const form = useForm({
+        search: filters.search || "",
+        sort_by: filters.sort_by || "name",
+        sort_order: filters.sort_order || "asc",
+    });
 
     // Table columns
     const columns = [
         { accessorKey: "id", header: "ID" },
         { accessorKey: "name", header: "Name" },
-        { accessorKey: "serial_number", header: "Serial Number" },
-        { accessorKey: "supplier", header: "Supplier" },
-        { accessorKey: "quantity", header: "Quantity" },
-        { accessorKey: "price", header: "Price" },
+        { accessorKey: "email", header: "Email" },
+        {
+            accessorKey: "role.name",
+            header: "Role",
+            cell: ({ row }) => <div>{row.original.role?.name || "N/A"}</div>,
+        },
         {
             accessorKey: "service.name",
-            header: "Served To",
+            header: "Service",
             cell: ({ row }) => <div>{row.original.service?.name || "N/A"}</div>,
         },
         {
@@ -99,16 +75,32 @@ const ProductList = () => {
             header: "Actions",
             cell: ({ row }) => (
                 <div className="flex gap-2">
-                    <Link href={`/products/${row.original.id}/edit`}>
-                        <Button variant="outline">
-                            <MaterialSymbolsEdit />
-                        </Button>
-                    </Link>
+                    {/* Role Update Dropdown */}
+                    <Select
+                        value={row.original.role_id?.toString() || ""}
+                        onValueChange={(value) =>
+                            handleRoleUpdate(row.original, value)
+                        }
+                    >
+                        <SelectTrigger className="w-36">
+                            <SelectValue placeholder="Assign Role" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {roles.map((role) => (
+                                <SelectItem
+                                    key={role.id}
+                                    value={role.id.toString()}
+                                >
+                                    {role.name}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+
+                    {/* Delete Button */}
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            <Button>
-                                <MingcuteDeleteFill />{" "}
-                            </Button>
+                            <Button variant="destructive">Delete</Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                             <AlertDialogHeader>
@@ -116,14 +108,14 @@ const ProductList = () => {
                                     Confirm Deletion
                                 </AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Are you sure you want to delete the product
-                                    "{row.original.name}"?
+                                    Are you sure you want to delete{" "}
+                                    {row.original.name}?
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                                 <AlertDialogAction
-                                    onClick={() => handleDelete(row.original)} // Ensure this is the only place calling handleDelete
+                                    onClick={() => handleDelete(row.original)}
                                     disabled={router.isProcessing}
                                 >
                                     {router.isProcessing
@@ -138,32 +130,47 @@ const ProductList = () => {
         },
     ];
 
+    // Handle role updates
+    const handleRoleUpdate = (user, roleId) => {
+        router.put(route("users.update", user.id), {
+            role_id: roleId,
+            service_id: user.service_id, // Preserve existing service
+            onSuccess: () => toast.success("Role updated successfully!"),
+            onError: () => toast.error("Failed to update role"),
+        });
+    };
+
+    // Handle user deletion
+    const handleDelete = (user) => {
+        router.delete(route("users.destroy", user.id), {
+            onSuccess: () => toast.success("User deleted successfully!"),
+            onError: () => toast.error("Failed to delete user"),
+        });
+    };
+
     return (
         <Layout>
             <div className="p-6">
-                <h1 className="text-4xl font-bold mb-4">Product List</h1>
+                <h1 className="text-4xl font-bold mb-4">User Management</h1>
 
-                {/* Search and Filters */}
+                {/* Search and Sorting */}
                 <form
                     onSubmit={(e) => {
-                        e.preventDefault(); // Prevent default form submission
-                        form.get(route("products.index"), {
+                        e.preventDefault();
+                        form.get(route("users.index"), {
                             preserveScroll: true,
                             preserveState: true,
                         });
                     }}
                     className="flex justify-between items-center mb-4"
                 >
-                    {/* Search Input */}
                     <Input
                         type="text"
-                        placeholder="Search by name or supplier..."
+                        placeholder="Search by name or email..."
                         value={form.data.search}
                         onChange={(e) => form.setData("search", e.target.value)}
                         className="max-w-sm"
                     />
-
-                    {/* Sorting Buttons */}
                     <div className="flex gap-2">
                         <Button
                             onClick={() => {
@@ -171,10 +178,7 @@ const ProductList = () => {
                                     sort_by: "name",
                                     sort_order: "asc",
                                 });
-                                form.get(route("products.index"), {
-                                    preserveScroll: true,
-                                    preserveState: true,
-                                });
+                                form.submit();
                             }}
                         >
                             Sort by Name (Asc)
@@ -182,27 +186,24 @@ const ProductList = () => {
                         <Button
                             onClick={() => {
                                 form.setData({
-                                    sort_by: "price",
+                                    sort_by: "email",
                                     sort_order: "desc",
                                 });
-                                form.get(route("products.index"), {
-                                    preserveScroll: true,
-                                    preserveState: true,
-                                });
+                                form.submit();
                             }}
                         >
-                            Sort by Price (Desc)
+                            Sort by Email (Desc)
                         </Button>
                     </div>
                 </form>
 
                 {/* Table */}
-                <Table columns={columns} data={products.data} />
+                <Table columns={columns} data={users.data} />
 
                 {/* Pagination */}
                 <Pagination className="mt-6">
                     <PaginationContent>
-                        {products.links.map((link, index) => {
+                        {users.links.map((link, index) => {
                             if (link.label.includes("Previous")) {
                                 return (
                                     <PaginationItem key={index}>
@@ -257,4 +258,4 @@ const ProductList = () => {
     );
 };
 
-export default ProductList;
+export default UsersList;

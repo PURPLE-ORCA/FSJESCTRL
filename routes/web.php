@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -47,5 +48,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/products/{product}', [ProductController::class, 'destroy'])
         ->name('products.destroy') // Must match the route name used in frontend
         ->middleware('can:can_manage_products');
+
+    Route::middleware('can:can_manage_users')->group(function () {
+        Route::get('/users', [RegisteredUserController::class, 'index'])->name('users.index');
+        Route::put('/users/{user}', [RegisteredUserController::class, 'update'])->name('users.update');
+        Route::delete('/users/{user}', [RegisteredUserController::class, 'destroy'])->name('users.destroy');
+    });
 });
 require __DIR__.'/auth.php';

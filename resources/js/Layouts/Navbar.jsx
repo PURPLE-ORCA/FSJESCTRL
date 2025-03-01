@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ApplicationLogo from "@/Components/ApplicationLogo";
+import Logo from "@/Components/Logo";
 import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
@@ -35,7 +35,7 @@ const Navbar = () => {
                     <div className="flex items-center">
                         <div className="flex-shrink-0">
                             <Link href="/" className="flex items-center">
-                                <ApplicationLogo className="h-9 w-auto text-white" />
+                                <Logo className="h-9 w-auto text-white" />
                                 <span className="ml-2 font-bold text-white hidden md:block">
                                     DashControl
                                 </span>
@@ -48,6 +48,14 @@ const Navbar = () => {
                                 className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white"
                             >
                                 Dashboard
+                            </NavLink>
+                            <NavLink
+                                href={route("users.index")}
+                                active={route().current("users.index")}
+                                className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white"
+                            >
+                                <User className="h-4 w-4 mr-1" />
+                                Users
                             </NavLink>
                             <NavLink className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white">
                                 <DropdownMenu>

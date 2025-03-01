@@ -48,6 +48,9 @@ class AppServiceProvider extends ServiceProvider
 Gate::define('can_manage_products', function ($user) {
     return in_array($user->role?->name, ['general_manager', 'magazine_manager', 'magazine_employee']);
 });
+Gate::define('can_manage_users', function ($user) {
+    return in_array($user->role?->name, ['general_manager']);
+});
         // Define Gates for role combinations (e.g. user with multiple roles)
         // Gate::define('is_magazine_staff', function ($user) {
         //     return $user->hasAnyRoles(['magazine_manager', 'magazine_employee']);

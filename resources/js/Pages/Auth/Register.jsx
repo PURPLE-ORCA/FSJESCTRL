@@ -1,23 +1,32 @@
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
+import InputError from "@/Components/InputError";
+import InputLabel from "@/Components/InputLabel";
+import PrimaryButton from "@/Components/PrimaryButton";
+import TextInput from "@/Components/TextInput";
+import GuestLayout from "@/Layouts/GuestLayout";
+import { Head, Link, useForm, usePage } from "@inertiajs/react";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 export default function Register() {
+    const { services } = usePage().props;
     const { data, setData, post, processing, errors, reset } = useForm({
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
+        name: "",
+        email: "",
+        password: "",
+        password_confirmation: "",
+        service_id: "",
     });
 
     const submit = (e) => {
         e.preventDefault();
 
-        post(route('register'), {
-            onFinish: () => reset('password', 'password_confirmation'),
+        post(route("register"), {
+            onFinish: () => reset("password", "password_confirmation"),
         });
     };
 
@@ -36,7 +45,7 @@ export default function Register() {
                         className="mt-1 block w-full"
                         autoComplete="name"
                         isFocused={true}
-                        onChange={(e) => setData('name', e.target.value)}
+                        onChange={(e) => setData("name", e.target.value)}
                         required
                     />
 
@@ -53,7 +62,7 @@ export default function Register() {
                         value={data.email}
                         className="mt-1 block w-full"
                         autoComplete="username"
-                        onChange={(e) => setData('email', e.target.value)}
+                        onChange={(e) => setData("email", e.target.value)}
                         required
                     />
 
@@ -70,7 +79,7 @@ export default function Register() {
                         value={data.password}
                         className="mt-1 block w-full"
                         autoComplete="new-password"
-                        onChange={(e) => setData('password', e.target.value)}
+                        onChange={(e) => setData("password", e.target.value)}
                         required
                     />
 
@@ -91,7 +100,7 @@ export default function Register() {
                         className="mt-1 block w-full"
                         autoComplete="new-password"
                         onChange={(e) =>
-                            setData('password_confirmation', e.target.value)
+                            setData("password_confirmation", e.target.value)
                         }
                         required
                     />
@@ -102,9 +111,35 @@ export default function Register() {
                     />
                 </div>
 
+                <InputLabel
+                    htmlFor="service_id"
+                    value="Service"
+                />
+                <Select
+                    value={data.service_id || ""}
+                    onValueChange={(value) => setData("service_id", value)}
+                >
+                    <SelectTrigger className="mt-1">
+                        <SelectValue placeholder="Select your service" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {services.map((service) => (
+                            <SelectItem
+                                key={service.id}
+                                value={service.id.toString()}
+                            >
+                                {service.name}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+                {errors.service_id && (
+                    <p className="text-red-500">{errors.service_id}</p>
+                )}
+
                 <div className="mt-4 flex items-center justify-end">
                     <Link
-                        href={route('login')}
+                        href={route("login")}
                         className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
                     >
                         Already registered?
