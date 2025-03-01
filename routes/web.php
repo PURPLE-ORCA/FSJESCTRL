@@ -6,6 +6,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ServiceController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -54,5 +55,13 @@ Route::middleware('auth')->group(function () {
         Route::put('/users/{user}', [RegisteredUserController::class, 'update'])->name('users.update');
         Route::delete('/users/{user}', [RegisteredUserController::class, 'destroy'])->name('users.destroy');
     });
+
+    Route::middleware('can:can_manage_services')->group(function () {
+    Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
+    Route::post('/services', [ServiceController::class, 'store'])->name('services.store');
+    Route::put('/services/{service}', [ServiceController::class, 'update'])->name('services.update'); 
+    Route::get('/services/{service}/edit', [ServiceController::class, 'edit'])->name('services.edit');
+    Route::delete('/services/{service}', [ServiceController::class, 'destroy'])->name('services.destroy');
+});
 });
 require __DIR__.'/auth.php';

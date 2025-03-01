@@ -135,16 +135,12 @@ const UsersList = () => {
         router.put(route("users.update", user.id), {
             role_id: roleId,
             service_id: user.service_id, // Preserve existing service
-            onSuccess: () => toast.success("Role updated successfully!"),
-            onError: () => toast.error("Failed to update role"),
         });
     };
 
     // Handle user deletion
     const handleDelete = (user) => {
         router.delete(route("users.destroy", user.id), {
-            onSuccess: () => toast.success("User deleted successfully!"),
-            onError: () => toast.error("Failed to delete user"),
         });
     };
 

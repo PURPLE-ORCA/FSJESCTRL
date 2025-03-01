@@ -1,9 +1,22 @@
 import React from "react";
-import { usePage } from "@inertiajs/react";
-import { Link, useForm, router } from "@inertiajs/react";
-import { Table } from "@/components/ui/table"; // Assuming shadcn DataTable
-import { Input } from "@/components/ui/input"; // shadcn Input
-import { Button } from "@/components/ui/button"; // shadcn Button
+import { Link, usePage } from "@inertiajs/react";
+import { useForm, router } from "@inertiajs/react";
+import { Table } from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
+import Layout from "@/Layouts/Layout";
 import {
     Pagination,
     PaginationContent,
@@ -12,39 +25,14 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination";
-import Layout from "@/Layouts/Layout";
 import { cn } from "@/lib/utils";
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter, // Fixed typo
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { toast } from "sonner";
-import { MingcuteDeleteFill } from "@/Components/MingcuteDeleteFill";
-import { MaterialSymbolsEdit } from "@/Components/MaterialSymbolsEdit";
 
-const ProductList = () => {
-    const { props } = usePage();
-    const { products, filters } = props; // Data passed from the backend
-    const { auth } = usePage().props;
-    // const { can_manage_products } = props.auth.user?.abilities || {};
+const ServiceList = () => {
+    const { auth, services, filters } = usePage().props;
+    const canManageServices = auth?.abilities?.can_manage_services;
+    const [editingService, setEditingService] = React.useState(null); // Track service being edited
 
-    const form = useForm({
-        search: filters.search || "",
-        sort_by: filters.sort_by || "name",
-        sort_order: filters.sort_order || "asc",
-    });
-
-    const [productToDelete, setProductToDelete] = React.useState(null); // Track product to delete
-    const canManageProducts = auth?.abilities?.can_manage_products;
-
-    if (!canManageProducts) {
+    if (!canManageServices) {
         return (
             <Layout>
                 <div className="text-center text-2xl font-bold mx-4 my-20">
@@ -53,53 +41,52 @@ const ProductList = () => {
             </Layout>
         );
     }
-    const handleDelete = (product) => {
-        router.delete(route("products.destroy", product.id));
-    };
-    // Confirm deletion
-    // const confirmDelete = () => {
-    //     if (!productToDelete) return;
 
-    //     router.delete(route("products.destroy", productToDelete.id), {
-    //         onSuccess: () => {
-    //             toast.success("Product deleted successfully!");
-    //             setProductToDelete(null);
-    //         },
-    //         onError: () => {
-    //             toast.error("Failed to delete product");
-    //             setProductToDelete(null);
-    //         },
-    //     });
-    // };
+    // Form for search/sorting and adding services
+    const form = useForm({
+        search: filters.search || "",
+        sort_by: filters.sort_by || "name",
+        sort_order: filters.sort_order || "asc",
+        name: "",
+        description: "",
+        type: "magazine", // Default type
+    });
+
+    // Handle adding a new service
+    const handleAddService = (e) => {
+        e.preventDefault();
+        router.post(route("services.store"), form.data, {
+            onSuccess: () => {
+                form.reset("name", "type");
+            },
+        });
+    };
+
+    // Handle deleting a service
+    const handleDelete = (service) => {
+        router.delete(route("services.destroy", service.id));
+    };
 
     // Table columns
     const columns = [
         { accessorKey: "id", header: "ID" },
         { accessorKey: "name", header: "Name" },
-        { accessorKey: "serial_number", header: "Serial Number" },
-        { accessorKey: "supplier", header: "Supplier" },
-        { accessorKey: "quantity", header: "Quantity" },
-        { accessorKey: "price", header: "Price" },
-        {
-            accessorKey: "service.name",
-            header: "Served To",
-            cell: ({ row }) => <div>{row.original.service?.name || "N/A"}</div>,
-        },
+        { accessorKey: "description", header: "Description" },
+        { accessorKey: "type", header: "Type" },
         {
             accessorKey: "actions",
             header: "Actions",
             cell: ({ row }) => (
                 <div className="flex gap-2">
-                    <Link href={`/products/${row.original.id}/edit`}>
-                        <Button variant="outline">
-                            <MaterialSymbolsEdit />
-                        </Button>
+                    {/* Edit Link */}
+                    <Link href={route("services.edit", row.original.id)}>
+                        <Button variant="outline">Edit</Button>
                     </Link>
+
+                    {/* Delete Button */}
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            <Button>
-                                <MingcuteDeleteFill />{" "}
-                            </Button>
+                            <Button variant="destructive">Delete</Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                             <AlertDialogHeader>
@@ -107,19 +94,16 @@ const ProductList = () => {
                                     Confirm Deletion
                                 </AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Are you sure you want to delete the product
-                                    "{row.original.name}"?
+                                    Are you sure you want to delete "
+                                    {row.original.name}"?
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                                 <AlertDialogAction
-                                    onClick={() => handleDelete(row.original)} // Ensure this is the only place calling handleDelete
-                                    disabled={router.isProcessing}
+                                    onClick={() => handleDelete(row.original)}
                                 >
-                                    {router.isProcessing
-                                        ? "Deleting..."
-                                        : "Confirm"}
+                                    Confirm
                                 </AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>
@@ -132,13 +116,61 @@ const ProductList = () => {
     return (
         <Layout>
             <div className="p-6">
-                <h1 className="text-4xl font-bold mb-4">Product List</h1>
+                <h1 className="text-4xl font-bold mb-4">Service Management</h1>
 
-                {/* Search and Filters */}
+                {/* Add Service Form */}
+                <form onSubmit={handleAddService} className="mb-6 space-y-4">
+                    <h2 className="text-2xl font-semibold">Add New Service</h2>
+
+                    {/* Name Field */}
+                    <div>
+                        <Input
+                            type="text"
+                            placeholder="Enter service name"
+                            value={form.data.name}
+                            onChange={(e) =>
+                                form.setData("name", e.target.value)
+                            }
+                            required
+                        />
+                    </div>
+                    <div>
+                        <Input
+                            type="text"
+                            placeholder="Enter service description"
+                            value={form.data.name}
+                            onChange={(e) =>
+                                form.setData("description", e.target.value)
+                            }
+                            required
+                        />
+                    </div>
+
+                    {/* Type Field */}
+                    <div>
+                        <select
+                            value={form.data.type}
+                            onChange={(e) =>
+                                form.setData("type", e.target.value)
+                            }
+                            className="w-full p-2 border rounded-md"
+                        >
+                            <option value="magazine">Magazine</option>
+                            <option value="it">IT</option>
+                        </select>
+                    </div>
+
+                    {/* Submit Button */}
+                    <Button type="submit" disabled={router.isProcessing}>
+                        {router.isProcessing ? "Adding..." : "Add Service"}
+                    </Button>
+                </form>
+
+                {/* Search and Sorting */}
                 <form
                     onSubmit={(e) => {
-                        e.preventDefault(); // Prevent default form submission
-                        form.get(route("products.index"), {
+                        e.preventDefault();
+                        form.get(route("services.index"), {
                             preserveScroll: true,
                             preserveState: true,
                         });
@@ -148,7 +180,7 @@ const ProductList = () => {
                     {/* Search Input */}
                     <Input
                         type="text"
-                        placeholder="Search by name or supplier..."
+                        placeholder="Search by name..."
                         value={form.data.search}
                         onChange={(e) => form.setData("search", e.target.value)}
                         className="max-w-sm"
@@ -162,10 +194,7 @@ const ProductList = () => {
                                     sort_by: "name",
                                     sort_order: "asc",
                                 });
-                                form.get(route("products.index"), {
-                                    preserveScroll: true,
-                                    preserveState: true,
-                                });
+                                form.submit();
                             }}
                         >
                             Sort by Name (Asc)
@@ -173,27 +202,24 @@ const ProductList = () => {
                         <Button
                             onClick={() => {
                                 form.setData({
-                                    sort_by: "price",
+                                    sort_by: "type",
                                     sort_order: "desc",
                                 });
-                                form.get(route("products.index"), {
-                                    preserveScroll: true,
-                                    preserveState: true,
-                                });
+                                form.submit();
                             }}
                         >
-                            Sort by Price (Desc)
+                            Sort by Type (Desc)
                         </Button>
                     </div>
                 </form>
 
                 {/* Table */}
-                <Table columns={columns} data={products.data} />
+                <Table columns={columns} data={services.data} />
 
                 {/* Pagination */}
                 <Pagination className="mt-6">
                     <PaginationContent>
-                        {products.links.map((link, index) => {
+                        {services.links.map((link, index) => {
                             if (link.label.includes("Previous")) {
                                 return (
                                     <PaginationItem key={index}>
@@ -248,4 +274,4 @@ const ProductList = () => {
     );
 };
 
-export default ProductList;
+export default ServiceList;

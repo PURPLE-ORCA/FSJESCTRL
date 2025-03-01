@@ -61,21 +61,7 @@ const ProductEdit = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        form.put(route("products.update", product.id), {
-            onSuccess: () => {
-                toast.success("Product updated successfully!");
-            },
-            onError: (errors) => {
-                // Show first error message
-                const firstError = Object.values(errors)[0];
-                toast.error(firstError);
-
-                // If you want to show all errors instead, uncomment this:
-                // Object.values(errors).forEach((error) => {
-                //     toast.error(error);
-                // });
-            },
-        });
+        form.put(route("products.update", product.id));
     };
 
     return (

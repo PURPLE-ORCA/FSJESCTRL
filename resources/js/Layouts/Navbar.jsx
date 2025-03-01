@@ -98,13 +98,21 @@ const Navbar = () => {
                                             asChild
                                             className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                                         >
-                                            <Link>Add Service</Link>
+                                            <Link
+                                            // href={route("services.create")}
+                                            >
+                                                Add Service
+                                            </Link>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
                                             asChild
                                             className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                                         >
-                                            <Link>All Services</Link>
+                                            <Link
+                                                href={route("services.index")}
+                                            >
+                                                All Services
+                                            </Link>
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
