@@ -32,8 +32,16 @@ Route::middleware('auth')->group(function () {
     ->name('products.create')
     ->middleware('can:can_manage_products');
 
-Route::post('/products', [ProductController::class, 'store'])
-    ->name('products.store')
+    Route::post('/products', [ProductController::class, 'store'])
+        ->name('products.store')
+        ->middleware('can:can_manage_products');
+
+    Route::get('/products/{product}/edit', [ProductController::class, 'edit'])
+    ->name('products.edit')
     ->middleware('can:can_manage_products');
+
+    Route::put('/products/{product}', [ProductController::class, 'update'])
+        ->name('products.update')
+        ->middleware('can:can_manage_products');
 });
 require __DIR__.'/auth.php';

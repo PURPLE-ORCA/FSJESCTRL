@@ -24,7 +24,7 @@ const ProductCreate = () => {
         supplier: "",
         quantity: 0,
         price: 0,
-        served_to: "",
+        served_to: null, // Change from "" to null
     });
 
     if (!canManageProducts) {
@@ -160,9 +160,13 @@ const ProductCreate = () => {
                     <div>
                         <Label htmlFor="served_to">Service</Label>
                         <Select
-                            value={form.data.served_to || ""}
-                            onValueChange={(value) =>
-                                form.setData("served_to", value || null)
+                            value={form.data.served_to?.toString() || ""} // Read value as string for display
+                            onValueChange={
+                                (value) =>
+                                    form.setData(
+                                        "served_to",
+                                        value ? parseInt(value) : null
+                                    ) // Convert to number or null
                             }
                         >
                             <SelectTrigger className="mt-1">
@@ -172,7 +176,7 @@ const ProductCreate = () => {
                                 {services.map((service) => (
                                     <SelectItem
                                         key={service.id}
-                                        value={service.id.toString()}
+                                        value={service.id.toString()} // Send as string for dropdown
                                     >
                                         {service.name}
                                     </SelectItem>

@@ -18,14 +18,21 @@ class ProductController extends Controller
      */
 public function index(Request $request)
 {
-    // Pagination, Search, and Sorting
-    $products = Product::with('service')
-        ->when($request->search, function($query, $search) {
-            return $query->where('name', 'like', "%{$search}%")
-                         ->orWhere('supplier', 'like', "%{$search}%");
-        })
-        ->orderBy($request->sort_by ?? 'name', $request->sort_order ?? 'asc')
-        ->paginate(10);
+    $query = Product::query()->with('service'); // Eager-load service
+
+    // Search
+    $query->when($request->search, function($q, $search) {
+        return $q->where('name', 'like', "%{$search}%")
+                 ->orWhere('supplier', 'like', "%{$search}%"); // Match column case
+    });
+
+    // Sorting
+    $query->orderBy(
+        $request->sort_by ?? 'name',
+        $request->sort_order ?? 'asc'
+    );
+
+    $products = $query->paginate(10);
 
     return Inertia::render('Products/ProductList', [
         'products' => $products,
@@ -47,17 +54,16 @@ public function store(Request $request)
     $request->validate([
         'name' => 'required|string|max:150',
         'serial_number' => 'required|string|unique:products|max:100',
-        'supplier' => 'required|string|max:150', // Ensure supplier is required
+        'supplier' => 'required|string|max:150',
         'quantity' => 'required|integer|min:0',
         'price' => 'required|numeric|min:0',
-        'served_to' => 'nullable|exists:services,id',    
+        'served_to' => 'nullable|exists:services,id', // Allow null
     ]);
 
     Product::create($request->all());
 
     return Redirect::route('products.index')->with('success', 'Product created successfully!');
 }
-
     /**
      * Display the specified resource.
      */
@@ -69,18 +75,30 @@ public function store(Request $request)
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Product $product)
-    {
-        //
-    }
+public function edit(Product $product)
+{
+    $services = Service::all();
+    return Inertia::render('Products/ProductEdit', [
+        'product' => $product,
+        'services' => $services,
+    ]);
+}
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateProductRequest $request, Product $product)
-    {
-        //
-    }
+public function update(Request $request, Product $product)
+{
+    $request->validate([
+        'name' => 'required|string|max:150',
+        'serial_number' => 'required|string|unique:products,serial_number,'.$product->id.'|max:100',
+        'supplier' => 'required|string|max:150',
+        'quantity' => 'required|integer|min:0',
+        'price' => 'required|numeric|min:0',
+        'served_to' => 'nullable|exists:services,id', // Ensure nullable is allowed
+    ]);
+
+    $product->update($request->all());
+
+    return Redirect::route('products.index')->with('success', 'Product updated successfully!');
+}
 
     /**
      * Remove the specified resource from storage.

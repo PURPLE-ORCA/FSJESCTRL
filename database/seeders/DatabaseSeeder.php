@@ -143,7 +143,7 @@ class DatabaseSeeder extends Seeder
                 'supplier' => 'Sony',
                 'quantity' => 30,
                 'price' => 349.99,
-                'served_to' => 3, // IT Department
+                'served_to' => 1, // IT Department
             ],
             [
                 'name' => 'Graphics Tablet - Wacom Intuos Pro',
@@ -159,7 +159,7 @@ class DatabaseSeeder extends Seeder
                 'supplier' => 'CalDigit',
                 'quantity' => 18,
                 'price' => 349.99,
-                'served_to' => 3, // IT Department
+                'served_to' => 2, // IT Department
             ],
             [
                 'name' => 'NAS Storage - Synology DS920+',
@@ -175,7 +175,7 @@ class DatabaseSeeder extends Seeder
                 'supplier' => 'Anker',
                 'quantity' => 50,
                 'price' => 79.99,
-                'served_to' => 3, // IT Department
+                'served_to' => 6, // IT Department
             ],
             [
                 'name' => 'Smartphone - iPhone 14 Pro',
@@ -191,7 +191,7 @@ class DatabaseSeeder extends Seeder
                 'supplier' => 'Anker',
                 'quantity' => 10,
                 'price' => 469.99,
-                'served_to' => 3, // IT Department
+                'served_to' => 4, // IT Department
             ],
             [
                 'name' => 'Smartwatch - Garmin Fenix 7',
@@ -199,7 +199,7 @@ class DatabaseSeeder extends Seeder
                 'supplier' => 'Garmin',
                 'quantity' => 25,
                 'price' => 699.99,
-                'served_to' => 3, // IT Department
+                'served_to' => 1, // IT Department
             ],
             [
                 'name' => 'Microphone - Shure SM7B',

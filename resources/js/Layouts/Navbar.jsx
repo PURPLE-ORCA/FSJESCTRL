@@ -63,6 +63,29 @@ const Navbar = () => {
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </NavLink>
+                            <NavLink className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700 dark:text-gray-300 dark:hover:text-white">
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger>
+                                        Services
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        <DropdownMenuItem asChild>
+                                            <Link
+                                                // href={route("services.create")}
+                                            >
+                                                Add Service
+                                            </Link>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem>
+                                            <Link
+                                                // href={route("services.index")}
+                                            >
+                                                All services
+                                            </Link>
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </NavLink>
                             <NavLink
                                 // href={route("dashboard")}
                                 // active={route().current("dashboard")}
