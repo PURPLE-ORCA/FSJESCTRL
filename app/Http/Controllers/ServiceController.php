@@ -14,37 +14,30 @@ class ServiceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
-    {
-        $query = Service::query();
+public function index(Request $request)
+{
+    $query = Service::withCount('users'); // Add this line
 
-        // Search by name
-        if ($request->has('search')) {
-            $query->where('name', 'like', "%{$request->input('search')}%");
-        }
-
-        // Sorting
-        $query->orderBy($request->sort_by ?? 'name', $request->sort_order ?? 'asc');
-
-        $services = $query->paginate(10);
-
-        return Inertia::render('Services/ServiceList', [
-            'services' => $services,
-            'filters' => $request->only(['search', 'sort_by', 'sort_order']),
-        ]);
+    // Search by name
+    if ($request->has('search')) {
+        $query->where('name', 'like', "%{$request->input('search')}%");
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+    // Sorting
+    $query->orderBy($request->sort_by ?? 'name', $request->sort_order ?? 'asc');
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    $services = $query->paginate(10);
+
+    return Inertia::render('Services/ServiceList', [
+        'services' => $services,
+        'filters' => $request->only(['search', 'sort_by', 'sort_order']),
+    ]);
+}
+
+public function create()
+{
+    return Inertia::render('Services/ServiceCreate');
+}
     public function store(Request $request)
     {
         $request->validate([
@@ -59,7 +52,7 @@ class ServiceController extends Controller
             'type' => $request->type,
         ]);
 
-        return Redirect::back()->with('success', 'Service created successfully!');
+        return Redirect::route('services.index')->with('success', 'Service created successfully!');
     }
 
 public function edit(Service $service)

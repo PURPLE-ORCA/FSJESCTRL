@@ -99,7 +99,7 @@ const Navbar = () => {
                                             className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                                         >
                                             <Link
-                                            // href={route("services.create")}
+                                                href={route("services.create")}
                                             >
                                                 Add Service
                                             </Link>
@@ -234,10 +234,16 @@ const Navbar = () => {
                     <div className="rounded-md px-3 py-2 text-base font-medium text-white hover:bg-white/10">
                         <span className="block">Services</span>
                         <div className="mt-1 ml-3 space-y-1">
-                            <ResponsiveNavLink className="block rounded-md px-3 py-2 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white">
+                            <ResponsiveNavLink
+                                href={route("services.create")}
+                                className="block rounded-md px-3 py-2 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white"
+                            >
                                 Add Service
                             </ResponsiveNavLink>
-                            <ResponsiveNavLink className="block rounded-md px-3 py-2 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white">
+                            <ResponsiveNavLink
+                                href={route("services.index")}
+                                className="block rounded-md px-3 py-2 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white"
+                            >
                                 All Services
                             </ResponsiveNavLink>
                         </div>

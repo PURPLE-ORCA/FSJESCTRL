@@ -24,7 +24,7 @@ const ProductCreate = () => {
         supplier: "",
         quantity: 0,
         price: 0,
-        served_to: null, // Change from "" to null
+        served_to: null, 
     });
 
     if (!canManageProducts) {

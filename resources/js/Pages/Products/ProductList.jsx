@@ -98,7 +98,7 @@ const ProductList = () => {
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
                             <Button>
-                                <MingcuteDeleteFill />{" "}
+                                <MingcuteDeleteFill />
                             </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>

@@ -26,11 +26,12 @@ import {
     PaginationPrevious,
 } from "@/components/ui/pagination";
 import { cn } from "@/lib/utils";
+import { MaterialSymbolsEdit } from "@/Components/MaterialSymbolsEdit";
+import { MingcuteDeleteFill } from "@/Components/MingcuteDeleteFill";
 
 const ServiceList = () => {
     const { auth, services, filters } = usePage().props;
     const canManageServices = auth?.abilities?.can_manage_services;
-    const [editingService, setEditingService] = React.useState(null); // Track service being edited
 
     if (!canManageServices) {
         return (
@@ -52,16 +53,6 @@ const ServiceList = () => {
         type: "magazine", // Default type
     });
 
-    // Handle adding a new service
-    const handleAddService = (e) => {
-        e.preventDefault();
-        router.post(route("services.store"), form.data, {
-            onSuccess: () => {
-                form.reset("name", "type");
-            },
-        });
-    };
-
     // Handle deleting a service
     const handleDelete = (service) => {
         router.delete(route("services.destroy", service.id));
@@ -74,19 +65,28 @@ const ServiceList = () => {
         { accessorKey: "description", header: "Description" },
         { accessorKey: "type", header: "Type" },
         {
+            accessorKey: "users_count",
+            header: "Users Count",
+            cell: ({ row }) => <div>{row.original.users_count || 0}</div>, // Default to 0 if null
+        },
+        {
             accessorKey: "actions",
             header: "Actions",
             cell: ({ row }) => (
                 <div className="flex gap-2">
                     {/* Edit Link */}
                     <Link href={route("services.edit", row.original.id)}>
-                        <Button variant="outline">Edit</Button>
+                        <Button variant="outline">
+                            <MaterialSymbolsEdit />
+                        </Button>
                     </Link>
 
                     {/* Delete Button */}
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            <Button variant="destructive">Delete</Button>
+                            <Button>
+                                <MingcuteDeleteFill />
+                            </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                             <AlertDialogHeader>
@@ -117,54 +117,6 @@ const ServiceList = () => {
         <Layout>
             <div className="p-6">
                 <h1 className="text-4xl font-bold mb-4">Service Management</h1>
-
-                {/* Add Service Form */}
-                <form onSubmit={handleAddService} className="mb-6 space-y-4">
-                    <h2 className="text-2xl font-semibold">Add New Service</h2>
-
-                    {/* Name Field */}
-                    <div>
-                        <Input
-                            type="text"
-                            placeholder="Enter service name"
-                            value={form.data.name}
-                            onChange={(e) =>
-                                form.setData("name", e.target.value)
-                            }
-                            required
-                        />
-                    </div>
-                    <div>
-                        <Input
-                            type="text"
-                            placeholder="Enter service description"
-                            value={form.data.name}
-                            onChange={(e) =>
-                                form.setData("description", e.target.value)
-                            }
-                            required
-                        />
-                    </div>
-
-                    {/* Type Field */}
-                    <div>
-                        <select
-                            value={form.data.type}
-                            onChange={(e) =>
-                                form.setData("type", e.target.value)
-                            }
-                            className="w-full p-2 border rounded-md"
-                        >
-                            <option value="magazine">Magazine</option>
-                            <option value="it">IT</option>
-                        </select>
-                    </div>
-
-                    {/* Submit Button */}
-                    <Button type="submit" disabled={router.isProcessing}>
-                        {router.isProcessing ? "Adding..." : "Add Service"}
-                    </Button>
-                </form>
 
                 {/* Search and Sorting */}
                 <form

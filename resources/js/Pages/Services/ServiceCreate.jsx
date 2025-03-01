@@ -1,6 +1,6 @@
 import React from "react";
 import { usePage } from "@inertiajs/react";
-import { Link, useForm, router } from "@inertiajs/react";
+import { useForm, router } from "@inertiajs/react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Layout from "@/Layouts/Layout";
@@ -14,9 +14,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-
-const ServiceEdit = () => {
-    const { auth, service } = usePage().props;
+const ServiceCreate = () => {
+    const { auth } = usePage().props;
     const canManageServices = auth?.abilities?.can_manage_services;
 
     if (!canManageServices) {
@@ -30,34 +29,32 @@ const ServiceEdit = () => {
     }
 
     const form = useForm({
-        name: service.name,
-        description: service.description,
-        type: service.type,
+        name: "",
+        description: "",
+        type: "magazine", // Default type
     });
 
-    // In ServiceEdit.jsx
     const handleSubmit = (e) => {
         e.preventDefault();
-        router.put(route("services.update", service.id), form.data, {
+        router.post(route("services.store"), form.data, {
+            onSuccess: () => {
+                form.reset();
+            },
         });
     };
 
     return (
         <Layout>
             <div className="p-6 max-w-2xl mx-auto">
-                <h1 className="text-3xl font-bold mb-4">Edit Service</h1>
+                <h1 className="text-3xl font-bold mb-4">Create Service</h1>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     {/* Name */}
                     <div>
-                        <Label
-                            htmlFor="name"
-                            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                        >
+                        <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                             Name
                         </Label>
                         <Input
-                            id="name"
                             type="text"
                             value={form.data.name}
                             onChange={(e) =>
@@ -74,14 +71,10 @@ const ServiceEdit = () => {
 
                     {/* Description */}
                     <div>
-                        <Label
-                            htmlFor="description"
-                            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                        >
+                        <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                             Description
                         </Label>
                         <Input
-                            id="description"
                             type="text"
                             value={form.data.description}
                             onChange={(e) =>
@@ -97,14 +90,10 @@ const ServiceEdit = () => {
 
                     {/* Type */}
                     <div>
-                        <Label
-                            htmlFor="type"
-                            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                        >
+                        <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                             Type
                         </Label>
                         <Select
-                            id="type"
                             value={form.data.type}
                             onChange={(e) =>
                                 form.setData("type", e.target.value)
@@ -130,7 +119,7 @@ const ServiceEdit = () => {
 
                     {/* Submit Button */}
                     <Button type="submit" disabled={form.processing}>
-                        {form.processing ? "Saving..." : "Update Service"}
+                        {form.processing ? "Creating..." : "Create Service"}
                     </Button>
                 </form>
             </div>
@@ -138,4 +127,4 @@ const ServiceEdit = () => {
     );
 };
 
-export default ServiceEdit;
+export default ServiceCreate;

@@ -58,6 +58,7 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('can:can_manage_services')->group(function () {
     Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
+    Route::get('/services/create', [ServiceController::class, 'create'])->name('services.create');
     Route::post('/services', [ServiceController::class, 'store'])->name('services.store');
     Route::put('/services/{service}', [ServiceController::class, 'update'])->name('services.update'); 
     Route::get('/services/{service}/edit', [ServiceController::class, 'edit'])->name('services.edit');
