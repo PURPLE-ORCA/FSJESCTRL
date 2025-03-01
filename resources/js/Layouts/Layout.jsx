@@ -6,9 +6,9 @@ const Layout = ({ header, children }) => {
         <SonnerToastProvider>
             <div className="bg-black">
                 <div>
-                    <p className="text-center text-white bg-slate-700">
+                    {/* <p className="text-center text-white bg-slate-700">
                         App currently in first beta
-                    </p>
+                    </p> */}
                     <Navbar />
                 </div>
                 <main>{children}</main>

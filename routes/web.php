@@ -43,5 +43,9 @@ Route::middleware('auth')->group(function () {
     Route::put('/products/{product}', [ProductController::class, 'update'])
         ->name('products.update')
         ->middleware('can:can_manage_products');
+
+    Route::delete('/products/{product}', [ProductController::class, 'destroy'])
+        ->name('products.destroy') // Must match the route name used in frontend
+        ->middleware('can:can_manage_products');
 });
 require __DIR__.'/auth.php';

@@ -1,19 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import ApplicationLogo from "@/Components/ApplicationLogo";
 import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link, usePage } from "@inertiajs/react";
-import { useState } from "react";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
+import {
+    Bell,
+    Menu,
+    X,
+    User,
+    BarChart3,
+    Activity,
+    Inbox,
+    Package,
+} from "lucide-react";
 
 const Navbar = () => {
     const user = usePage().props.auth.user;
@@ -21,97 +27,93 @@ const Navbar = () => {
         useState(false);
 
     return (
-        <nav className="bg-black shadow dark:bg-mian ">
+        <nav className="bg-main shadow">
             {/* Desktop & Tablet View */}
             <div className="mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex h-14 justify-between">
+                <div className="flex h-16 justify-between">
                     {/* Logo Section */}
                     <div className="flex items-center">
                         <div className="flex-shrink-0">
-                            <Link href="/">
-                                <ApplicationLogo className="h-8 w-auto text-indigo-600 dark:text-indigo-400" />
+                            <Link href="/" className="flex items-center">
+                                <ApplicationLogo className="h-9 w-auto text-white" />
+                                <span className="ml-2 font-bold text-white hidden md:block">
+                                    DashControl
+                                </span>
                             </Link>
                         </div>
-                        <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <div className="hidden space-x-1 sm:-my-px sm:ml-6 sm:flex">
                             <NavLink
                                 href={route("dashboard")}
                                 active={route().current("dashboard")}
-                                className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700 dark:text-gray-300 dark:hover:text-white"
+                                className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white"
                             >
                                 Dashboard
                             </NavLink>
-                            <NavLink className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700 dark:text-gray-300 dark:hover:text-white">
+                            <NavLink className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white">
                                 <DropdownMenu>
-                                    <DropdownMenuTrigger>
-                                        Products
+                                    <DropdownMenuTrigger className="inline-flex items-center gap-1">
+                                        <Package className="h-4 w-4" />
+                                        <span>Products</span>
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent>
-                                        <DropdownMenuItem asChild>
+                                    <DropdownMenuContent className="bg-white dark:bg-gray-800 py-1">
+                                        <DropdownMenuItem
+                                            asChild
+                                            className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                        >
                                             <Link
                                                 href={route("products.create")}
                                             >
                                                 Add Product
                                             </Link>
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            asChild
+                                            className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                        >
                                             <Link
                                                 href={route("products.index")}
                                             >
-                                                All products
+                                                All Products
                                             </Link>
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </NavLink>
-                            <NavLink className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700 dark:text-gray-300 dark:hover:text-white">
+                            <NavLink className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white">
                                 <DropdownMenu>
-                                    <DropdownMenuTrigger>
-                                        Services
+                                    <DropdownMenuTrigger className="inline-flex items-center gap-1">
+                                        <Activity className="h-4 w-4" />
+                                        <span>Services</span>
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent>
-                                        <DropdownMenuItem asChild>
-                                            <Link
-                                                // href={route("services.create")}
-                                            >
-                                                Add Service
-                                            </Link>
+                                    <DropdownMenuContent className="bg-white dark:bg-gray-800 py-1">
+                                        <DropdownMenuItem
+                                            asChild
+                                            className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                        >
+                                            <Link>Add Service</Link>
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem>
-                                            <Link
-                                                // href={route("services.index")}
-                                            >
-                                                All services
-                                            </Link>
+                                        <DropdownMenuItem
+                                            asChild
+                                            className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                        >
+                                            <Link>All Services</Link>
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </NavLink>
-                            <NavLink
-                                // href={route("dashboard")}
-                                // active={route().current("dashboard")}
-                                className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700 dark:text-gray-300 dark:hover:text-white"
-                            >
+                            <NavLink className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white">
+                                <Inbox className="h-4 w-4 mr-1" />
                                 Mouvements
                             </NavLink>
-                            <NavLink
-                                // href={route("dashboard")}
-                                // active={route().current("dashboard")}
-                                className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700 dark:text-gray-300 dark:hover:text-white"
-                            >
+                            <NavLink className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white">
+                                <Bell className="h-4 w-4 mr-1" />
                                 Notifications
                             </NavLink>
-                            <NavLink
-                                // href={route("dashboard")}
-                                // active={route().current("dashboard")}
-                                className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700 dark:text-gray-300 dark:hover:text-white"
-                            >
+                            <NavLink className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white">
                                 Actions
                             </NavLink>
-                            <NavLink
-                                // href={route("dashboard")}
-                                // active={route().current("dashboard")}
-                                className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700 dark:text-gray-300 dark:hover:text-white"
-                            >
+                            <NavLink className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white">
+                                <BarChart3 className="h-4 w-4 mr-1" />
                                 Analytics
                             </NavLink>
                         </div>
@@ -119,36 +121,41 @@ const Navbar = () => {
 
                     {/* User Dropdown (Desktop) */}
                     <div className="hidden sm:ml-6 sm:flex sm:items-center">
+                        <button className="mr-3 relative rounded-full bg-white/10 p-1 text-white hover:bg-white/20 focus:outline-none  ">
+                            <span className="sr-only">View notifications</span>
+                            <Bell className="h-6 w-6" />
+                            <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
+                        </button>
+
                         <Dropdown>
                             <Dropdown.Trigger>
-                                <button className="flex items-center rounded-full bg-white p-1 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-main focus:ring-offset-2 dark:bg-gray-800 dark:text-gray-400 dark:hover:text-gray-300">
+                                <button className="flex items-center rounded-full border-2 border-white/30 bg-white/10 p-1 text-white hover:bg-white/20 focus:outline-none ">
                                     <span className="sr-only">
                                         Open user menu
                                     </span>
-                                    <svg
-                                        className="h-6 w-6"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                        />
-                                    </svg>
+                                    <User className="h-6 w-6" />
                                 </button>
                             </Dropdown.Trigger>
-                            <Dropdown.Content>
-                                <Dropdown.Link href={route("profile.edit")}>
+                            <Dropdown.Content className="mt-2 w-48 rounded-md bg-white py-1 shadow-lg dark:bg-gray-800">
+                                <div className="border-b border-gray-200 dark:border-gray-700 px-4 py-2">
+                                    <p className="text-sm font-medium text-gray-800 dark:text-gray-200">
+                                        {user.name}
+                                    </p>
+                                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                                        {user.email}
+                                    </p>
+                                </div>
+                                <Dropdown.Link
+                                    href={route("profile.edit")}
+                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                                >
                                     Profile
                                 </Dropdown.Link>
                                 <Dropdown.Link
                                     href={route("logout")}
                                     method="post"
                                     as="button"
+                                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
                                 >
                                     Log Out
                                 </Dropdown.Link>
@@ -157,52 +164,21 @@ const Navbar = () => {
                     </div>
 
                     {/* Mobile Menu Button */}
-                    <div className="-mr-2 flex items-center sm:hidden">
+                    <div className="flex items-center sm:hidden">
                         <button
                             onClick={() =>
                                 setShowingNavigationDropdown(
-                                    (previousState) => !previousState
+                                    !showingNavigationDropdown
                                 )
                             }
-                            className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 dark:text-gray-500 dark:hover:bg-gray-700 dark:hover:text-gray-400"
+                            className="inline-flex items-center justify-center rounded-md p-2 text-white hover:bg-white/10"
                         >
                             <span className="sr-only">Open main menu</span>
-                            <svg
-                                className={`${
-                                    showingNavigationDropdown
-                                        ? "hidden"
-                                        : "block"
-                                } h-6 w-6`}
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M4 6h16M4 12h16M4 18h16"
-                                />
-                            </svg>
-                            <svg
-                                className={`${
-                                    showingNavigationDropdown
-                                        ? "block"
-                                        : "hidden"
-                                } h-6 w-6`}
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M6 18L18 6M6 6l12 12"
-                                />
-                            </svg>
+                            {showingNavigationDropdown ? (
+                                <X className="h-6 w-6" />
+                            ) : (
+                                <Menu className="h-6 w-6" />
+                            )}
                         </button>
                     </div>
                 </div>
@@ -212,30 +188,86 @@ const Navbar = () => {
             <div
                 className={`${
                     showingNavigationDropdown ? "block" : "hidden"
-                } sm:hidden`}
+                } sm:hidden bg-main`}
             >
-                <div className="space-y-1 pb-3 pt-2">
+                <div className="space-y-1 px-3 pb-3 pt-2">
                     <ResponsiveNavLink
                         href={route("dashboard")}
                         active={route().current("dashboard")}
-                        className="block py-2 pl-3 pr-4 text-base font-medium text-gray-900 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-white/10"
                     >
                         Dashboard
                     </ResponsiveNavLink>
-                </div>
-                <div className="border-t border-gray-200 pb-3 pt-4 dark:border-gray-700">
-                    <div className="px-4">
-                        <div className="text-base font-medium text-gray-800 dark:text-gray-200">
-                            {user.name}
-                        </div>
-                        <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                            {user.email}
+                    <div className="rounded-md px-3 py-2 text-base font-medium text-white hover:bg-white/10">
+                        <span className="block">Products</span>
+                        <div className="mt-1 ml-3 space-y-1">
+                            <ResponsiveNavLink
+                                href={route("products.create")}
+                                className="block rounded-md px-3 py-2 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white"
+                            >
+                                Add Product
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink
+                                href={route("products.index")}
+                                className="block rounded-md px-3 py-2 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white"
+                            >
+                                All Products
+                            </ResponsiveNavLink>
                         </div>
                     </div>
-                    <div className="mt-3 space-y-1">
+                    <div className="rounded-md px-3 py-2 text-base font-medium text-white hover:bg-white/10">
+                        <span className="block">Services</span>
+                        <div className="mt-1 ml-3 space-y-1">
+                            <ResponsiveNavLink className="block rounded-md px-3 py-2 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white">
+                                Add Service
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink className="block rounded-md px-3 py-2 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white">
+                                All Services
+                            </ResponsiveNavLink>
+                        </div>
+                    </div>
+                    <ResponsiveNavLink className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-white/10">
+                        <div className="flex items-center">
+                            <Inbox className="h-5 w-5 mr-2" />
+                            Mouvements
+                        </div>
+                    </ResponsiveNavLink>
+                    <ResponsiveNavLink className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-white/10">
+                        <div className="flex items-center">
+                            <Bell className="h-5 w-5 mr-2" />
+                            Notifications
+                        </div>
+                    </ResponsiveNavLink>
+                    <ResponsiveNavLink className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-white/10">
+                        Actions
+                    </ResponsiveNavLink>
+                    <ResponsiveNavLink className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-white/10">
+                        <div className="flex items-center">
+                            <BarChart3 className="h-5 w-5 mr-2" />
+                            Analytics
+                        </div>
+                    </ResponsiveNavLink>
+                </div>
+                <div className="border-t border-indigo-700 pb-3 pt-4">
+                    <div className="flex items-center px-4">
+                        <div className="flex-shrink-0">
+                            <div className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center text-white">
+                                <User className="h-6 w-6" />
+                            </div>
+                        </div>
+                        <div className="ml-3">
+                            <div className="text-base font-medium text-white">
+                                {user.name}
+                            </div>
+                            <div className="text-sm font-medium text-white/60">
+                                {user.email}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="mt-3 space-y-1 px-2">
                         <ResponsiveNavLink
                             href={route("profile.edit")}
-                            className="block py-2 pl-3 pr-4 text-base font-medium text-gray-900 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                            className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-white/10"
                         >
                             Profile
                         </ResponsiveNavLink>
@@ -243,7 +275,7 @@ const Navbar = () => {
                             method="post"
                             href={route("logout")}
                             as="button"
-                            className="block py-2 pl-3 pr-4 text-base font-medium text-gray-900 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                            className="block w-full text-left rounded-md px-3 py-2 text-base font-medium text-white hover:bg-white/10"
                         >
                             Log Out
                         </ResponsiveNavLink>

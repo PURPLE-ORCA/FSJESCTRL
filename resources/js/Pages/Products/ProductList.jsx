@@ -1,6 +1,6 @@
 import React from "react";
 import { usePage } from "@inertiajs/react";
-import { Link, useForm } from "@inertiajs/react";
+import { Link, useForm, router } from "@inertiajs/react";
 import { Table } from "@/components/ui/table"; // Assuming shadcn DataTable
 import { Input } from "@/components/ui/input"; // shadcn Input
 import { Button } from "@/components/ui/button"; // shadcn Button
@@ -14,31 +14,72 @@ import {
 } from "@/components/ui/pagination";
 import Layout from "@/Layouts/Layout";
 import { cn } from "@/lib/utils";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter, // Fixed typo
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
+import { MingcuteDeleteFill } from "@/Components/MingcuteDeleteFill";
+import { MaterialSymbolsEdit } from "@/Components/MaterialSymbolsEdit";
 
 const ProductList = () => {
     const { props } = usePage();
     const { products, filters } = props; // Data passed from the backend
     const { auth } = usePage().props;
     // const { can_manage_products } = props.auth.user?.abilities || {};
-    
-    // Form for search and sorting
+
     const form = useForm({
         search: filters.search || "",
         sort_by: filters.sort_by || "name",
         sort_order: filters.sort_order || "asc",
     });
 
-const canManageProducts = auth?.abilities?.can_manage_products;
+    const [productToDelete, setProductToDelete] = React.useState(null); // Track product to delete
+    const canManageProducts = auth?.abilities?.can_manage_products;
 
-if (!canManageProducts) {
-    return (
-        <Layout>
-            <div className="text-center text-2xl font-bold mx-4 my-20">
-                You do not have permission to view this page.
-            </div>
-        </Layout>
-    );
-}
+    if (!canManageProducts) {
+        return (
+            <Layout>
+                <div className="text-center text-2xl font-bold mx-4 my-20">
+                    You do not have permission to view this page.
+                </div>
+            </Layout>
+        );
+    }
+const handleDelete = (product) => {
+router.delete(route("products.destroy", product.id), {
+    preserveScroll: true,
+    preserveState: true,
+    onSuccess: () => {
+        toast.success("Product deleted successfully!");
+    },
+    onError: () => {
+        toast.error("Failed to delete product");
+    },
+});
+};
+    // Confirm deletion
+    // const confirmDelete = () => {
+    //     if (!productToDelete) return;
+
+    //     router.delete(route("products.destroy", productToDelete.id), {
+    //         onSuccess: () => {
+    //             toast.success("Product deleted successfully!");
+    //             setProductToDelete(null);
+    //         },
+    //         onError: () => {
+    //             toast.error("Failed to delete product");
+    //             setProductToDelete(null);
+    //         },
+    //     });
+    // };
 
     // Table columns
     const columns = [
@@ -59,9 +100,39 @@ if (!canManageProducts) {
             cell: ({ row }) => (
                 <div className="flex gap-2">
                     <Link href={`/products/${row.original.id}/edit`}>
-                        <Button variant="outline">Edit</Button>
+                        <Button variant="outline">
+                            <MaterialSymbolsEdit />
+                        </Button>
                     </Link>
-                    <Button variant="destructive">Delete</Button>
+                    <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                            <Button>
+                                <MingcuteDeleteFill />{" "}
+                            </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                    Confirm Deletion
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    Are you sure you want to delete the product
+                                    "{row.original.name}"?
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                    onClick={() => handleDelete(row.original)} // Ensure this is the only place calling handleDelete
+                                    disabled={router.isProcessing}
+                                >
+                                    {router.isProcessing
+                                        ? "Deleting..."
+                                        : "Confirm"}
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
                 </div>
             ),
         },
