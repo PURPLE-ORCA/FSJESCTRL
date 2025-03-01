@@ -26,7 +26,7 @@ class Product extends Model
 {
     return $this->belongsTo(Service::class, 'served_to');
 }
-    public function stockMovements()
+    public function movements()
     {
         return $this->hasMany(Movement::class);
     }

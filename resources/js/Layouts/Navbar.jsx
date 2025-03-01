@@ -118,8 +118,34 @@ const Navbar = () => {
                                 </DropdownMenu>
                             </NavLink>
                             <NavLink className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white">
-                                <Inbox className="h-4 w-4 mr-1" />
-                                Mouvements
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger className="inline-flex items-center gap-1">
+                                        <Inbox className="h-4 w-4 mr-1" />
+                                        <span>Movements</span>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className="bg-white dark:bg-gray-800 py-1">
+                                        <DropdownMenuItem
+                                            asChild
+                                            className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                        >
+                                            <Link
+                                            // href={route("movements.create")}
+                                            >
+                                                Add Movement
+                                            </Link>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            asChild
+                                            className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                        >
+                                            <Link
+                                                href={route("movements.index")}
+                                            >
+                                                All Movements
+                                            </Link>
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
                             </NavLink>
                             <NavLink className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white">
                                 <Bell className="h-4 w-4 mr-1" />
@@ -248,12 +274,23 @@ const Navbar = () => {
                             </ResponsiveNavLink>
                         </div>
                     </div>
-                    <ResponsiveNavLink className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-white/10">
-                        <div className="flex items-center">
-                            <Inbox className="h-5 w-5 mr-2" />
-                            Mouvements
+                    <div className="rounded-md px-3 py-2 text-base font-medium text-white hover:bg-white/10">
+                        <span className="block">Mouvements</span>
+                        <div className="mt-1 ml-3 space-y-1">
+                            <ResponsiveNavLink
+                                // href={route("movements.create")}
+                                className="block rounded-md px-3 py-2 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white"
+                            >
+                                Add mouvement
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink
+                                // href={route("movements.index")}
+                                className="block rounded-md px-3 py-2 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white"
+                            >
+                                All mouvement
+                            </ResponsiveNavLink>
                         </div>
-                    </ResponsiveNavLink>
+                    </div>
                     <ResponsiveNavLink className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-white/10">
                         <div className="flex items-center">
                             <Bell className="h-5 w-5 mr-2" />

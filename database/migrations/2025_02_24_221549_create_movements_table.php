@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('movements', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained();
+            $table->foreignId('product_id')->constrained('products');
             $table->foreignId('from_service_id')->constrained('services');
             $table->foreignId('to_service_id')->constrained('services');
             $table->unsignedInteger('quantity');

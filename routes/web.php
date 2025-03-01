@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\MovementController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -64,5 +65,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/services/{service}/edit', [ServiceController::class, 'edit'])->name('services.edit');
     Route::delete('/services/{service}', [ServiceController::class, 'destroy'])->name('services.destroy');
 });
+
+Route::middleware('can:can_manage_movements')->group(function () {
+    Route::get('/movements', [MovementController::class, 'index'])->name('movements.index');
+    Route::post('/movements', [MovementController::class, 'store'])->name('movements.store');
 });
+});
+Route::get('/movements/export', [MovementController::class, 'export'])->name('movements.export');
 require __DIR__.'/auth.php';
