@@ -135,54 +135,54 @@ const MovementList = () => {
                 {/* Pagination */}
                 <Pagination className="mt-6">
                     <PaginationContent>
-                        {movements.links.map((link, index) =>{
-                                                    if (link.label.includes("Previous")) {
-                                                        return (
-                                                            <PaginationItem key={index}>
-                                                                <PaginationPrevious
-                                                                    href={link.url || "#"}
-                                                                    className={
-                                                                        link.url
-                                                                            ? ""
-                                                                            : "pointer-events-none opacity-50"
-                                                                    }
-                                                                />
-                                                            </PaginationItem>
-                                                        );
-                                                    }
-                        
-                                                    if (link.label.includes("Next")) {
-                                                        return (
-                                                            <PaginationItem key={index}>
-                                                                <PaginationNext
-                                                                    href={link.url || "#"}
-                                                                    className={
-                                                                        link.url
-                                                                            ? ""
-                                                                            : "pointer-events-none opacity-50"
-                                                                    }
-                                                                />
-                                                            </PaginationItem>
-                                                        );
-                                                    }
-                        
-                                                    return (
-                                                        <PaginationItem key={index}>
-                                                            <PaginationLink
-                                                                href={link.url || "#"}
-                                                                isActive={link.active}
-                                                                className={cn(
-                                                                    link.active
-                                                                        ? "bg-main text-white"
-                                                                        : "hover:bg-gray-100",
-                                                                    "dark:hover:bg-gray-800"
-                                                                )}
-                                                            >
-                                                                {link.label}
-                                                            </PaginationLink>
-                                                        </PaginationItem>
-                                                    );
-                                                })}
+                        {movements.links.map((link, index) => {
+                            if (link.label.includes("Previous")) {
+                                return (
+                                    <PaginationItem key={index}>
+                                        <PaginationPrevious
+                                            href={link.url || "#"}
+                                            className={
+                                                link.url
+                                                    ? ""
+                                                    : "pointer-events-none opacity-50"
+                                            }
+                                        />
+                                    </PaginationItem>
+                                );
+                            }
+
+                            if (link.label.includes("Next")) {
+                                return (
+                                    <PaginationItem key={index}>
+                                        <PaginationNext
+                                            href={link.url || "#"}
+                                            className={
+                                                link.url
+                                                    ? ""
+                                                    : "pointer-events-none opacity-50"
+                                            }
+                                        />
+                                    </PaginationItem>
+                                );
+                            }
+
+                            return (
+                                <PaginationItem key={index}>
+                                    <PaginationLink
+                                        href={link.url || "#"}
+                                        isActive={link.active}
+                                        className={cn(
+                                            link.active
+                                                ? "bg-main text-white"
+                                                : "hover:bg-gray-100",
+                                            "dark:hover:bg-gray-800"
+                                        )}
+                                    >
+                                        {link.label}
+                                    </PaginationLink>
+                                </PaginationItem>
+                            );
+                        })}
                     </PaginationContent>
                 </Pagination>
             </div>

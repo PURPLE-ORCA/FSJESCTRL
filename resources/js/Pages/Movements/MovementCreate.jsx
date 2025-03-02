@@ -28,9 +28,9 @@ const MovementCreate = () => {
     }
 
     const form = useForm({
-        product_id: "",
-        from_service_id: "",
-        to_service_id: "",
+        product_id: null, // Change to null
+        from_service_id: null, // Change to null
+        to_service_id: null, // Change to null
         quantity: 0,
         note: "",
     });
@@ -40,7 +40,8 @@ const MovementCreate = () => {
         const product = products.find((p) => p.id === parseInt(productId));
         if (product) {
             form.setData({
-                from_service_id: product.served_to.toString(),
+                product_id: product.id, // Set as number
+                from_service_id: product.served_to, // Keep as number
                 quantity: product.quantity,
             });
         }
@@ -86,7 +87,7 @@ const MovementCreate = () => {
                                         key={product.id}
                                         value={product.id.toString()}
                                     >
-                                        {product.name} (Qty: {product.quantity})
+                                        {product.name}
                                     </SelectItem>
                                 ))}
                             </SelectContent>
@@ -122,10 +123,10 @@ const MovementCreate = () => {
                             To Service
                         </label>
                         <Select
-                            value={form.data.to_service_id}
-                            onValueChange={(value) =>
-                                form.setData("to_service_id", value)
-                            }
+                            value={form.data.to_service_id?.toString() || ""}
+                            onValueChange={(value) => {
+                                form.setData("to_service_id", parseInt(value)); // Convert to number
+                            }}
                         >
                             <SelectTrigger>
                                 <SelectValue placeholder="Select destination service" />
@@ -156,9 +157,10 @@ const MovementCreate = () => {
                         <Input
                             type="number"
                             value={form.data.quantity}
-                            onChange={(e) =>
-                                form.setData("quantity", e.target.value)
-                            }
+                            onChange={(e) => {
+                                const value = parseInt(e.target.value) || 0;
+                                form.setData("quantity", value);
+                            }}
                             className="mt-1"
                             min={1}
                         />

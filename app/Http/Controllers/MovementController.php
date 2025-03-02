@@ -6,6 +6,7 @@ use App\Models\Movement;
 use App\Http\Requests\StoreMovementRequest;
 use App\Http\Requests\UpdateMovementRequest;
 use App\Models\Product;
+use App\Models\Service;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,16 +38,22 @@ public function index(Request $request)
     ]);
 }
 
+    public function create()
+    {
+        return Inertia::render('Movements/MovementCreate', [
+            'products' => Product::all(),
+            'services' => Service::all(),
+        ]);
+    }
 public function store(Request $request)
 {
     $request->validate([
-        'product_id' => 'required|exists:products,id',
-        'from_service_id' => 'required|exists:services,id',
-        'to_service_id' => 'required|exists:services,id|different:from_service_id',
+        'product_id' => 'required|integer|exists:products,id',
+        'from_service_id' => 'required|integer|exists:services,id',
+        'to_service_id' => 'required|integer|exists:services,id|different:from_service_id',
         'quantity' => 'required|integer|min:1',
         'note' => 'nullable|string',
     ]);
-
     $product = Product::findOrFail($request->product_id);
 
     // Ensure the product is currently in the from_service
@@ -73,10 +80,7 @@ public function store(Request $request)
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
-    }
+
     public function show(Movement $movement)
     {
         //

@@ -20,6 +20,7 @@ import {
     Inbox,
     Package,
 } from "lucide-react";
+import ThemeToggler from "@/Components/ThemeToggler";
 
 const Navbar = () => {
     const user = usePage().props.auth.user;
@@ -60,36 +61,6 @@ const Navbar = () => {
                             <NavLink className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white">
                                 <DropdownMenu>
                                     <DropdownMenuTrigger className="inline-flex items-center gap-1">
-                                        <Package className="h-4 w-4" />
-                                        <span>Products</span>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent className="bg-white dark:bg-gray-800 py-1">
-                                        <DropdownMenuItem
-                                            asChild
-                                            className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                        >
-                                            <Link
-                                                href={route("products.create")}
-                                            >
-                                                Add Product
-                                            </Link>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            asChild
-                                            className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                        >
-                                            <Link
-                                                href={route("products.index")}
-                                            >
-                                                All Products
-                                            </Link>
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </NavLink>
-                            <NavLink className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white">
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger className="inline-flex items-center gap-1">
                                         <Activity className="h-4 w-4" />
                                         <span>Services</span>
                                     </DropdownMenuTrigger>
@@ -120,6 +91,37 @@ const Navbar = () => {
                             <NavLink className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white">
                                 <DropdownMenu>
                                     <DropdownMenuTrigger className="inline-flex items-center gap-1">
+                                        <Package className="h-4 w-4" />
+                                        <span>Products</span>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className="bg-white dark:bg-gray-800 py-1">
+                                        <DropdownMenuItem
+                                            asChild
+                                            className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                        >
+                                            <Link
+                                                href={route("products.create")}
+                                            >
+                                                Add Product
+                                            </Link>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            asChild
+                                            className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                        >
+                                            <Link
+                                                href={route("products.index")}
+                                            >
+                                                All Products
+                                            </Link>
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </NavLink>
+
+                            <NavLink className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white">
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger className="inline-flex items-center gap-1">
                                         <Inbox className="h-4 w-4 mr-1" />
                                         <span>Movements</span>
                                     </DropdownMenuTrigger>
@@ -129,7 +131,7 @@ const Navbar = () => {
                                             className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                                         >
                                             <Link
-                                            // href={route("movements.create")}
+                                            href={route("movements.create")}
                                             >
                                                 Add Movement
                                             </Link>
@@ -163,6 +165,7 @@ const Navbar = () => {
 
                     {/* User Dropdown (Desktop) */}
                     <div className="hidden sm:ml-6 sm:flex sm:items-center">
+                        <ThemeToggler />
                         <button className="mr-3 relative rounded-full bg-white/10 p-1 text-white hover:bg-white/20 focus:outline-none  ">
                             <span className="sr-only">View notifications</span>
                             <Bell className="h-6 w-6" />
