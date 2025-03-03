@@ -14,7 +14,12 @@ import Layout from "@/Layouts/Layout";
 import { toast } from "sonner";
 
 const MovementCreate = () => {
-    const { auth, products, services } = usePage().props;
+    const {
+        auth,
+        products: allProducts,
+        services,
+        user_service_id,
+    } = usePage().props;
     const canManageMovements = auth?.abilities?.can_manage_movements;
 
     if (!canManageMovements) {
@@ -27,34 +32,58 @@ const MovementCreate = () => {
         );
     }
 
+    if (!user_service_id) {
+        return (
+            <Layout>
+                <div className="text-center text-xl text-red-500 mx-4 my-20">
+                    You need to be assigned to a service to create movements
+                </div>
+            </Layout>
+        );
+    }
+
+    // Filter products available in user's service
+    const availableProducts = allProducts.filter(
+        (product) =>
+            product.served_to &&
+            product.served_to.toString() === user_service_id.toString()
+    );
+
+    const handleProductSelect = (productId) => {
+        const product = availableProducts.find((p) => p.id === productId);
+
+        if (!product) {
+            toast.error("Product not found");
+            form.setData("product_id", null);
+            return;
+        }
+
+        // Use setData while preserving from_service_id
+        form.setData({
+            ...form.data,
+            product_id: product.id,
+            quantity: product.quantity,
+        });
+    };
+
     const form = useForm({
-        product_id: null, // Change to null
-        from_service_id: null, // Change to null
-        to_service_id: null, // Change to null
+        product_id: null,
+        from_service_id: parseInt(user_service_id), // Use parseInt to ensure it's a number
+        to_service_id: null,
         quantity: 0,
         note: "",
     });
 
-    // Fetch product details when selected
-    const handleProductSelect = (productId) => {
-        const product = products.find((p) => p.id === parseInt(productId));
-        if (product) {
-            form.setData({
-                product_id: product.id, // Set as number
-                from_service_id: product.served_to, // Keep as number
-                quantity: product.quantity,
-            });
-        }
-    };
-
     const handleSubmit = (e) => {
         e.preventDefault();
+
         router.post(route("movements.store"), form.data, {
             onSuccess: () => {
                 toast.success("Movement recorded!");
                 form.reset();
             },
             onError: (errors) => {
+                console.error("Form errors:", errors); // Add this line
                 const firstError = Object.values(errors)[0];
                 toast.error(firstError);
             },
@@ -74,20 +103,22 @@ const MovementCreate = () => {
                         </label>
                         <Select
                             onValueChange={(value) => {
-                                form.setData("product_id", value);
-                                handleProductSelect(value);
+                                const productId = parseInt(value);
+                                form.setData("product_id", productId);
+                                handleProductSelect(productId);
                             }}
                         >
                             <SelectTrigger>
                                 <SelectValue placeholder="Select a product" />
                             </SelectTrigger>
                             <SelectContent>
-                                {products.map((product) => (
+                                {availableProducts.map((product) => (
                                     <SelectItem
                                         key={product.id}
                                         value={product.id.toString()}
                                     >
-                                        {product.name}
+                                        {product.name} (Available:{" "}
+                                        {product.quantity})
                                     </SelectItem>
                                 ))}
                             </SelectContent>
@@ -99,23 +130,11 @@ const MovementCreate = () => {
                         )}
                     </div>
 
-                    {/* From Service (Auto-filled) */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            From Service
-                        </label>
-                        <Input
-                            value={
-                                services.find(
-                                    (s) =>
-                                        s.id ===
-                                        parseInt(form.data.from_service_id)
-                                )?.name || ""
-                            }
-                            disabled
-                            className="mt-1"
-                        />
-                    </div>
+                    <input
+                        type="hidden"
+                        name="from_service_id"
+                        value={user_service_id}
+                    />
 
                     {/* To Service */}
                     <div>
@@ -125,21 +144,26 @@ const MovementCreate = () => {
                         <Select
                             value={form.data.to_service_id?.toString() || ""}
                             onValueChange={(value) => {
-                                form.setData("to_service_id", parseInt(value)); // Convert to number
+                                form.setData("to_service_id", parseInt(value));
                             }}
                         >
                             <SelectTrigger>
                                 <SelectValue placeholder="Select destination service" />
                             </SelectTrigger>
                             <SelectContent>
-                                {services.map((service) => (
-                                    <SelectItem
-                                        key={service.id}
-                                        value={service.id.toString()}
-                                    >
-                                        {service.name}
-                                    </SelectItem>
-                                ))}
+                                {services
+                                    .filter(
+                                        (service) =>
+                                            service.id !== user_service_id
+                                    ) // Add this filter
+                                    .map((service) => (
+                                        <SelectItem
+                                            key={service.id}
+                                            value={service.id.toString()}
+                                        >
+                                            {service.name}
+                                        </SelectItem>
+                                    ))}
                             </SelectContent>
                         </Select>
                         {form.errors.to_service_id && (
