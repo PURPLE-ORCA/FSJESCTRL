@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Layout from "@/Layouts/Layout";
 import { toast } from "sonner";
+import jsPDF from "jspdf";
 
 const MovementCreate = () => {
     const {
@@ -83,11 +84,91 @@ const MovementCreate = () => {
                 form.reset();
             },
             onError: (errors) => {
-                console.error("Form errors:", errors); // Add this line
+                console.error("Form errors:", errors);
                 const firstError = Object.values(errors)[0];
                 toast.error(firstError);
             },
         });
+    };
+
+    // Function to export the movement paper as a PDF
+    // Function to export the movement paper as a PDF with custom styling
+    const exportMovementPaper = () => {
+        // Look up names based on IDs
+        const product = availableProducts.find(
+            (p) => p.id === form.data.product_id
+        );
+        const toService = services.find(
+            (s) => s.id === form.data.to_service_id
+        );
+        const fromService = services.find(
+            (s) => s.id === parseInt(user_service_id)
+        );
+
+        const doc = new jsPDF();
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+
+        // Add a stylish header with a cool background color
+        doc.setFillColor(30, 144, 255); // DodgerBlue
+        doc.rect(0, 0, pageWidth, 40, "F");
+
+        // Header title centered in white
+        doc.setFontSize(22);
+        doc.setTextColor(255, 255, 255);
+        doc.text("Movement Paper", pageWidth / 2, 25, { align: "center" });
+
+        // Draw a border for the content area
+        doc.setLineWidth(0.5);
+        doc.setDrawColor(0, 0, 0);
+        doc.rect(10, 50, pageWidth - 20, 100);
+
+        // Body content
+        doc.setFontSize(12);
+        doc.setTextColor(0, 0, 0);
+        const contentX = 14;
+        let contentY = 60;
+        const lineSpacing = 10;
+
+        doc.text(
+            `Date: ${new Date().toLocaleDateString()}`,
+            contentX,
+            contentY
+        );
+        contentY += lineSpacing;
+        doc.text(
+            `Product: ${product ? product.name : "N/A"}`,
+            contentX,
+            contentY
+        );
+        contentY += lineSpacing;
+        doc.text(
+            `From Service: ${fromService ? fromService.name : user_service_id}`,
+            contentX,
+            contentY
+        );
+        contentY += lineSpacing;
+        doc.text(
+            `To Service: ${toService ? toService.name : "N/A"}`,
+            contentX,
+            contentY
+        );
+        contentY += lineSpacing;
+        doc.text(`Quantity: ${form.data.quantity}`, contentX, contentY);
+        contentY += lineSpacing;
+        doc.text(`Note: ${form.data.note || "No note"}`, contentX, contentY);
+
+        // Footer with a bit of branding
+        doc.setFontSize(10);
+        doc.setTextColor(100);
+        doc.text(
+            "Powered by Your Awesome Inventory App",
+            pageWidth / 2,
+            pageHeight - 10,
+            { align: "center" }
+        );
+
+        doc.save("movement_paper.pdf");
     };
 
     return (
@@ -155,7 +236,7 @@ const MovementCreate = () => {
                                     .filter(
                                         (service) =>
                                             service.id !== user_service_id
-                                    ) // Add this filter
+                                    )
                                     .map((service) => (
                                         <SelectItem
                                             key={service.id}
@@ -210,9 +291,14 @@ const MovementCreate = () => {
                         />
                     </div>
 
-                    <Button type="submit" disabled={form.processing}>
-                        {form.processing ? "Saving..." : "Create Movement"}
-                    </Button>
+                    <div className="flex gap-4">
+                        <Button type="submit" disabled={form.processing}>
+                            {form.processing ? "Saving..." : "Create Movement"}
+                        </Button>
+                        <Button type="button" onClick={exportMovementPaper}>
+                            Export Movement Paper
+                        </Button>
+                    </div>
                 </form>
             </div>
         </Layout>

@@ -32,7 +32,7 @@ class MovementController extends Controller
             });
         }
 
-        $movements = $query->paginate(10);
+        $movements = $query->paginate(17);
 
         return Inertia::render('Movements/MovementList', [
             'movements' => $movements,
