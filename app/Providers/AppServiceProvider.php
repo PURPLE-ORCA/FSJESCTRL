@@ -57,6 +57,9 @@ Gate::define('can_manage_services', function ($user) {
 Gate::define('can_manage_movements', function ($user) {
     return in_array($user->role?->name, ['general_manager', 'magazine_manager', 'magazine_employee', 'it_manager', 'it_employee']);
 });
+Gate::define('can_view_actions', function ($user) {
+    return in_array($user->role?->name, ['general_manager', 'magazine_manager', 'it_manager', 'it_employee']);
+});
 Gate::define('can_view_movements', function ($user) {
     return in_array($user->role?->name, ['general_manager', 'magazine_manager', 'magazine_employee' , 'it_manager', 'it_employee']);
 });

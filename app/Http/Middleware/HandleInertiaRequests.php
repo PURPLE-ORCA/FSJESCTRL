@@ -63,6 +63,7 @@ class HandleInertiaRequests extends Middleware
             'can_manage_services' => Gate::forUser($user)->allows('can_manage_services'),
             'can_view_movements' => Gate::forUser($user)->allows('can_view_movements'),
             'can_manage_movements' => Gate::forUser($user)->allows('can_manage_movements'),
+            'can_view_actions' => Gate::forUser($user)->allows('can_view_actions'),
             'can_view_analytics' => Gate::forUser($user)->allows('can_view_analytics'),
         ];
     }

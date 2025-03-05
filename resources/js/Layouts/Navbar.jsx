@@ -131,7 +131,7 @@ const Navbar = () => {
                                             className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                                         >
                                             <Link
-                                            href={route("movements.create")}
+                                                href={route("movements.create")}
                                             >
                                                 Add Movement
                                             </Link>
@@ -153,7 +153,10 @@ const Navbar = () => {
                                 <Bell className="h-4 w-4 mr-1" />
                                 Notifications
                             </NavLink>
-                            <NavLink className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white">
+                            <NavLink
+                                href={route("actions.index")}
+                                className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white"
+                            >
                                 Actions
                             </NavLink>
                             <NavLink className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white">

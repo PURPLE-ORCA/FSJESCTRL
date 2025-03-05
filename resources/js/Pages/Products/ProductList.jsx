@@ -35,7 +35,7 @@ import { Icon } from "@iconify/react";
 
 const ProductList = () => {
     const { props } = usePage();
-    const { products, filters } = props; // Data passed from the backend
+    const { products, filters } = props;
     const { auth } = usePage().props;
 
     const form = useForm({

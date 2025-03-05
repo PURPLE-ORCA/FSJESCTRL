@@ -1,8 +1,8 @@
 import React from "react";
 import { usePage, useForm } from "@inertiajs/react";
+import Layout from "@/Layouts/Layout";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import Layout from "@/Layouts/Layout";
 import {
     Pagination,
     PaginationContent,
@@ -13,13 +13,13 @@ import {
 } from "@/components/ui/pagination";
 import { cn } from "@/lib/utils";
 import DataExport from "@/Components/DataExport";
-import MovementCard from "./MovementCard";
+import ActionCard from "./ActionCard";
 
-const MovementList = () => {
-    const { auth, movements, filters } = usePage().props;
-    const canViewMovements = auth?.abilities?.can_view_movements;
+const ActionList = () => {
+    const { auth, actions, filters } = usePage().props;
+    const canViewActions = auth?.abilities?.can_view_actions;
 
-    if (!canViewMovements) {
+    if (!canViewActions) {
         return (
             <Layout>
                 <div className="text-center text-2xl font-bold mx-4 my-20">
@@ -29,7 +29,7 @@ const MovementList = () => {
         );
     }
 
-    // Form for search
+    // Form for search/filtering
     const form = useForm({
         search: filters.search || "",
     });
@@ -37,13 +37,13 @@ const MovementList = () => {
     return (
         <Layout>
             <div className="p-6">
-                <h1 className="text-4xl font-bold mb-4">Stock Movements</h1>
+                <h1 className="text-4xl font-bold mb-4">Actions List</h1>
 
                 {/* Search and Filters */}
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();
-                        form.get(route("movements.index"), {
+                        form.get(route("actions.index"), {
                             preserveScroll: true,
                             preserveState: true,
                         });
@@ -52,7 +52,7 @@ const MovementList = () => {
                 >
                     <Input
                         type="text"
-                        placeholder="Search by product name..."
+                        placeholder="Search actions..."
                         value={form.data.search}
                         onChange={(e) => form.setData("search", e.target.value)}
                         className="max-w-sm"
@@ -62,7 +62,7 @@ const MovementList = () => {
                         <Button
                             onClick={() => {
                                 form.setData({
-                                    sort_by: "movement_date",
+                                    sort_by: "created_at",
                                     sort_order: "desc",
                                 });
                                 form.submit();
@@ -71,13 +71,13 @@ const MovementList = () => {
                             Sort by Date (Desc)
                         </Button>
 
-                        <DataExport data={movements.data} />
+                        <DataExport data={actions.data} />
                     </div>
                 </form>
 
                 <div className="flex flex-wrap justify-center flex-col gap-4">
-                    {movements.data.map((movement, index) => (
-                        <MovementCard key={index} movement={movement} />
+                    {actions.data.map((action, index) => (
+                        <ActionCard key={index} action={action} />
                     ))}
                 </div>
 
@@ -85,7 +85,7 @@ const MovementList = () => {
                 <div className="mt-6">
                     <Pagination className="mt-6">
                         <PaginationContent>
-                            {movements.links.map((link, index) => {
+                            {actions.links.map((link, index) => {
                                 if (link.label.includes("Previous")) {
                                     return (
                                         <PaginationItem key={index}>
@@ -100,7 +100,6 @@ const MovementList = () => {
                                         </PaginationItem>
                                     );
                                 }
-
                                 if (link.label.includes("Next")) {
                                     return (
                                         <PaginationItem key={index}>
@@ -115,7 +114,6 @@ const MovementList = () => {
                                         </PaginationItem>
                                     );
                                 }
-
                                 return (
                                     <PaginationItem key={index}>
                                         <PaginationLink
@@ -134,11 +132,11 @@ const MovementList = () => {
                                 );
                             })}
                         </PaginationContent>
-                    </Pagination>{" "}
+                    </Pagination>
                 </div>
             </div>
         </Layout>
     );
 };
 
-export default MovementList;
+export default ActionList;

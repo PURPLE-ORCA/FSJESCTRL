@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\MovementController;
 use App\Http\Controllers\ProfileController;
@@ -64,13 +65,18 @@ Route::middleware('auth')->group(function () {
     Route::put('/services/{service}', [ServiceController::class, 'update'])->name('services.update'); 
     Route::get('/services/{service}/edit', [ServiceController::class, 'edit'])->name('services.edit');
     Route::delete('/services/{service}', [ServiceController::class, 'destroy'])->name('services.destroy');
-});
+    });
 
-Route::middleware('can:can_manage_movements')->group(function () {
-    Route::get('/movements', [MovementController::class, 'index'])->name('movements.index');
-    Route::get('/movements/create', [MovementController::class, 'create'])->name('movements.create');
-    Route::post('/movements', [MovementController::class, 'store'])->name('movements.store');
+    Route::middleware('can:can_manage_movements')->group(function () {
+        Route::get('/movements', [MovementController::class, 'index'])->name('movements.index');
+        Route::get('/movements/create', [MovementController::class, 'create'])->name('movements.create');
+        Route::post('/movements', [MovementController::class, 'store'])->name('movements.store');
+    });
+    Route::middleware('can:can_view_actions')->group(function () {
+        Route::get('/actions', [ActionController::class, 'index'])->name('actions.index');
+        Route::post('/actions', [ActionController::class, 'store'])->name('actions.store');
     });
 });
+
 Route::get('/movements/export', [MovementController::class, 'export'])->name('movements.export');
 require __DIR__.'/auth.php';
