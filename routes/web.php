@@ -70,7 +70,7 @@ Route::middleware('can:can_manage_movements')->group(function () {
     Route::get('/movements', [MovementController::class, 'index'])->name('movements.index');
     Route::get('/movements/create', [MovementController::class, 'create'])->name('movements.create');
     Route::post('/movements', [MovementController::class, 'store'])->name('movements.store');
-});
+    });
 });
 Route::get('/movements/export', [MovementController::class, 'export'])->name('movements.export');
 require __DIR__.'/auth.php';

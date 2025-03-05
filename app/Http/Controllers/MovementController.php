@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Movement;
-use App\Http\Requests\StoreMovementRequest;
 use App\Http\Requests\UpdateMovementRequest;
 use App\Models\Product;
 use App\Models\Service;
@@ -32,7 +31,7 @@ class MovementController extends Controller
             });
         }
 
-        $movements = $query->paginate(17);
+        $movements = $query->paginate(20);
 
         return Inertia::render('Movements/MovementList', [
             'movements' => $movements,
@@ -41,22 +40,20 @@ class MovementController extends Controller
     }
     public function create()
     {
-            $user = auth::user();
-                Log::info('User service ID:', ['id' => $user->service_id]); // Check value
+        $user = auth::user();
 
-    
     // Ensure user has a service assigned
-    abort_if(!$user->service_id, 403, 'You need to be assigned to a service');
+        abort_if(!$user->service_id, 403, 'You need to be assigned to a service');
 
-        return Inertia::render('Movements/MovementCreate', [
-        'products' => Product::where('served_to', $user->service_id)->get(),
-            'services' => Service::all(),
-        'user_service_id' => $user->service_id, 
-        ]);
+            return Inertia::render('Movements/MovementCreate', [
+            'products' => Product::where('served_to', $user->service_id)->get(),
+                'services' => Service::all(),
+            'user_service_id' => $user->service_id, 
+            ]);
     }
     public function store(Request $request)
     {
-            $request->validate([
+        $request->validate([
             'product_id' => 'required|exists:products,id',
             'from_service_id' => [
                 'required',

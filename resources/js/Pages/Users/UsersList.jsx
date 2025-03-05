@@ -48,7 +48,6 @@ const UsersList = () => {
         );
     }
 
-    // Form for search/sorting
     const form = useForm({
         search: filters.search || "",
         sort_by: filters.sort_by || "name",
@@ -63,12 +62,16 @@ const UsersList = () => {
         {
             accessorKey: "role.name",
             header: "Role",
-            cell: ({ row }) => <div>{row.original.role?.name || "N/A"}</div>,
+            cell: ({ row }) => (
+                <div>{row.original.role?.name || "no role"}</div>
+            ),
         },
         {
             accessorKey: "service.name",
             header: "Service",
-            cell: ({ row }) => <div>{row.original.service?.name || "N/A"}</div>,
+            cell: ({ row }) => (
+                <div>{row.original.service?.name || "no service"}</div>
+            ),
         },
         {
             accessorKey: "actions",
@@ -130,18 +133,16 @@ const UsersList = () => {
         },
     ];
 
-    // Handle role updates
     const handleRoleUpdate = (user, roleId) => {
         router.put(route("users.update", user.id), {
             role_id: roleId,
-            service_id: user.service_id, // Preserve existing service
+            service_id: user.service_id,
         });
     };
 
     // Handle user deletion
     const handleDelete = (user) => {
-        router.delete(route("users.destroy", user.id), {
-        });
+        router.delete(route("users.destroy", user.id), {});
     };
 
     return (

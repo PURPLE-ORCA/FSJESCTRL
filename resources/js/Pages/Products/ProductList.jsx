@@ -1,9 +1,9 @@
 import React from "react";
 import { usePage } from "@inertiajs/react";
 import { Link, useForm, router } from "@inertiajs/react";
-import { Table } from "@/components/ui/table"; // Assuming shadcn DataTable
-import { Input } from "@/components/ui/input"; // shadcn Input
-import { Button } from "@/components/ui/button"; // shadcn Button
+import { Table } from "@/components/ui/table"; 
+import { Input } from "@/components/ui/input"; 
+import { Button } from "@/components/ui/button";
 import {
     Pagination,
     PaginationContent,
@@ -25,15 +25,18 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { toast } from "sonner";
-import { MingcuteDeleteFill } from "@/Components/MingcuteDeleteFill";
-import { MaterialSymbolsEdit } from "@/Components/MaterialSymbolsEdit";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Icon } from "@iconify/react";
 
 const ProductList = () => {
     const { props } = usePage();
     const { products, filters } = props; // Data passed from the backend
     const { auth } = usePage().props;
-    // const { can_manage_products } = props.auth.user?.abilities || {};
 
     const form = useForm({
         search: filters.search || "",
@@ -41,7 +44,6 @@ const ProductList = () => {
         sort_order: filters.sort_order || "asc",
     });
 
-    const [productToDelete, setProductToDelete] = React.useState(null); // Track product to delete
     const canManageProducts = auth?.abilities?.can_manage_products;
 
     if (!canManageProducts) {
@@ -56,21 +58,6 @@ const ProductList = () => {
     const handleDelete = (product) => {
         router.delete(route("products.destroy", product.id));
     };
-    // Confirm deletion
-    // const confirmDelete = () => {
-    //     if (!productToDelete) return;
-
-    //     router.delete(route("products.destroy", productToDelete.id), {
-    //         onSuccess: () => {
-    //             toast.success("Product deleted successfully!");
-    //             setProductToDelete(null);
-    //         },
-    //         onError: () => {
-    //             toast.error("Failed to delete product");
-    //             setProductToDelete(null);
-    //         },
-    //     });
-    // };
 
     // Table columns
     const columns = [
@@ -89,42 +76,84 @@ const ProductList = () => {
             accessorKey: "actions",
             header: "Actions",
             cell: ({ row }) => (
-                <div className="flex gap-2">
-                    <Link href={`/products/${row.original.id}/edit`}>
-                        <Button variant="outline">
-                            <MaterialSymbolsEdit />
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="p-1">
+                            <Icon
+                                icon="mdi:dots-vertical"
+                                className="w-5 h-5"
+                            />
                         </Button>
-                    </Link>
-                    <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                            <Button>
-                                <MingcuteDeleteFill />
-                            </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>
-                                    Confirm Deletion
-                                </AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    Are you sure you want to delete the product
-                                    "{row.original.name}"?
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction
-                                    onClick={() => handleDelete(row.original)} // Ensure this is the only place calling handleDelete
-                                    disabled={router.isProcessing}
-                                >
-                                    {router.isProcessing
-                                        ? "Deleting..."
-                                        : "Confirm"}
-                                </AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
-                </div>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-40">
+                        <DropdownMenuItem asChild>
+                            <Link
+                            //  href={`/products/${row.original.id}/edit`}
+                            >
+                                <div className="flex items-center gap-2">
+                                    <Icon
+                                        icon="mdi:interaction-double-tap"
+                                        width="24"
+                                        height="24"
+                                    />
+                                    <span>Intervention</span>
+                                </div>
+                            </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                            <Link href={`/products/${row.original.id}/edit`}>
+                                <div className="flex items-center gap-2">
+                                    <Icon
+                                        icon="cuida:edit-outline"
+                                        width="24"
+                                        height="24"
+                                    />
+                                    <span>Edit</span>
+                                </div>
+                            </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <div className="flex items-center gap-2">
+                                        <Icon
+                                            icon="mingcute:delete-3-line"
+                                            width="24"
+                                            height="24"
+                                        />
+                                        <span>Delete</span>
+                                    </div>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>
+                                            Confirm Deletion
+                                        </AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            Are you sure you want to delete the
+                                            product "{row.original.name}"?
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel>
+                                            Cancel
+                                        </AlertDialogCancel>
+                                        <AlertDialogAction
+                                            onClick={() =>
+                                                handleDelete(row.original)
+                                            }
+                                            disabled={router.isProcessing}
+                                        >
+                                            {router.isProcessing
+                                                ? "Deleting..."
+                                                : "Confirm"}
+                                        </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
             ),
         },
     ];
@@ -137,7 +166,7 @@ const ProductList = () => {
                 {/* Search and Filters */}
                 <form
                     onSubmit={(e) => {
-                        e.preventDefault(); // Prevent default form submission
+                        e.preventDefault(); 
                         form.get(route("products.index"), {
                             preserveScroll: true,
                             preserveState: true,
