@@ -21,6 +21,7 @@ import {
     Package,
 } from "lucide-react";
 import ThemeToggler from "@/Components/ThemeToggler";
+import { Icon } from "@iconify/react";
 
 const Navbar = () => {
     const user = usePage().props.auth.user;
@@ -70,9 +71,9 @@ const Navbar = () => {
                                             className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                                         >
                                             <Link
-                                                href={route("services.create")}
+                                                href={route("services.index")}
                                             >
-                                                Add Service
+                                                All Services
                                             </Link>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
@@ -80,9 +81,9 @@ const Navbar = () => {
                                             className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                                         >
                                             <Link
-                                                href={route("services.index")}
+                                                href={route("services.create")}
                                             >
-                                                All Services
+                                                Add Service
                                             </Link>
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>
@@ -100,9 +101,9 @@ const Navbar = () => {
                                             className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                                         >
                                             <Link
-                                                href={route("products.create")}
+                                                href={route("products.index")}
                                             >
-                                                Add Product
+                                                All Products
                                             </Link>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
@@ -110,9 +111,9 @@ const Navbar = () => {
                                             className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                                         >
                                             <Link
-                                                href={route("products.index")}
+                                                href={route("products.create")}
                                             >
-                                                All Products
+                                                Add Product
                                             </Link>
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>
@@ -131,9 +132,9 @@ const Navbar = () => {
                                             className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                                         >
                                             <Link
-                                                href={route("movements.create")}
+                                                href={route("movements.index")}
                                             >
-                                                Add Movement
+                                                All Movements
                                             </Link>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
@@ -141,23 +142,29 @@ const Navbar = () => {
                                             className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                                         >
                                             <Link
-                                                href={route("movements.index")}
+                                                href={route("movements.create")}
                                             >
-                                                All Movements
+                                                Add Movement
                                             </Link>
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </NavLink>
-                            <NavLink className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white">
-                                <Bell className="h-4 w-4 mr-1" />
-                                Notifications
-                            </NavLink>
+
                             <NavLink
                                 href={route("actions.index")}
                                 className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white"
                             >
+                                <Icon
+                                    icon="mdi:interaction-double-tap"
+                                    width="24"
+                                    height="24"
+                                />
                                 Actions
+                            </NavLink>
+                            <NavLink className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white">
+                                <Bell className="h-4 w-4 mr-1" />
+                                Notifications
                             </NavLink>
                             <NavLink className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white">
                                 <BarChart3 className="h-4 w-4 mr-1" />

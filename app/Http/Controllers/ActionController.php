@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Action;
 use App\Http\Requests\StoreActionRequest;
 use App\Http\Requests\UpdateActionRequest;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
 
 class ActionController extends Controller
 {
@@ -38,13 +41,25 @@ class ActionController extends Controller
     }
 
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+
+public function create()
+{
+    // Fetch products with 'id', 'name', and 'serial_number'
+    $products = Product::select('id', 'name', 'serial_number') // Add 'serial_number'
+        ->get()
+        ->map(function ($product) {
+            return [
+                'id' => $product->id,
+                'name' => $product->name,
+                'serial_number' => $product->serial_number, // Ensure this is included
+            ];
+        })
+        ->toArray();
+
+    return Inertia::render('Actions/ActionCreate', [
+        'products' => $products,
+    ]);
+}
 
     public function store(Request $request)
     {
@@ -61,11 +76,10 @@ class ActionController extends Controller
             'details'    => $request->input('details'),
         ]);
 
-        return redirect()->back()->with('success', 'Action created successfully.');
+        return Redirect::route('actions.index')
+            ->with('success', 'Action logged successfully.');
     }
-    /**
-     * Display the specified resource.
-     */
+
     public function show(Action $action)
     {
         //

@@ -1,5 +1,5 @@
 import React from "react";
-import { usePage } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import { useForm, router } from "@inertiajs/react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { ArrowLeft } from "lucide-react";
+
 const ServiceCreate = () => {
     const { auth } = usePage().props;
     const canManageServices = auth?.abilities?.can_manage_services;
@@ -47,6 +49,16 @@ const ServiceCreate = () => {
         <Layout>
             <div className="p-6 max-w-2xl mx-auto">
                 <h1 className="text-3xl font-bold mb-4">Create Service</h1>
+
+                <div className="flex items-center gap-2 mb-4">
+                    <Link
+                        href={route("services.index")}
+                        className="text-blue-600"
+                    >
+                        <ArrowLeft className="w-4 h-4" /> Back to Services
+                    </Link>
+                    <h1 className="text-3xl font-bold">Create New Action</h1>
+                </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     {/* Name */}

@@ -88,7 +88,7 @@ const ProductList = () => {
                     <DropdownMenuContent align="end" className="w-40">
                         <DropdownMenuItem asChild>
                             <Link
-                            //  href={`/products/${row.original.id}/edit`}
+                                href={`/actions/create?product_id=${row.original.id}`} // Pass product_id via URL
                             >
                                 <div className="flex items-center gap-2">
                                     <Icon

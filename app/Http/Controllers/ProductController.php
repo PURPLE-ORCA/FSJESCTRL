@@ -26,7 +26,7 @@ class ProductController extends Controller
             $request->sort_order ?? 'asc'
         );
 
-        $products = $query->paginate(10);
+        $products = $query->paginate(20);
 
         return Inertia::render('Products/ProductList', [
             'products' => $products,

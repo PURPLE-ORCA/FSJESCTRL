@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/button";
 import Layout from "@/Layouts/Layout";
 import { toast } from "sonner";
 import jsPDF from "jspdf";
+import { ArrowLeft } from "lucide-react";
+import { Link } from "@inertiajs/react";
 
 const MovementCreate = () => {
     const {
@@ -162,7 +164,7 @@ const MovementCreate = () => {
         doc.setFontSize(10);
         doc.setTextColor(100);
         doc.text(
-            "Powered by Your Awesome Inventory App",
+            "Powered by EL MOUSSAOUI MOHAMMED",
             pageWidth / 2,
             pageHeight - 10,
             { align: "center" }
@@ -175,6 +177,16 @@ const MovementCreate = () => {
         <Layout>
             <div className="p-6 max-w-2xl mx-auto">
                 <h1 className="text-3xl font-bold mb-4">Create Movement</h1>
+
+                <div className="flex items-center gap-2 mb-4">
+                    <Link
+                        href={route("movements.index")}
+                        className="text-blue-600"
+                    >
+                        <ArrowLeft className="w-4 h-4" /> Back to Movements
+                    </Link>
+                    <h1 className="text-3xl font-bold">Create New Action</h1>
+                </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     {/* Product Selection */}

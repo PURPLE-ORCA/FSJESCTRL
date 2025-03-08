@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/select";
 import Layout from "@/Layouts/Layout";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { ArrowLeft } from "lucide-react";
+
 
 const ProductCreate = () => {
     const { auth, services } = usePage().props;
@@ -51,6 +53,16 @@ const ProductCreate = () => {
                 <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl mb-6">
                     Add New Product
                 </h1>
+
+                <div className="flex items-center gap-2 mb-4">
+                    <Link
+                        href={route("products.index")}
+                        className="text-blue-600"
+                    >
+                        <ArrowLeft className="w-4 h-4" /> Back to Products
+                    </Link>
+                    <h1 className="text-3xl font-bold">Create New Action</h1>
+                </div>
 
                 {form.recentlySuccessful && (
                     <Alert className="mb-6 border-l-4 border-green-500 bg-green-50">
