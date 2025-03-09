@@ -1,356 +1,374 @@
 import React, { useState } from "react";
-import Logo from "@/Components/Logo";
-import Dropdown from "@/Components/Dropdown";
-import NavLink from "@/Components/NavLink";
-import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link, usePage } from "@inertiajs/react";
+import { Icon } from "@iconify/react";
+import {
+    Bell,
+    Menu,
+    ChevronDown,
+    LogOut,
+    Settings,
+} from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
+    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-    Bell,
-    Menu,
-    X,
-    User,
-    BarChart3,
-    Activity,
-    Inbox,
-    Package,
-} from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import ThemeToggler from "@/Components/ThemeToggler";
-import { Icon } from "@iconify/react";
 
 const Navbar = () => {
-    const user = usePage().props.auth.user;
-    const [showingNavigationDropdown, setShowingNavigationDropdown] =
-        useState(false);
+    const { auth } = usePage().props;
+    const user = auth.user;
+
+    const mainNavItems = [
+        {
+            name: "Dashboard",
+            icon: "material-symbols:dashboard",
+            route: "dashboard",
+        },
+        {
+            name: "Users",
+            icon: "material-symbols:person",
+            route: "users.index",
+        },
+        {
+            name: "Services",
+            icon: "material-symbols:miscellaneous-services",
+            children: [
+                { name: "All Services", route: "services.index" },
+                { name: "Add Service", route: "services.create" },
+            ],
+        },
+        {
+            name: "Products",
+            icon: "material-symbols:inventory-2",
+            children: [
+                { name: "All Products", route: "products.index" },
+                { name: "Add Product", route: "products.create" },
+            ],
+        },
+        {
+            name: "Movements",
+            icon: "material-symbols:swap-horiz",
+            children: [
+                { name: "All Movements", route: "movements.index" },
+                { name: "Add Movement", route: "movements.create" },
+            ],
+        },
+        {
+            name: "Actions",
+            icon: "material-symbols:tap-interaction",
+            route: "actions.index",
+        },
+    ];
+
+    // Get user initials for avatar fallback
+    const getInitials = (name) => {
+        return name
+            .split(" ")
+            .map((part) => part[0])
+            .join("")
+            .toUpperCase();
+    };
 
     return (
-        <nav className="bg-main shadow">
-            {/* Desktop & Tablet View */}
-            <div className="mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex h-16 justify-between">
-                    {/* Logo Section */}
+        <nav className="border-b bg-background">
+            <div className="mx-auto px-4 md:px-6">
+                <div className="flex h-16 items-center justify-between">
+                    {/* Logo */}
                     <div className="flex items-center">
-                        <div className="flex-shrink-0">
-                            <Link href="/" className="flex items-center">
-                                <Logo className="h-9 w-auto text-white" />
-                                <span className="ml-2 font-bold text-white hidden md:block">
-                                    DashControl
-                                </span>
-                            </Link>
-                        </div>
-                        <div className="hidden space-x-1 sm:-my-px sm:ml-6 sm:flex">
-                            <NavLink
-                                href={route("dashboard")}
-                                active={route().current("dashboard")}
-                                className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white"
-                            >
-                                Dashboard
-                            </NavLink>
-                            <NavLink
-                                href={route("users.index")}
-                                active={route().current("users.index")}
-                                className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white"
-                            >
-                                <User className="h-4 w-4 mr-1" />
-                                Users
-                            </NavLink>
-                            <NavLink className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white">
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger className="inline-flex items-center gap-1">
-                                        <Activity className="h-4 w-4" />
-                                        <span>Services</span>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent className="bg-white dark:bg-gray-800 py-1">
-                                        <DropdownMenuItem
-                                            asChild
-                                            className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                        >
-                                            <Link
-                                                href={route("services.index")}
-                                            >
-                                                All Services
-                                            </Link>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            asChild
-                                            className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                        >
-                                            <Link
-                                                href={route("services.create")}
-                                            >
-                                                Add Service
-                                            </Link>
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </NavLink>
-                            <NavLink className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white">
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger className="inline-flex items-center gap-1">
-                                        <Package className="h-4 w-4" />
-                                        <span>Products</span>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent className="bg-white dark:bg-gray-800 py-1">
-                                        <DropdownMenuItem
-                                            asChild
-                                            className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                        >
-                                            <Link
-                                                href={route("products.index")}
-                                            >
-                                                All Products
-                                            </Link>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            asChild
-                                            className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                        >
-                                            <Link
-                                                href={route("products.create")}
-                                            >
-                                                Add Product
-                                            </Link>
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </NavLink>
-
-                            <NavLink className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white">
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger className="inline-flex items-center gap-1">
-                                        <Inbox className="h-4 w-4 mr-1" />
-                                        <span>Movements</span>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent className="bg-white dark:bg-gray-800 py-1">
-                                        <DropdownMenuItem
-                                            asChild
-                                            className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                        >
-                                            <Link
-                                                href={route("movements.index")}
-                                            >
-                                                All Movements
-                                            </Link>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            asChild
-                                            className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                        >
-                                            <Link
-                                                href={route("movements.create")}
-                                            >
-                                                Add Movement
-                                            </Link>
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </NavLink>
-
-                            <NavLink
-                                href={route("actions.index")}
-                                className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white"
-                            >
-                                <Icon
-                                    icon="mdi:interaction-double-tap"
-                                    width="24"
-                                    height="24"
-                                />
-                                Actions
-                            </NavLink>
-                            <NavLink className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white">
-                                <Bell className="h-4 w-4 mr-1" />
-                                Notifications
-                            </NavLink>
-                            <NavLink className="inline-flex items-center px-3 py-2 text-sm font-medium text-white/80 rounded-md transition duration-150 ease-in-out hover:bg-white/10 hover:text-white">
-                                <BarChart3 className="h-4 w-4 mr-1" />
-                                Analytics
-                            </NavLink>
-                        </div>
+                        <Link href="/" className="flex items-center">
+                            <Icon
+                                icon="material-symbols:dashboard-customize"
+                                className="h-8 w-8 text-primary"
+                            />
+                            <span className="ml-2 font-semibold text-xl">
+                                DashControl
+                            </span>
+                        </Link>
                     </div>
 
-                    {/* User Dropdown (Desktop) */}
-                    <div className="hidden sm:ml-6 sm:flex sm:items-center">
-                        <ThemeToggler />
-                        <button className="mr-3 relative rounded-full bg-white/10 p-1 text-white hover:bg-white/20 focus:outline-none  ">
-                            <span className="sr-only">View notifications</span>
-                            <Bell className="h-6 w-6" />
-                            <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
-                        </button>
-
-                        <Dropdown>
-                            <Dropdown.Trigger>
-                                <button className="flex items-center rounded-full border-2 border-white/30 bg-white/10 p-1 text-white hover:bg-white/20 focus:outline-none ">
-                                    <span className="sr-only">
-                                        Open user menu
-                                    </span>
-                                    <User className="h-6 w-6" />
-                                </button>
-                            </Dropdown.Trigger>
-                            <Dropdown.Content className="mt-2 w-48 rounded-md bg-white py-1 shadow-lg dark:bg-gray-800">
-                                <div className="border-b border-gray-200 dark:border-gray-700 px-4 py-2">
-                                    <p className="text-sm font-medium text-gray-800 dark:text-gray-200">
-                                        {user.name}
-                                    </p>
-                                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                                        {user.email}
-                                    </p>
-                                </div>
-                                <Dropdown.Link
-                                    href={route("profile.edit")}
-                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
-                                >
-                                    Profile
-                                </Dropdown.Link>
-                                <Dropdown.Link
-                                    href={route("logout")}
-                                    method="post"
-                                    as="button"
-                                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
-                                >
-                                    Log Out
-                                </Dropdown.Link>
-                            </Dropdown.Content>
-                        </Dropdown>
-                    </div>
-
-                    {/* Mobile Menu Button */}
-                    <div className="flex items-center sm:hidden">
-                        <button
-                            onClick={() =>
-                                setShowingNavigationDropdown(
-                                    !showingNavigationDropdown
-                                )
-                            }
-                            className="inline-flex items-center justify-center rounded-md p-2 text-white hover:bg-white/10"
-                        >
-                            <span className="sr-only">Open main menu</span>
-                            {showingNavigationDropdown ? (
-                                <X className="h-6 w-6" />
+                    {/* Desktop Navigation */}
+                    <div className="hidden md:flex md:items-center md:space-x-1">
+                        {mainNavItems.map((item) =>
+                            item.children ? (
+                                <DropdownMenu key={item.name}>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button
+                                            variant="ghost"
+                                            className="flex items-center gap-1 text-sm"
+                                        >
+                                            <Icon
+                                                icon={item.icon}
+                                                className="h-4 w-4 mr-1"
+                                            />
+                                            {item.name}
+                                            <ChevronDown className="h-4 w-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent
+                                        align="center"
+                                        className="w-48"
+                                    >
+                                        {item.children.map((child) => (
+                                            <DropdownMenuItem
+                                                key={child.name}
+                                                asChild
+                                            >
+                                                <Link
+                                                    href={route(child.route)}
+                                                    className="w-full cursor-pointer"
+                                                >
+                                                    {child.name}
+                                                </Link>
+                                            </DropdownMenuItem>
+                                        ))}
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
                             ) : (
-                                <Menu className="h-6 w-6" />
-                            )}
-                        </button>
+                                <Button
+                                    key={item.name}
+                                    variant="ghost"
+                                    asChild
+                                    className={`text-sm ${
+                                        route().current(item.route)
+                                            ? "bg-muted"
+                                            : ""
+                                    }`}
+                                >
+                                    <Link
+                                        href={route(item.route)}
+                                        className="flex items-center gap-2"
+                                    >
+                                        <Icon
+                                            icon={item.icon}
+                                            className="h-4 w-4"
+                                        />
+                                        {item.name}
+                                    </Link>
+                                </Button>
+                            )
+                        )}
                     </div>
-                </div>
-            </div>
 
-            {/* Mobile Menu Dropdown */}
-            <div
-                className={`${
-                    showingNavigationDropdown ? "block" : "hidden"
-                } sm:hidden bg-main`}
-            >
-                <div className="space-y-1 px-3 pb-3 pt-2">
-                    <ResponsiveNavLink
-                        href={route("dashboard")}
-                        active={route().current("dashboard")}
-                        className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-white/10"
-                    >
-                        Dashboard
-                    </ResponsiveNavLink>
-                    <div className="rounded-md px-3 py-2 text-base font-medium text-white hover:bg-white/10">
-                        <span className="block">Products</span>
-                        <div className="mt-1 ml-3 space-y-1">
-                            <ResponsiveNavLink
-                                href={route("products.create")}
-                                className="block rounded-md px-3 py-2 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white"
-                            >
-                                Add Product
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink
-                                href={route("products.index")}
-                                className="block rounded-md px-3 py-2 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white"
-                            >
-                                All Products
-                            </ResponsiveNavLink>
+                    {/* Right Side Actions */}
+                    <div className="flex items-center gap-2">
+                        <ThemeToggler />
+
+                        {/* Notifications */}
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="relative"
+                                >
+                                    <Bell className="h-5 w-5" />
+                                    <Badge className="absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-[10px]">
+                                        3
+                                    </Badge>
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-80">
+                                <div className="flex justify-between items-center px-4 py-2 border-b">
+                                    <span className="font-medium">
+                                        Notifications
+                                    </span>
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="text-xs"
+                                    >
+                                        Mark all as read
+                                    </Button>
+                                </div>
+                                <div className="py-2 px-4 text-sm text-muted-foreground">
+                                    No new notifications
+                                </div>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+
+                        {/* User Menu (Desktop) */}
+                        <div className="hidden md:flex">
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button
+                                        variant="ghost"
+                                        className="flex items-center gap-2"
+                                    >
+                                        <Avatar className="h-8 w-8">
+                                            <AvatarFallback>
+                                                {getInitials(user.name)}
+                                            </AvatarFallback>
+                                        </Avatar>
+                                        <span className="text-sm font-medium">
+                                            {user.name.split(" ")[0]}
+                                        </span>
+                                        <ChevronDown className="h-4 w-4" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent
+                                    align="end"
+                                    className="w-56"
+                                >
+                                    <div className="px-4 py-3">
+                                        <p className="text-sm font-medium">
+                                            {user.name}
+                                        </p>
+                                        <p className="text-xs text-muted-foreground truncate">
+                                            {user.email}
+                                        </p>
+                                    </div>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem asChild>
+                                        <Link
+                                            href={route("profile.edit")}
+                                            className="flex cursor-pointer"
+                                        >
+                                            <Settings className="mr-2 h-4 w-4" />
+                                            <span>Settings</span>
+                                        </Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem asChild>
+                                        <Link
+                                            href={route("logout")}
+                                            method="post"
+                                            as="button"
+                                            className="flex w-full cursor-pointer"
+                                        >
+                                            <LogOut className="mr-2 h-4 w-4" />
+                                            <span>Log out</span>
+                                        </Link>
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </div>
-                    </div>
-                    <div className="rounded-md px-3 py-2 text-base font-medium text-white hover:bg-white/10">
-                        <span className="block">Services</span>
-                        <div className="mt-1 ml-3 space-y-1">
-                            <ResponsiveNavLink
-                                href={route("services.create")}
-                                className="block rounded-md px-3 py-2 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white"
-                            >
-                                Add Service
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink
-                                href={route("services.index")}
-                                className="block rounded-md px-3 py-2 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white"
-                            >
-                                All Services
-                            </ResponsiveNavLink>
+
+                        {/* Mobile Menu */}
+                        <div className="md:hidden">
+                            <Sheet>
+                                <SheetTrigger asChild>
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="md:hidden"
+                                    >
+                                        <Menu className="h-6 w-6" />
+                                    </Button>
+                                </SheetTrigger>
+                                <SheetContent
+                                    side="right"
+                                    className="w-[300px] sm:w-[350px]"
+                                >
+                                    <div className="py-4 flex flex-col h-full">
+                                        {/* User Profile in Mobile Menu */}
+                                        <div className="flex items-center px-2 pb-4 border-b">
+                                            <Avatar className="h-10 w-10">
+                                                <AvatarFallback>
+                                                    {getInitials(user.name)}
+                                                </AvatarFallback>
+                                            </Avatar>
+                                            <div className="ml-3">
+                                                <p className="font-medium">
+                                                    {user.name}
+                                                </p>
+                                                <p className="text-xs text-muted-foreground truncate">
+                                                    {user.email}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        {/* Mobile Navigation */}
+                                        <div className="flex-1 overflow-auto py-2">
+                                            <div className="space-y-1">
+                                                {mainNavItems.map((item) =>
+                                                    item.children ? (
+                                                        <div
+                                                            key={item.name}
+                                                            className="px-2 py-1.5"
+                                                        >
+                                                            <div className="flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                                                                <Icon
+                                                                    icon={
+                                                                        item.icon
+                                                                    }
+                                                                    className="h-5 w-5 mr-2"
+                                                                />
+                                                                {item.name}
+                                                            </div>
+                                                            <div className="ml-4 mt-1 space-y-1">
+                                                                {item.children.map(
+                                                                    (child) => (
+                                                                        <Link
+                                                                            key={
+                                                                                child.name
+                                                                            }
+                                                                            href={route(
+                                                                                child.route
+                                                                            )}
+                                                                            className="block px-3 py-2 text-sm rounded-md hover:bg-muted"
+                                                                        >
+                                                                            {
+                                                                                child.name
+                                                                            }
+                                                                        </Link>
+                                                                    )
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        <Link
+                                                            key={item.name}
+                                                            href={route(
+                                                                item.route
+                                                            )}
+                                                            className={`flex items-center px-3 py-2 mx-2 text-sm font-medium rounded-md ${
+                                                                route().current(
+                                                                    item.route
+                                                                )
+                                                                    ? "bg-muted"
+                                                                    : "hover:bg-muted"
+                                                            }`}
+                                                        >
+                                                            <Icon
+                                                                icon={item.icon}
+                                                                className="h-5 w-5 mr-2"
+                                                            />
+                                                            {item.name}
+                                                        </Link>
+                                                    )
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {/* Bottom Actions */}
+                                        <div className="border-t pt-4 space-y-1">
+                                            <Link
+                                                href={route("profile.edit")}
+                                                className="flex items-center px-3 py-2 mx-2 text-sm font-medium rounded-md hover:bg-muted"
+                                            >
+                                                <Settings className="h-5 w-5 mr-2" />
+                                                Settings
+                                            </Link>
+                                            <Link
+                                                href={route("logout")}
+                                                method="post"
+                                                as="button"
+                                                className="flex w-full items-center px-3 py-2 mx-2 text-sm font-medium rounded-md hover:bg-muted"
+                                            >
+                                                <LogOut className="h-5 w-5 mr-2" />
+                                                Log out
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </SheetContent>
+                            </Sheet>
                         </div>
-                    </div>
-                    <div className="rounded-md px-3 py-2 text-base font-medium text-white hover:bg-white/10">
-                        <span className="block">Mouvements</span>
-                        <div className="mt-1 ml-3 space-y-1">
-                            <ResponsiveNavLink
-                                // href={route("movements.create")}
-                                className="block rounded-md px-3 py-2 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white"
-                            >
-                                Add mouvement
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink
-                                // href={route("movements.index")}
-                                className="block rounded-md px-3 py-2 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white"
-                            >
-                                All mouvement
-                            </ResponsiveNavLink>
-                        </div>
-                    </div>
-                    <ResponsiveNavLink className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-white/10">
-                        <div className="flex items-center">
-                            <Bell className="h-5 w-5 mr-2" />
-                            Notifications
-                        </div>
-                    </ResponsiveNavLink>
-                    <ResponsiveNavLink className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-white/10">
-                        Actions
-                    </ResponsiveNavLink>
-                    <ResponsiveNavLink className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-white/10">
-                        <div className="flex items-center">
-                            <BarChart3 className="h-5 w-5 mr-2" />
-                            Analytics
-                        </div>
-                    </ResponsiveNavLink>
-                </div>
-                <div className="border-t border-indigo-700 pb-3 pt-4">
-                    <div className="flex items-center px-4">
-                        <div className="flex-shrink-0">
-                            <div className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center text-white">
-                                <User className="h-6 w-6" />
-                            </div>
-                        </div>
-                        <div className="ml-3">
-                            <div className="text-base font-medium text-white">
-                                {user.name}
-                            </div>
-                            <div className="text-sm font-medium text-white/60">
-                                {user.email}
-                            </div>
-                        </div>
-                    </div>
-                    <div className="mt-3 space-y-1 px-2">
-                        <ResponsiveNavLink
-                            href={route("profile.edit")}
-                            className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-white/10"
-                        >
-                            Profile
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            method="post"
-                            href={route("logout")}
-                            as="button"
-                            className="block w-full text-left rounded-md px-3 py-2 text-base font-medium text-white hover:bg-white/10"
-                        >
-                            Log Out
-                        </ResponsiveNavLink>
                     </div>
                 </div>
             </div>
