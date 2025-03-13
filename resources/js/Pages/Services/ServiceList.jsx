@@ -1,8 +1,8 @@
 import React from "react";
-import { Link, usePage } from "@inertiajs/react";
-import { useForm, router } from "@inertiajs/react";
-import { Table } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
+import { usePage } from "@inertiajs/react";
+import { router } from "@inertiajs/react";
+import Layout from "@/Layouts/Layout";
+import { Link } from "@inertiajs/react";
 import { Button } from "@/components/ui/button";
 import {
     AlertDialog,
@@ -15,59 +15,58 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { toast } from "sonner";
-import Layout from "@/Layouts/Layout";
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination";
-import { cn } from "@/lib/utils";
 import { MaterialSymbolsEdit } from "@/Components/MaterialSymbolsEdit";
 import { MingcuteDeleteFill } from "@/Components/MingcuteDeleteFill";
+import DataTable from "@/Components/DataTable/DataTable";
+import StayOut from "@/Components/StayOut";
 
 const ServiceList = () => {
     const { auth, services, filters } = usePage().props;
     const canManageServices = auth?.abilities?.can_manage_services;
 
     if (!canManageServices) {
-        return (
-            <Layout>
-                <div className="text-center text-2xl font-bold mx-4 my-20">
-                    You do not have permission to view this page.
-                </div>
-            </Layout>
-        );
+        return <StayOut/>;
     }
-
-    // Form for search/sorting and adding services
-    const form = useForm({
-        search: filters.search || "",
-        sort_by: filters.sort_by || "name",
-        sort_order: filters.sort_order || "asc",
-        name: "",
-        description: "",
-        type: "magazine", // Default type
-    });
 
     // Handle deleting a service
     const handleDelete = (service) => {
         router.delete(route("services.destroy", service.id));
     };
 
+    // Define sort options for the dropdown
+    const sortOptions = [
+        { value: "name", label: "Name" },
+        { value: "type", label: "Type" },
+        { value: "id", label: "ID" },
+        { value: "users_count", label: "Users Count" },
+    ];
+
     // Table columns
     const columns = [
-        { accessorKey: "id", header: "ID" },
-        { accessorKey: "name", header: "Name" },
-        { accessorKey: "description", header: "Description" },
-        { accessorKey: "type", header: "Type" },
+        {
+            accessorKey: "id",
+            header: "ID",
+            sortable: true,
+        },
+        {
+            accessorKey: "name",
+            header: "Name",
+            sortable: true,
+        },
+        {
+            accessorKey: "description",
+            header: "Description",
+        },
+        {
+            accessorKey: "type",
+            header: "Type",
+            sortable: true,
+        },
         {
             accessorKey: "users_count",
             header: "Users Count",
-            cell: ({ row }) => <div>{row.original.users_count || 0}</div>, // Default to 0 if null
+            sortable: true,
+            cell: ({ row }) => <div>{row.original.users_count || 0}</div>,
         },
         {
             accessorKey: "actions",
@@ -116,111 +115,18 @@ const ServiceList = () => {
     return (
         <Layout>
             <div className="p-6">
-                <h1 className="text-4xl font-bold mb-4">Service Management</h1>
-
-                {/* Search and Sorting */}
-                <form
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        form.get(route("services.index"), {
-                            preserveScroll: true,
-                            preserveState: true,
-                        });
-                    }}
-                    className="flex justify-between items-center mb-4"
-                >
-                    {/* Search Input */}
-                    <Input
-                        type="text"
-                        placeholder="Search by name..."
-                        value={form.data.search}
-                        onChange={(e) => form.setData("search", e.target.value)}
-                        className="max-w-sm"
-                    />
-
-                    {/* Sorting Buttons */}
-                    <div className="flex gap-2">
-                        <Button
-                            onClick={() => {
-                                form.setData({
-                                    sort_by: "name",
-                                    sort_order: "asc",
-                                });
-                                form.submit();
-                            }}
-                        >
-                            Sort by Name (Asc)
-                        </Button>
-                        <Button
-                            onClick={() => {
-                                form.setData({
-                                    sort_by: "type",
-                                    sort_order: "desc",
-                                });
-                                form.submit();
-                            }}
-                        >
-                            Sort by Type (Desc)
-                        </Button>
-                    </div>
-                </form>
-
-                {/* Table */}
-                <Table columns={columns} data={services.data} />
-
-                {/* Pagination */}
-                <Pagination className="mt-6">
-                    <PaginationContent>
-                        {services.links.map((link, index) => {
-                            if (link.label.includes("Previous")) {
-                                return (
-                                    <PaginationItem key={index}>
-                                        <PaginationPrevious
-                                            href={link.url || "#"}
-                                            className={
-                                                link.url
-                                                    ? ""
-                                                    : "pointer-events-none opacity-50"
-                                            }
-                                        />
-                                    </PaginationItem>
-                                );
-                            }
-
-                            if (link.label.includes("Next")) {
-                                return (
-                                    <PaginationItem key={index}>
-                                        <PaginationNext
-                                            href={link.url || "#"}
-                                            className={
-                                                link.url
-                                                    ? ""
-                                                    : "pointer-events-none opacity-50"
-                                            }
-                                        />
-                                    </PaginationItem>
-                                );
-                            }
-
-                            return (
-                                <PaginationItem key={index}>
-                                    <PaginationLink
-                                        href={link.url || "#"}
-                                        isActive={link.active}
-                                        className={cn(
-                                            link.active
-                                                ? "bg-main text-white"
-                                                : "hover:bg-gray-100",
-                                            "dark:hover:bg-gray-800"
-                                        )}
-                                    >
-                                        {link.label}
-                                    </PaginationLink>
-                                </PaginationItem>
-                            );
-                        })}
-                    </PaginationContent>
-                </Pagination>
+                <DataTable
+                    data={services}
+                    columns={columns}
+                    filters={filters}
+                    routeName="services.index"
+                    title="Service Management"
+                    addRoute={route("services.create")}
+                    addLabel="Add Service"
+                    sortOptions={sortOptions}
+                    searchPlaceholder="Search by name..."
+                    emptyMessage="No services found"
+                />
             </div>
         </Layout>
     );

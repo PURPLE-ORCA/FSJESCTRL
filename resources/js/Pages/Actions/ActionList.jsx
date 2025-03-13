@@ -14,19 +14,14 @@ import {
 import { cn } from "@/lib/utils";
 import DataExport from "@/Components/DataExport";
 import ActionCard from "./ActionCard";
+import StayOut from "@/Components/StayOut";
 
 const ActionList = () => {
     const { auth, actions, filters } = usePage().props;
     const canViewActions = auth?.abilities?.can_view_actions;
 
     if (!canViewActions) {
-        return (
-            <Layout>
-                <div className="text-center text-2xl font-bold mx-4 my-20">
-                    You do not have permission to view this page.
-                </div>
-            </Layout>
-        );
+        return <StayOut />;
     }
 
     // Form for search/filtering

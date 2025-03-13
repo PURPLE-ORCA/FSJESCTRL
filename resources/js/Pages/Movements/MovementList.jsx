@@ -14,6 +14,7 @@ import {
 import { cn } from "@/lib/utils";
 import DataExport from "@/Components/DataExport";
 import MovementCard from "./MovementCard";
+import StayOut from "@/Components/StayOut";
 
 const MovementList = () => {
     const { auth, movements, filters } = usePage().props;
@@ -21,11 +22,7 @@ const MovementList = () => {
 
     if (!canViewMovements) {
         return (
-            <Layout>
-                <div className="text-center text-2xl font-bold mx-4 my-20">
-                    You do not have permission to view this page.
-                </div>
-            </Layout>
+            <StayOut/>
         );
     }
 

@@ -33,6 +33,7 @@ import {
 import { toast } from "sonner";
 import Layout from "@/Layouts/Layout";
 import { cn } from "@/lib/utils";
+import StayOut from "@/Components/StayOut";
 
 const UsersList = () => {
     const { auth, users, roles, services, filters } = usePage().props;
@@ -40,11 +41,7 @@ const UsersList = () => {
 
     if (!canManageUsers) {
         return (
-            <Layout>
-                <div className="text-center text-2xl font-bold mx-4 my-20">
-                    You do not have permission to view this page.
-                </div>
-            </Layout>
+            <StayOut/>
         );
     }
 
