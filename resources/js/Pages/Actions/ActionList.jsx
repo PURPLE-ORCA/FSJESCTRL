@@ -1,11 +1,11 @@
-import React from "react";
+import React, { act } from "react";
 import { usePage } from "@inertiajs/react";
 import Layout from "@/Layouts/Layout";
-import DataExport from "@/Components/DataExport";
 import ActionCard from "./ActionCard";
 import StayOut from "@/Components/StayOut";
 import SearchFilterBar from "@/Components/SearchFilterBar";
 import PaginationLinks from "@/Components/PaginationLinks";
+import ActionDataExport from "./ActionDataExport";
 
 const ActionList = () => {
     const { auth, actions, filters } = usePage().props;
@@ -23,7 +23,7 @@ const ActionList = () => {
     ];
 
     // Create a separate component for export to prevent it from being part of the form
-    const exportButton = <DataExport data={actions.data} />;
+    const exportButton = <ActionDataExport data={actions.data} />;
 
     return (
         <Layout>

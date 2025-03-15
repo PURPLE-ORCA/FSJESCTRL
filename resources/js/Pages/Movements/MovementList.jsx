@@ -1,11 +1,11 @@
 import React from "react";
 import { usePage } from "@inertiajs/react";
 import Layout from "@/Layouts/Layout";
-import DataExport from "@/Components/DataExport";
 import MovementCard from "./MovementCard";
 import StayOut from "@/Components/StayOut";
 import SearchFilterBar from "@/Components/SearchFilterBar";
 import PaginationLinks from "@/Components/PaginationLinks";
+import MovementDataExport from "./MovementDataExport";
 
 const MovementList = () => {
     const { auth, movements, filters, services } = usePage().props;
@@ -52,7 +52,7 @@ const MovementList = () => {
     };
 
     // Create a separate component for export to prevent it from being part of the form
-    const exportButton = <DataExport data={movements.data} />;
+    const exportButton = <MovementDataExport data={movements.data} />;
 
     return (
         <Layout>

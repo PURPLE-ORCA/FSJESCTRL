@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import DataTable from "@/Components/DataTable/DataTable";
 import StayOut from "@/Components/StayOut";
+import ProductDataExport from "./ProducDataExport";
 
 const ProductList = () => {
     const { props } = usePage();
@@ -33,9 +34,7 @@ const ProductList = () => {
     const canManageProducts = auth?.abilities?.can_manage_products;
 
     if (!canManageProducts) {
-        return (
-            <StayOut/>
-        );
+        return <StayOut />;
     }
 
     const handleDelete = (product) => {
@@ -180,17 +179,25 @@ const ProductList = () => {
     return (
         <Layout>
             <div className="p-6">
+                <div className="flex justify-between items-center mb-4">
+                    <h1 className="text-2xl font-bold">Product List</h1>
+                    <div className="flex gap-2">
+                        <ProductDataExport data={products.data} />
+                        <Link href={route("products.create")}>
+                            <Button>Add Product</Button>
+                        </Link>
+                    </div>
+                </div>
                 <DataTable
                     data={products}
                     columns={columns}
                     filters={filters}
                     routeName="products.index"
                     title="Product List"
-                    addRoute={route("products.create")}
-                    addLabel="Add Product"
                     sortOptions={sortOptions}
                     searchPlaceholder="Search by name or supplier..."
                     emptyMessage="No products found"
+                    showHeader={false}
                 />
             </div>
         </Layout>
