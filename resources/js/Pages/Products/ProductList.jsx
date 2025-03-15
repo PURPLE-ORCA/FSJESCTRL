@@ -57,33 +57,27 @@ const ProductList = () => {
         {
             accessorKey: "id",
             header: "ID",
-            sortable: true,
         },
         {
             accessorKey: "name",
             header: "Name",
-            sortable: true,
         },
         {
             accessorKey: "serial_number",
             header: "Serial Number",
-            sortable: true,
         },
         {
             accessorKey: "supplier",
             header: "Supplier",
-            sortable: true,
         },
         {
             accessorKey: "quantity",
             header: "Quantity",
-            sortable: true,
             cell: ({ row }) => <div>{row.original.quantity}</div>,
         },
         {
             accessorKey: "price",
             header: "Price",
-            sortable: true,
             cell: ({ row }) => (
                 <div>
                     {typeof row.original.price === "number"

@@ -17,7 +17,11 @@ class ProductController extends Controller
         // Search
         $query->when($request->search, function($q, $search) {
             return $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('supplier', 'like', "%{$search}%"); // Match column case
+                    ->orWhere('supplier', 'like', "%{$search}%")
+                    ->orWhere('quantity', 'like', "%{$search}%")
+                    ->orWhere('id', 'like', "%{$search}%")
+                    ->orWhere('price', 'like', "%{$search}%")
+                    ->orWhere('serial_number', 'like', "%{$search}%"); // Match column case
         });
 
         // Sorting

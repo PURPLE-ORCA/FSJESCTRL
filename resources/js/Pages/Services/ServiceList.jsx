@@ -46,12 +46,10 @@ const ServiceList = () => {
         {
             accessorKey: "id",
             header: "ID",
-            sortable: true,
         },
         {
             accessorKey: "name",
             header: "Name",
-            sortable: true,
         },
         {
             accessorKey: "description",
@@ -60,12 +58,10 @@ const ServiceList = () => {
         {
             accessorKey: "type",
             header: "Type",
-            sortable: true,
         },
         {
             accessorKey: "users_count",
             header: "Users Count",
-            sortable: true,
             cell: ({ row }) => <div>{row.original.users_count || 0}</div>,
         },
         {

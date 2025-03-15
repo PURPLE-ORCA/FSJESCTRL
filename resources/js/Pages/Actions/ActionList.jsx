@@ -1,20 +1,11 @@
 import React from "react";
-import { usePage, useForm } from "@inertiajs/react";
+import { usePage } from "@inertiajs/react";
 import Layout from "@/Layouts/Layout";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination";
-import { cn } from "@/lib/utils";
 import DataExport from "@/Components/DataExport";
 import ActionCard from "./ActionCard";
 import StayOut from "@/Components/StayOut";
+import SearchFilterBar from "@/Components/SearchFilterBar";
+import PaginationLinks from "@/Components/PaginationLinks";
 
 const ActionList = () => {
     const { auth, actions, filters } = usePage().props;
@@ -24,111 +15,45 @@ const ActionList = () => {
         return <StayOut />;
     }
 
-    // Form for search/filtering
-    const form = useForm({
-        search: filters.search || "",
-    });
+    // Define sort options based on your schema
+    const sortOptions = [
+        { label: "Date Created", value: "created_at" },
+        { label: "Action Type", value: "action" },
+        { label: "Date Updated", value: "updated_at" },
+    ];
+
+    // Create a separate component for export to prevent it from being part of the form
+    const exportButton = <DataExport data={actions.data} />;
 
     return (
         <Layout>
             <div className="p-6">
                 <h1 className="text-4xl font-bold mb-4">Actions List</h1>
 
-                {/* Search and Filters */}
-                <form
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        form.get(route("actions.index"), {
-                            preserveScroll: true,
-                            preserveState: true,
-                        });
-                    }}
-                    className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4"
-                >
-                    <Input
-                        type="text"
-                        placeholder="Search actions..."
-                        value={form.data.search}
-                        onChange={(e) => form.setData("search", e.target.value)}
-                        className="max-w-sm"
-                    />
+                <SearchFilterBar
+                    routeName="actions.index"
+                    initialFilters={filters}
+                    searchPlaceholder="Search by action or details..."
+                    sortOptions={sortOptions}
+                    additionalControls={exportButton}
+                />
 
-                    <div className="flex gap-2">
-                        <Button
-                            onClick={() => {
-                                form.setData({
-                                    sort_by: "created_at",
-                                    sort_order: "desc",
-                                });
-                                form.submit();
-                            }}
-                        >
-                            Sort by Date (Desc)
-                        </Button>
-
-                        <DataExport data={actions.data} />
+                {actions.data.length > 0 ? (
+                    <div className="flex flex-wrap justify-center flex-col gap-4">
+                        {actions.data.map((action, index) => (
+                            <ActionCard
+                                key={action.id || index}
+                                action={action}
+                            />
+                        ))}
                     </div>
-                </form>
+                ) : (
+                    <div className="text-center py-10 text-gray-500">
+                        No actions found. Try adjusting your search or filters.
+                    </div>
+                )}
 
-                <div className="flex flex-wrap justify-center flex-col gap-4">
-                    {actions.data.map((action, index) => (
-                        <ActionCard key={index} action={action} />
-                    ))}
-                </div>
-
-                {/* Pagination */}
-                <div className="mt-6">
-                    <Pagination className="mt-6">
-                        <PaginationContent>
-                            {actions.links.map((link, index) => {
-                                if (link.label.includes("Previous")) {
-                                    return (
-                                        <PaginationItem key={index}>
-                                            <PaginationPrevious
-                                                href={link.url || "#"}
-                                                className={
-                                                    link.url
-                                                        ? ""
-                                                        : "pointer-events-none opacity-50"
-                                                }
-                                            />
-                                        </PaginationItem>
-                                    );
-                                }
-                                if (link.label.includes("Next")) {
-                                    return (
-                                        <PaginationItem key={index}>
-                                            <PaginationNext
-                                                href={link.url || "#"}
-                                                className={
-                                                    link.url
-                                                        ? ""
-                                                        : "pointer-events-none opacity-50"
-                                                }
-                                            />
-                                        </PaginationItem>
-                                    );
-                                }
-                                return (
-                                    <PaginationItem key={index}>
-                                        <PaginationLink
-                                            href={link.url || "#"}
-                                            isActive={link.active}
-                                            className={cn(
-                                                link.active
-                                                    ? "bg-main text-white"
-                                                    : "hover:bg-gray-100",
-                                                "dark:hover:bg-gray-800"
-                                            )}
-                                        >
-                                            {link.label}
-                                        </PaginationLink>
-                                    </PaginationItem>
-                                );
-                            })}
-                        </PaginationContent>
-                    </Pagination>
-                </div>
+                <PaginationLinks links={actions.links} />
             </div>
         </Layout>
     );

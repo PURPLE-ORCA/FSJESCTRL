@@ -20,26 +20,47 @@ class ActionController extends Controller
     {
         $query = Action::query()->with(['product', 'user']);
 
-        if ($search = $request->input('search')) {
-            $query->where('action', 'like', '%' . $search . '%')
-                  ->orWhere('details', 'like', '%' . $search . '%');
+        // Handle search across multiple fields
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('action', 'like', '%' . $search . '%')
+                  ->orWhere('details', 'like', '%' . $search . '%')
+                  ->orWhereHas('product', function($subQuery) use ($search) {
+                      $subQuery->where('name', 'like', '%' . $search . '%');
+                  });
+            });
         }
 
-        if ($request->has('sort_by') && $request->has('sort_order')) {
-            $query->orderBy($request->input('sort_by'), $request->input('sort_order'));
-        } else {
-            $query->orderBy('created_at', 'desc');
+        // Handle sorting with better defaults
+        $sortBy = $request->input('sort_by', 'created_at');
+        $sortOrder = $request->input('sort_order', 'desc');
+        
+        // Handle different sort options
+        switch ($sortBy) {
+            case 'action':
+                $query->orderBy('action', $sortOrder);
+                break;
+            case 'updated_at':
+                $query->orderBy('updated_at', $sortOrder);
+                break;
+            default:
+                $query->orderBy('created_at', $sortOrder);
+                break;
         }
 
+        // Get paginated results
         $actions = $query->paginate(10)->appends($request->query());
 
-        return inertia('Actions/ActionList', [
+        return Inertia::render('Actions/ActionList', [
             'actions' => $actions,
-            'filters' => $request->all(['search', 'sort_by', 'sort_order']),
-            // 'auth' => $request->user(),
+            'filters' => $request->only([
+                'search', 
+                'sort_by', 
+                'sort_order'
+            ])
         ]);
     }
-
 
 
 public function create()

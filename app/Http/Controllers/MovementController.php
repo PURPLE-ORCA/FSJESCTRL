@@ -21,21 +21,59 @@ class MovementController extends Controller
     public function index(Request $request)
     {
         $query = Movement::query()
-            ->with(['product', 'fromService', 'toService', 'user'])
-            ->orderBy('movement_date', 'desc');
+            ->with(['product', 'fromService', 'toService', 'user']);
 
-        if ($request->has('search')) {
+        // Handle search
+        if ($request->filled('search')) {
             $search = $request->input('search');
             $query->whereHas('product', function($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%");
             });
         }
 
+        // Handle sorting
+        $sortBy = $request->input('sort_by', 'movement_date');
+        $sortOrder = $request->input('sort_order', 'desc');
+        
+        // Handle different sort options
+        switch ($sortBy) {
+            case 'product_name':
+                $query->join('products', 'movements.product_id', '=', 'products.id')
+                      ->orderBy('products.name', $sortOrder)
+                      ->select('movements.*');
+                break;
+            case 'quantity':
+                $query->orderBy('quantity', $sortOrder);
+                break;
+            default:
+                $query->orderBy('movement_date', $sortOrder);
+                break;
+        }
+
+        // Handle filtering by services
+        if ($request->filled('from_service_id') && $request->input('from_service_id') !== 'all') {
+            $query->where('from_service_id', $request->input('from_service_id'));
+        }
+        
+        if ($request->filled('to_service_id') && $request->input('to_service_id') !== 'all') {
+            $query->where('to_service_id', $request->input('to_service_id'));
+        }
+
+        // Get all services for the filter dropdowns
+        $services = Service::select('id', 'name')->orderBy('name')->get();
+
         $movements = $query->paginate(20);
 
         return Inertia::render('Movements/MovementList', [
             'movements' => $movements,
-            'filters' => $request->only(['search']),
+            'filters' => $request->only([
+                'search', 
+                'sort_by', 
+                'sort_order', 
+                'from_service_id', 
+                'to_service_id'
+            ]),
+            'services' => $services,
         ]);
     }
     public function create()
