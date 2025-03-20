@@ -20,8 +20,9 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import ThemeToggler from "@/Components/ThemeToggler";
+import NotificationBadge from "@/Components/NotificationBadge";
 
-const Navbar = () => {
+const Navbar = ({pendingCount = 0}) => {
     const { auth } = usePage().props;
     const user = auth.user;
 
@@ -61,9 +62,14 @@ const Navbar = () => {
             ],
         },
         {
-            name: "Actions",
+            name: "Interventions",
             icon: "material-symbols:tap-interaction",
             route: "actions.index",
+        },
+        {
+            name: "request",
+            icon: "material-symbols:tap-interaction",
+            route: "help-requests.index",
         },
     ];
 
@@ -161,7 +167,7 @@ const Navbar = () => {
                         <ThemeToggler />
 
                         {/* Notifications */}
-                        <DropdownMenu>
+                        {/* <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button
                                     variant="ghost"
@@ -191,7 +197,8 @@ const Navbar = () => {
                                     No new notifications
                                 </div>
                             </DropdownMenuContent>
-                        </DropdownMenu>
+                        </DropdownMenu> */}
+                        <NotificationBadge initialCount={pendingCount} />
 
                         {/* User Menu (Desktop) */}
                         <div className="hidden md:flex">

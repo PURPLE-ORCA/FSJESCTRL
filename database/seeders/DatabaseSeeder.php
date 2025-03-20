@@ -273,5 +273,66 @@ class DatabaseSeeder extends Seeder
             ],
         ]);
 
+        // Seed Help Requests Table
+        DB::table('help_requests')->insert([
+            [
+                'user_id'    => 2, // user 1? (adjust according to your seed data)
+                'product_id' => 1, // Laptop - Dell XPS 15
+                'description'=> 'My laptop is overheating. Need immediate support.',
+                'status'     => 'pending',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'user_id'    => 2, // using user 2 or user 3, depending on your logic
+                'product_id' => 3, // Wireless Mouse - Logitech MX Master 3
+                'description'=> 'The mouse stopped clicking altogether.',
+                'status'     => 'pending',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'user_id'    => 3, // using user 2 or user 3, depending on your logic
+                'product_id' => 4, // Wireless Mouse - Logitech MX Master 3
+                'description'=> 'The mouse stopped clicking altogether.',
+                'status'     => 'pending',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'user_id'    => 3, // using user 2 or user 3, depending on your logic
+                'product_id' => 7, // Wireless Mouse - Logitech MX Master 3
+                'description'=> 'The mouse stopped clicking altogether.',
+                'status'     => 'pending',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'user_id'    => 2, // using user 2 or user 3, depending on your logic
+                'product_id' => 9, // Wireless Mouse - Logitech MX Master 3
+                'description'=> 'The mouse stopped clicking altogether.',
+                'status'     => 'pending',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'user_id'    => 3, // using user 2 or user 3, depending on your logic
+                'product_id' => 12, // Wireless Mouse - Logitech MX Master 3
+                'description'=> 'The mouse stopped clicking altogether.',
+                'status'     => 'pending',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'user_id'    => 2,
+                'product_id' => 2, // Mechanical Keyboard - Keychron K6
+                'description'=> 'Keyboard is unresponsive after the spill.',
+                'status'     => 'resolved', // example with different status
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
+
+
     }
 }

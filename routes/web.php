@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ActionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\HelpRequestController;
 use App\Http\Controllers\MovementController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -77,6 +78,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/actions/create', [ActionController::class, 'create'])->name('actions.create');
         Route::post('/actions', [ActionController::class, 'store'])->name('actions.store');
     });
+
+    Route::get('/help-requests', [HelpRequestController::class, 'index'])->name('help-requests.index');
+    Route::post('/help-requests', [HelpRequestController::class, 'store'])->name('help-requests.store');
+    Route::put('/help-requests/{helpRequest}/status', [HelpRequestController::class, 'updateStatus'])->name('help-requests.update-status');
+    Route::get('/help-requests/pending-count', [HelpRequestController::class, 'getPendingCount'])->name('help-requests.pending-count');
+    Route::post('/help-requests/mark-as-read', [HelpRequestController::class, 'markAllAsRead'])->name('help-requests.mark-as-read');
+    Route::get('/help-requests/create', [HelpRequestController::class, 'create'])->name('help-requests.create');
 });
 
 Route::get('/movements/export', [MovementController::class, 'export'])->name('movements.export');
