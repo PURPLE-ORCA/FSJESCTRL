@@ -1,6 +1,6 @@
 // resources/js/Pages/HelpRequests/Index.jsx
 import React, { useEffect, useState } from "react";
-import { Head, router } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
 import NotificationBadge from "@/Components/NotificationBadge";
 import Layout from "@/Layouts/Layout";
 
@@ -218,6 +218,22 @@ export default function Index({
                                                                     Reopen
                                                                 </button>
                                                             )}
+                                                        </div>
+                                                    </td>
+                                                    <td className="py-4 px-4 border-b border-gray-200">
+                                                        <div className="flex space-x-2">
+                                                            {/* Existing status update buttons */}
+
+                                                            {/* Add the View button */}
+                                                            <Link
+                                                                href={route(
+                                                                    "help-requests.show",
+                                                                    request.id
+                                                                )}
+                                                                className="px-3 py-1 bg-indigo-600 text-white text-xs rounded hover:bg-indigo-700"
+                                                            >
+                                                                View
+                                                            </Link>
                                                         </div>
                                                     </td>
                                                 </tr>

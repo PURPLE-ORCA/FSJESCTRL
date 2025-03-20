@@ -85,6 +85,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/help-requests/pending-count', [HelpRequestController::class, 'getPendingCount'])->name('help-requests.pending-count');
     Route::post('/help-requests/mark-as-read', [HelpRequestController::class, 'markAllAsRead'])->name('help-requests.mark-as-read');
     Route::get('/help-requests/create', [HelpRequestController::class, 'create'])->name('help-requests.create');
+Route::get('help-requests/{helpRequest}', [HelpRequestController::class, 'show'])
+    ->name('help-requests.show');
 });
 
 Route::get('/movements/export', [MovementController::class, 'export'])->name('movements.export');

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { router } from '@inertiajs/react';
+import React, { useEffect, useState } from "react";
+import { router } from "@inertiajs/react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -7,78 +7,105 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Dropdown from './Dropdown';
+import { Bell, CheckCircle, AlertCircle, ExternalLink } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
+
 export default function NotificationBadge({ initialCount = 0 }) {
     const [count, setCount] = useState(initialCount);
-    
+    const [isOpen, setIsOpen] = useState(false);
+
     useEffect(() => {
         const interval = setInterval(() => {
             // Fetch the latest count
-            fetch(route('help-requests.pending-count'))
-                .then(response => response.json())
-                .then(data => setCount(data.count));
+            fetch(route("help-requests.pending-count"))
+                .then((response) => response.json())
+                .then((data) => setCount(data.count));
         }, 30000); // Every 30 seconds
-        
+
         return () => clearInterval(interval);
     }, []);
-    
-    const handleMarkAllAsRead = () => {
-        fetch(route('help-requests.mark-as-read'), {
-            method: 'POST',
+
+    const handleMarkAllAsRead = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        fetch(route("help-requests.mark-as-read"), {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            }
-        })
-        .then(() => setCount(0));
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute("content"),
+            },
+        }).then(() => setCount(0));
     };
-    
+
+    const navigateToHelpRequests = () => {
+        router.visit(route("help-requests.index"));
+        setIsOpen(false);
+    };
+
     return (
-        <div className="relative">
-            <Dropdown>
-                <Dropdown.Trigger>
-                    <button className="relative p-1 text-gray-600 hover:text-gray-900">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                        </svg>
+        <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+            <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="relative">
+                    <Bell className="h-5 w-5" />
+                    {count > 0 && (
+                        <Badge
+                            variant="destructive"
+                            className="absolute -top-1 -right-1 h-5 min-w-5 p-0 flex items-center justify-center rounded-full text-xs font-medium"
+                        >
+                            {count > 99 ? "99+" : count}
+                        </Badge>
+                    )}
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-72">
+                <div className="p-2">
+                    <div className="flex justify-between items-center mb-2 px-2 py-1">
+                        <h3 className="text-sm font-medium">Notifications</h3>
                         {count > 0 && (
-                            <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
-                                {count}
-                            </span>
-                        )}
-                    </button>
-                </Dropdown.Trigger>
-                <Dropdown.Content>
-                    <div className="p-3">
-                        <div className="flex justify-between items-center mb-2">
-                            <h3 className="text-sm font-medium text-gray-900">Notifications</h3>
-                            {count > 0 && (
-                                <button
-                                    onClick={handleMarkAllAsRead}
-                                    className="text-xs text-blue-600 hover:text-blue-800"
-                                >
-                                    Mark all as read
-                                </button>
-                            )}
-                        </div>
-                        <div className="space-y-1">
-                            {count > 0 ? (
-                                <p className="text-sm text-gray-600">
-                                    There is {count} new help request{count !== 1 && 's'}.
-                                </p>
-                            ) : (
-                                <p className="text-sm text-gray-600">No new notifications.</p>
-                            )}
-                            <a
-                                href={route('help-requests.index')}
-                                className="block text-sm text-blue-600 hover:text-blue-800"
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={handleMarkAllAsRead}
+                                className="text-xs h-7 px-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50"
                             >
-                                View all help requests
-                            </a>
-                        </div>
+                                <CheckCircle className="mr-1 h-3 w-3" />
+                                Mark all as read
+                            </Button>
+                        )}
                     </div>
-                </Dropdown.Content>
-            </Dropdown>
-        </div>
+                    <Separator className="my-1" />
+                    <div className="space-y-1 mt-3 px-2">
+                        {count > 0 ? (
+                            <div className="flex items-center text-sm text-amber-600 bg-amber-50 p-2 rounded-md">
+                                <AlertCircle className="h-4 w-4 mr-2 flex-shrink-0" />
+                                <p>
+                                    You have {count} new help request
+                                    {count !== 1 && "s"} pending.
+                                </p>
+                            </div>
+                        ) : (
+                            <div className="flex items-center text-sm text-gray-600 p-2">
+                                <CheckCircle className="h-4 w-4 mr-2 text-green-500 flex-shrink-0" />
+                                <p>No new notifications.</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                    onClick={navigateToHelpRequests}
+                    className="flex items-center justify-center cursor-pointer py-2 text-blue-600 hover:text-blue-800"
+                >
+                    <ExternalLink className="h-4 w-4 mr-2" />
+                    View all help requests
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
     );
 }

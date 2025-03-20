@@ -33,6 +33,19 @@ class HelpRequestController extends Controller
         ]);
     }
 
+    public function show(HelpRequest $helpRequest)
+    {
+        // Eager load the help request with its related product, user, and action logs
+        $helpRequest->load([
+            'user', 
+            'product', 
+            'product.actionLogs.user'  // Load the user info for each action
+        ]);
+        
+        return Inertia::render('HelpRequests/Show', [
+            'helpRequest' => $helpRequest,
+        ]);
+    }
     public function create()
     {
         $products = Product::all();
@@ -41,7 +54,7 @@ class HelpRequestController extends Controller
             'products' => $products
         ]);
     }
-    
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -65,7 +78,18 @@ class HelpRequestController extends Controller
             'status' => 'required|in:pending,in_progress,resolved,closed',
         ]);
         
-        $helpRequest->update(['status' => $validated['status']]);
+        $oldStatus = $helpRequest->status;
+        $newStatus = $validated['status'];
+        
+        $helpRequest->update(['status' => $newStatus]);
+        
+        // Record action in the Action log
+        $product = $helpRequest->product;
+        $product->actionLogs()->create([
+            'user_id' => Auth::id(),
+            'action' => 'Status Change',
+            'details' => "Help request status changed from '{$oldStatus}' to '{$newStatus}'",
+        ]);
         
         return redirect()->back()->with('success', 'Status updated successfully.');
     }
