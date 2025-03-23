@@ -1,22 +1,38 @@
-// resources/js/Pages/HelpRequests/Index.jsx
 import React, { useEffect, useState } from "react";
-import { Head, Link, router } from "@inertiajs/react";
-import NotificationBadge from "@/Components/NotificationBadge";
+import { Head, Link, router, usePage } from "@inertiajs/react";
 import Layout from "@/Layouts/Layout";
+import { Icon } from "@iconify/react";
+import { Button } from "@/components/ui/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import DataTable from "@/Components/DataTable/DataTable";
 
 export default function Index({
     auth,
     helpRequests,
-    pendingCount,
     currentFilter = "all",
 }) {
     const [filter, setFilter] = useState(currentFilter);
+    const { props } = usePage();
 
-    // Auto-refresh every 30 seconds as mentioned in the document
     useEffect(() => {
         const interval = setInterval(() => {
             router.reload({ only: ["helpRequests", "pendingCount"] });
-        }, 30000);
+    }, 30000);
 
         return () => clearInterval(interval);
     }, []);
@@ -27,8 +43,7 @@ export default function Index({
         });
     };
 
-    const handleFilterChange = (e) => {
-        const newFilter = e.target.value;
+    const handleFilterChange = (newFilter) => {
         setFilter(newFilter);
         router.get(
             route("help-requests.index", { status: newFilter }),
@@ -40,217 +55,284 @@ export default function Index({
         );
     };
 
-    // Helper function to get the appropriate status badge color
-    const getStatusBadgeColor = (status) => {
-        switch (status) {
-            case "pending":
-                return "bg-yellow-100 text-yellow-800";
-            case "in_progress":
-                return "bg-blue-100 text-blue-800";
-            case "resolved":
-                return "bg-green-100 text-green-800";
-            case "closed":
-                return "bg-gray-100 text-gray-800";
-            default:
-                return "bg-gray-100 text-gray-800";
-        }
+    const getStatusBadge = (status) => {
+        const statusMap = {
+            pending: {
+                variant: "warning",
+                label: "Pending",
+                icon: "mdi:clock-outline",
+            },
+            in_progress: {
+                variant: "info",
+                label: "In Progress",
+                icon: "mdi:progress-wrench",
+            },
+            resolved: {
+                variant: "success",
+                label: "Resolved",
+                icon: "mdi:check-circle-outline",
+            },
+            closed: {
+                variant: "secondary",
+                label: "Closed",
+                icon: "mdi:archive-outline",
+            },
+        };
+
+        const statusInfo = statusMap[status] || statusMap.closed;
+        const variantStyles = {
+            warning: "bg-yellow-100 hover:bg-yellow-200 text-yellow-800",
+            info: "bg-blue-100 hover:bg-blue-200 text-blue-800",
+            success: "bg-green-100 hover:bg-green-200 text-green-800",
+            secondary: "bg-gray-100 hover:bg-gray-200 text-gray-800",
+        };
+
+        return (
+            <Badge
+                className={variantStyles[statusInfo.variant]}
+                variant="outline"
+            >
+                <Icon icon={statusInfo.icon} className="mr-1 w-4 h-4" />
+                {statusInfo.label}
+            </Badge>
+        );
     };
 
-    return (
-        <Layout
-            user={auth.user}
-            header={
-                <div className="flex justify-between items-center">
-                    <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                        Help Requests
-                    </h2>
-                    <NotificationBadge initialCount={pendingCount} />
+    const getActionButton = (request) => {
+        const actions = {
+            pending: {
+                action: () => updateStatus(request.id, "in_progress"),
+                icon: "mdi:play",
+                label: "Start",
+                className: "bg-blue-600 hover:bg-blue-700 text-white",
+            },
+            in_progress: {
+                action: () => updateStatus(request.id, "resolved"),
+                icon: "mdi:check",
+                label: "Resolve",
+                className: "bg-green-600 hover:bg-green-700 text-white",
+            },
+            resolved: {
+                action: () => updateStatus(request.id, "closed"),
+                icon: "mdi:archive",
+                label: "Close",
+                className: "bg-gray-600 hover:bg-gray-700 text-white",
+            },
+            closed: {
+                action: () => updateStatus(request.id, "in_progress"),
+                icon: "mdi:refresh",
+                label: "Reopen",
+                className: "bg-orange-600 hover:bg-orange-700 text-white",
+            },
+        };
+
+        const actionInfo = actions[request.status];
+
+        return (
+            <Button
+                onClick={actionInfo.action}
+                size="sm"
+                className={actionInfo.className}
+            >
+                <Icon icon={actionInfo.icon} className="mr-1 w-4 h-4" />
+                {actionInfo.label}
+            </Button>
+        );
+    };
+
+    const columns = [
+        {
+            accessorKey: "user.name",
+            header: "User",
+            cell: ({ row }) => <div>{row.original.user.name}</div>,
+        },
+        {
+            accessorKey: "product.name",
+            header: "Product",
+            cell: ({ row }) => <div>{row.original.product.name}</div>,
+        },
+        {
+            accessorKey: "description",
+            header: "Description",
+            cell: ({ row }) => (
+                <div
+                    className="max-w-xs truncate"
+                    title={row.original.description}
+                >
+                    {row.original.description}
                 </div>
-            }
-        >
-            <Head title="Help Requests" />
-
-            <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 bg-white border-b border-gray-200">
-                            {/* Filter Section */}
-                            <div className="mb-6">
-                                <label
-                                    htmlFor="status-filter"
-                                    className="block text-sm font-medium text-gray-700 mb-2"
-                                >
-                                    Filter by Status
-                                </label>
-                                <select
-                                    id="status-filter"
-                                    className="mt-1 block w-full md:w-64 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                                    value={filter}
-                                    onChange={handleFilterChange}
-                                >
-                                    <option value="all">All Statuses</option>
-                                    <option value="pending">Pending</option>
-                                    <option value="in_progress">
-                                        In Progress
-                                    </option>
-                                    <option value="resolved">Resolved</option>
-                                    <option value="closed">Closed</option>
-                                </select>
+            ),
+        },
+        {
+            accessorKey: "status",
+            header: "Status",
+            cell: ({ row }) => getStatusBadge(row.original.status),
+        },
+        {
+            accessorKey: "created_at",
+            header: "Date",
+            cell: ({ row }) => (
+                <div>
+                    {new Date(row.original.created_at).toLocaleString()}
+                </div>
+            ),
+        },
+        {
+            accessorKey: "actions",
+            header: "Actions",
+            cell: ({ row }) => (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="p-1">
+                            <Icon
+                                icon="mdi:dots-vertical"
+                                className="w-5 h-5"
+                            />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-40">
+                        <DropdownMenuItem asChild>
+                            <Link
+                                href={route(
+                                    "help-requests.show",
+                                    row.original.id
+                                )}
+                            >
+                                <div className="flex items-center gap-2">
+                                    <Icon
+                                        icon="mdi:eye-outline"
+                                        width="24"
+                                        height="24"
+                                    />
+                                    <span>View Details</span>
+                                </div>
+                            </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            onClick={() =>
+                                getActionButton(row.original).props.onClick()
+                            }
+                        >
+                            <div className="flex items-center gap-2">
+                                <Icon
+                                    icon={
+                                        row.original.status === "pending"
+                                            ? "mdi:play"
+                                            : row.original.status ===
+                                              "in_progress"
+                                            ? "mdi:check"
+                                            : row.original.status === "resolved"
+                                            ? "mdi:archive"
+                                            : "mdi:refresh"
+                                    }
+                                    width="24"
+                                    height="24"
+                                />
+                                <span>
+                                    {row.original.status === "pending"
+                                        ? "Start"
+                                        : row.original.status === "in_progress"
+                                        ? "Resolve"
+                                        : row.original.status === "resolved"
+                                        ? "Close"
+                                        : "Reopen"}
+                                </span>
                             </div>
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            ),
+        },
+    ];
 
-                            {helpRequests.length > 0 ? (
-                                <div className="overflow-x-auto">
-                                    <table className="min-w-full bg-white">
-                                        <thead>
-                                            <tr>
-                                                <th className="py-3 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    User
-                                                </th>
-                                                <th className="py-3 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Product
-                                                </th>
-                                                <th className="py-3 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Description
-                                                </th>
-                                                <th className="py-3 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Status
-                                                </th>
-                                                <th className="py-3 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Date
-                                                </th>
-                                                <th className="py-3 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Actions
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {helpRequests.map((request) => (
-                                                <tr key={request.id}>
-                                                    <td className="py-4 px-4 border-b border-gray-200">
-                                                        {request.user.name}
-                                                    </td>
-                                                    <td className="py-4 px-4 border-b border-gray-200">
-                                                        {request.product.name}
-                                                    </td>
-                                                    <td className="py-4 px-4 border-b border-gray-200">
-                                                        <div className="max-w-xs overflow-hidden text-ellipsis">
-                                                            {
-                                                                request.description
-                                                            }
-                                                        </div>
-                                                    </td>
-                                                    <td className="py-4 px-4 border-b border-gray-200">
-                                                        <span
-                                                            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadgeColor(
-                                                                request.status
-                                                            )}`}
-                                                        >
-                                                            {request.status.replace(
-                                                                "_",
-                                                                " "
-                                                            )}
-                                                        </span>
-                                                    </td>
-                                                    <td className="py-4 px-4 border-b border-gray-200">
-                                                        {new Date(
-                                                            request.created_at
-                                                        ).toLocaleDateString()}
-                                                    </td>
-                                                    <td className="py-4 px-4 border-b border-gray-200">
-                                                        <div className="flex space-x-2">
-                                                            {request.status ===
-                                                                "pending" && (
-                                                                <button
-                                                                    onClick={() =>
-                                                                        updateStatus(
-                                                                            request.id,
-                                                                            "in_progress"
-                                                                        )
-                                                                    }
-                                                                    className="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700"
-                                                                >
-                                                                    Start
-                                                                </button>
-                                                            )}
+    const sortOptions = [
+        { value: "created_at", label: "Date" },
+        { value: "status", label: "Status" },
+        { value: "user.name", label: "User" },
+        { value: "product.name", label: "Product" },
+    ];
 
-                                                            {request.status ===
-                                                                "in_progress" && (
-                                                                <button
-                                                                    onClick={() =>
-                                                                        updateStatus(
-                                                                            request.id,
-                                                                            "resolved"
-                                                                        )
-                                                                    }
-                                                                    className="px-3 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700"
-                                                                >
-                                                                    Resolve
-                                                                </button>
-                                                            )}
+    const filterOptions = [
+        { value: "all", label: "All Statuses", icon: "mdi:filter-variant" },
+        { value: "pending", label: "Pending", icon: "mdi:clock-outline" },
+        {
+            value: "in_progress",
+            label: "In Progress",
+            icon: "mdi:progress-wrench",
+        },
+        {
+            value: "resolved",
+            label: "Resolved",
+            icon: "mdi:check-circle-outline",
+        },
+        { value: "closed", label: "Closed", icon: "mdi:archive-outline" },
+    ];
 
-                                                            {request.status ===
-                                                                "resolved" && (
-                                                                <button
-                                                                    onClick={() =>
-                                                                        updateStatus(
-                                                                            request.id,
-                                                                            "closed"
-                                                                        )
-                                                                    }
-                                                                    className="px-3 py-1 bg-gray-600 text-white text-xs rounded hover:bg-gray-700"
-                                                                >
-                                                                    Close
-                                                                </button>
-                                                            )}
-
-                                                            {/* Option to reopen closed requests */}
-                                                            {request.status ===
-                                                                "closed" && (
-                                                                <button
-                                                                    onClick={() =>
-                                                                        updateStatus(
-                                                                            request.id,
-                                                                            "in_progress"
-                                                                        )
-                                                                    }
-                                                                    className="px-3 py-1 bg-orange-600 text-white text-xs rounded hover:bg-orange-700"
-                                                                >
-                                                                    Reopen
-                                                                </button>
-                                                            )}
-                                                        </div>
-                                                    </td>
-                                                    <td className="py-4 px-4 border-b border-gray-200">
-                                                        <div className="flex space-x-2">
-                                                            {/* Existing status update buttons */}
-
-                                                            {/* Add the View button */}
-                                                            <Link
-                                                                href={route(
-                                                                    "help-requests.show",
-                                                                    request.id
-                                                                )}
-                                                                className="px-3 py-1 bg-indigo-600 text-white text-xs rounded hover:bg-indigo-700"
-                                                            >
-                                                                View
-                                                            </Link>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            ) : (
-                                <div className="text-center py-8">
-                                    <p className="text-gray-500">
-                                        {filter === "all"
-                                            ? "No help requests found."
-                                            : `No ${filter} help requests found.`}
-                                    </p>
-                                </div>
-                            )}
+    return (
+        <Layout user={auth.user}>
+            <div className="">
+                <div className="overflow-hidden">
+                    <div className="p-6">
+                        <div className="flex justify-between items-center mb-6">
+                            <Select
+                                value={filter}
+                                onValueChange={handleFilterChange}
+                            >
+                                <SelectTrigger className="w-[180px] border-gray-300 focus:ring-indigo-500 focus:border-indigo-500">
+                                    <SelectValue placeholder="Filter by status" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        {filterOptions.map((option) => (
+                                            <SelectItem
+                                                key={option.value}
+                                                value={option.value}
+                                            >
+                                                <div className="flex items-center gap-2">
+                                                    <Icon
+                                                        icon={option.icon}
+                                                        className="w-4 h-4"
+                                                    />
+                                                    {option.label}
+                                                </div>
+                                            </SelectItem>
+                                        ))}
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
                         </div>
+
+                        {helpRequests.length > 0 ? (
+                            <div className="mt-4">
+                                <DataTable
+                                    data={{ data: helpRequests }}
+                                    columns={columns}
+                                    filters={{ status: filter }}
+                                    routeName="help-requests.index"
+                                    title="Help Requests"
+                                    sortOptions={sortOptions}
+                                    searchPlaceholder="Search by user or product..."
+                                    emptyMessage="No help requests found"
+                                    showHeader={false}
+                                    className="border rounded-lg"
+                                />
+                            </div>
+                        ) : (
+                            <div className="text-center py-12 bg-gray-50 rounded-lg">
+                                <Icon
+                                    icon="mdi:inbox-outline"
+                                    className="w-12 h-12 mx-auto text-gray-400"
+                                />
+                                <p className="mt-2 text-gray-600 text-sm">
+                                    {filter === "all"
+                                        ? "No help requests found."
+                                        : `No ${filter.replace(
+                                              "_",
+                                              " "
+                                          )} help requests found.`}
+                                </p>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

@@ -39,7 +39,7 @@ const Navbar = ({pendingCount = 0}) => {
         },
         {
             name: "Services",
-            icon: "material-symbols:miscellaneous-services",
+            icon: "material-symbols:home-repair-service",
             children: [
                 { name: "All Services", route: "services.index" },
                 { name: "Add Service", route: "services.create" },
@@ -62,14 +62,17 @@ const Navbar = ({pendingCount = 0}) => {
             ],
         },
         {
-            name: "Interventions",
-            icon: "material-symbols:tap-interaction",
+            name: "Actions",
+            icon: "mdi:interaction-tap",
             route: "actions.index",
         },
         {
-            name: "request",
-            icon: "material-symbols:tap-interaction",
-            route: "help-requests.index",
+            name: "Interventions",
+            icon: "la:screwdriver",
+            children: [
+                { name: "All Help requests", route: "help-requests.index" },
+                { name: "request Help", route: "help-requests.create" },
+            ],
         },
     ];
 

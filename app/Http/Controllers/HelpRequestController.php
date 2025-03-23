@@ -17,7 +17,12 @@ class HelpRequestController extends Controller
         $statusFilter = $request->query('status', 'all');
         
         $query = HelpRequest::with(['user', 'product'])->latest();
-        
+        $query->when($request->search, function($q, $search){
+            return $q->where('product', function($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%");
+                });
+        });
+                
         // Apply filter if a specific status is requested
         if ($statusFilter !== 'all') {
             $query->where('status', $statusFilter);
