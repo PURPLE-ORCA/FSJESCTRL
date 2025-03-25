@@ -1,8 +1,8 @@
-import React from "react";
-import { usePage } from "@inertiajs/react";
-import { router } from "@inertiajs/react";
+// 1) Import and consume TranslationContext at the top
+import React, { useContext } from "react";
+import { usePage, Link, router } from "@inertiajs/react";
 import Layout from "@/Layouts/Layout";
-import { Link } from "@inertiajs/react";
+import { TranslationContext } from "@/context/TranslationProvider";
 import { Button } from "@/components/ui/button";
 import {
     AlertDialog,
@@ -24,8 +24,11 @@ const ServiceList = () => {
     const { auth, services, filters } = usePage().props;
     const canManageServices = auth?.abilities?.can_manage_services;
 
+    // Pull in translations
+    const { translations } = useContext(TranslationContext);
+
     if (!canManageServices) {
-        return <StayOut/>;
+        return <StayOut />;
     }
 
     // Handle deleting a service
@@ -33,40 +36,43 @@ const ServiceList = () => {
         router.delete(route("services.destroy", service.id));
     };
 
-    // Define sort options for the dropdown
+    // Define sort options for the dropdown, using translations as labels
     const sortOptions = [
-        { value: "name", label: "Name" },
-        { value: "type", label: "Type" },
-        { value: "id", label: "ID" },
-        { value: "users_count", label: "Users Count" },
+        { value: "name", label: translations.name || "Name" },
+        { value: "type", label: translations.type || "Type" },
+        { value: "id", label: translations.id || "ID" },
+        {
+            value: "users_count",
+            label: translations.users_count || "Users Count",
+        },
     ];
 
-    // Table columns
+    // Table columns with translated headers and messages
     const columns = [
         {
             accessorKey: "id",
-            header: "ID",
+            header: translations.id || "ID",
         },
         {
             accessorKey: "name",
-            header: "Name",
+            header: translations.name || "Name",
         },
         {
             accessorKey: "description",
-            header: "Description",
+            header: translations.description || "Description",
         },
         {
             accessorKey: "type",
-            header: "Type",
+            header: translations.type || "Type",
         },
         {
             accessorKey: "users_count",
-            header: "Users Count",
+            header: translations.users_count || "Users Count",
             cell: ({ row }) => <div>{row.original.users_count || 0}</div>,
         },
         {
             accessorKey: "actions",
-            header: "Actions",
+            header: translations.actions || "Actions",
             cell: ({ row }) => (
                 <div className="flex gap-2">
                     {/* Edit Link */}
@@ -86,19 +92,26 @@ const ServiceList = () => {
                         <AlertDialogContent>
                             <AlertDialogHeader>
                                 <AlertDialogTitle>
-                                    Confirm Deletion
+                                    {translations.confirm_deletion ||
+                                        "Confirm Deletion"}
                                 </AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Are you sure you want to delete "
-                                    {row.original.name}"?
+                                    {translations.confirm_delete_message
+                                        ? translations.confirm_delete_message.replace(
+                                              "{name}",
+                                              row.original.name
+                                          )
+                                        : `Are you sure you want to delete "${row.original.name}"?`}
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogCancel>
+                                    {translations.cancel || "Cancel"}
+                                </AlertDialogCancel>
                                 <AlertDialogAction
                                     onClick={() => handleDelete(row.original)}
                                 >
-                                    Confirm
+                                    {translations.confirm || "Confirm"}
                                 </AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>
@@ -116,12 +129,18 @@ const ServiceList = () => {
                     columns={columns}
                     filters={filters}
                     routeName="services.index"
-                    title="Service Management"
+                    title={
+                        translations.service_management || "Service Management"
+                    }
                     addRoute={route("services.create")}
-                    addLabel="Add Service"
+                    addLabel={translations.add_service || "Add Service"}
                     sortOptions={sortOptions}
-                    searchPlaceholder="Search by name..."
-                    emptyMessage="No services found"
+                    searchPlaceholder={
+                        translations.search_by_name || "Search by name..."
+                    }
+                    emptyMessage={
+                        translations.no_services_found || "No services found"
+                    }
                 />
             </div>
         </Layout>

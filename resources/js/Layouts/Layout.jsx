@@ -1,14 +1,21 @@
 import SonnerToastProvider from "@/Components/SonnerToastProvider";
 import Navbar from "./Navbar";
+import React, { useContext } from "react";
+import { TranslationContext } from "@/context/TranslationProvider";
+import { cn } from "@/lib/utils"; // if you have a utility for classNames
 
 const Layout = ({ header, children }) => {
+    const {language} = useContext(TranslationContext);
+
     return (
         <SonnerToastProvider>
-            <div className="bg-white dark:bg-black text-black dark:text-white">
+            <div
+                className={cn(
+                    "bg-white dark:bg-black text-black dark:text-white",
+                    language === "ar" ? "rtl" : "ltr"
+                )}
+            >
                 <div>
-                    {/* <p className="text-center text-white bg-slate-700">
-                        App currently in first beta
-                    </p> */}
                     <Navbar />
                 </div>
                 <main>{children}</main>

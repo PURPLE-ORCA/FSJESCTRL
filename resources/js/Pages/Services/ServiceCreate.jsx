@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, usePage } from "@inertiajs/react";
 import { useForm, router } from "@inertiajs/react";
 import Layout from "@/Layouts/Layout";
@@ -26,10 +26,12 @@ import {
     BreadcrumbList,
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { TranslationContext } from "@/context/TranslationProvider";
 
 const ServiceCreate = () => {
     const { auth } = usePage().props;
     const canManageServices = auth?.abilities?.can_manage_services;
+    const { translations } = useContext(TranslationContext);
 
     // Redirect unauthorized users
     if (!canManageServices) {
@@ -42,7 +44,7 @@ const ServiceCreate = () => {
                                 icon="solar:shield-warning-broken"
                                 className="w-6 h-6 text-yellow-500"
                             />
-                            Access Denied
+                            {translations.acces_denied || "Access Denied"}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -51,14 +53,19 @@ const ServiceCreate = () => {
                                 icon="solar:lock-keyhole-broken"
                                 className="h-4 w-4"
                             />
-                            <AlertTitle>Permission Error</AlertTitle>
+                            <AlertTitle>
+                                {translations.permission_error ||
+                                    "Permission Error"}
+                            </AlertTitle>
                             <AlertDescription>
-                                You do not have permission to access this page.
+                                {translations.no_permission ||
+                                    "You do not have permission to access this page."}
                             </AlertDescription>
                         </Alert>
                         <Button className="mt-4 w-full" asChild>
                             <Link href={route("dashboard")}>
-                                Return to Dashboard
+                                {translations.return_to_dashboard ||
+                                    "Return to Dashboard"}
                             </Link>
                         </Button>
                     </CardContent>
@@ -77,11 +84,17 @@ const ServiceCreate = () => {
         e.preventDefault();
         router.post(route("services.store"), form.data, {
             onSuccess: () => {
-                toast.success("Service created successfully");
+                toast.success(
+                    translations.service_created_successfully ||
+                        "Service created successfully"
+                );
                 form.reset();
             },
             onError: () => {
-                toast.error("Failed to create service");
+                toast.error(
+                    translations.failed_to_create_service ||
+                        "Failed to create service"
+                );
             },
         });
     };
@@ -95,7 +108,7 @@ const ServiceCreate = () => {
                             <BreadcrumbList>
                                 <BreadcrumbItem>
                                     <BreadcrumbLink href={route("dashboard")}>
-                                        Dashboard
+                                        {translations.Dashboard || "Dashboard"}
                                     </BreadcrumbLink>
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator />
@@ -103,19 +116,23 @@ const ServiceCreate = () => {
                                     <BreadcrumbLink
                                         href={route("services.index")}
                                     >
-                                        Services
+                                        {translations.services || "Services"}
                                     </BreadcrumbLink>
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator />
                                 <BreadcrumbItem>
-                                    <BreadcrumbLink>Create</BreadcrumbLink>
+                                    <BreadcrumbLink>
+                                        {" "}
+                                        {translations.create || "Create"}
+                                    </BreadcrumbLink>
                                 </BreadcrumbItem>
                             </BreadcrumbList>
                         </Breadcrumb>
 
                         <div className="flex justify-between items-center">
                             <CardTitle className="text-2xl font-bold">
-                                Create New Service
+                                {translations.create_new_service ||
+                                    "Create New Service"}
                             </CardTitle>
                             <Button variant="outline" size="sm" asChild>
                                 <Link href={route("services.index")}>
@@ -123,7 +140,8 @@ const ServiceCreate = () => {
                                         icon="solar:arrow-left-broken"
                                         className="mr-2 h-4 w-4"
                                     />
-                                    Back to Services
+                                    {translations.back_to_services ||
+                                        "Back to Services"}
                                 </Link>
                             </Button>
                         </div>
@@ -136,11 +154,15 @@ const ServiceCreate = () => {
                         >
                             <div className="space-y-2">
                                 <Label htmlFor="name" className="text-base">
-                                    Service Name
+                                    {translations.service_name ||
+                                        "Service Name"}
                                 </Label>
                                 <Input
                                     id="name"
-                                    placeholder="Enter service name"
+                                    placeholder={
+                                        translations.enter_service_name ||
+                                        "Enter service name"
+                                    }
                                     value={form.data.name}
                                     onChange={(e) =>
                                         form.setData("name", e.target.value)
@@ -164,11 +186,14 @@ const ServiceCreate = () => {
                                     htmlFor="description"
                                     className="text-base"
                                 >
-                                    Description
+                                    {translations.description || "Description"}
                                 </Label>
                                 <Textarea
                                     id="description"
-                                    placeholder="Enter service description"
+                                    placeholder={
+                                        translations.enter_service_description ||
+                                        "Enter service description"
+                                    }
                                     value={form.data.description}
                                     onChange={(e) =>
                                         form.setData(
@@ -191,7 +216,8 @@ const ServiceCreate = () => {
 
                             <div className="space-y-2">
                                 <Label htmlFor="type" className="text-base">
-                                    Service Type
+                                    {translations.service_type ||
+                                        "Service Type"}
                                 </Label>
                                 <Select
                                     value={form.data.type}
@@ -200,7 +226,12 @@ const ServiceCreate = () => {
                                     }
                                 >
                                     <SelectTrigger id="type" className="w-full">
-                                        <SelectValue placeholder="Select a type" />
+                                        <SelectValue
+                                            placeholder={
+                                                translations.select_a_type ||
+                                                "Select a type"
+                                            }
+                                        />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="magazine">
@@ -209,7 +240,10 @@ const ServiceCreate = () => {
                                                     icon="solar:book-broken"
                                                     className="h-4 w-4"
                                                 />
-                                                <span>Magazine</span>
+                                                <span>
+                                                    {translations.magazine ||
+                                                        "Magazine"}
+                                                </span>
                                             </div>
                                         </SelectItem>
                                         <SelectItem value="service">
@@ -218,7 +252,10 @@ const ServiceCreate = () => {
                                                     icon="solar:widget-broken"
                                                     className="h-4 w-4"
                                                 />
-                                                <span>Service</span>
+                                                <span>
+                                                    {translations.service ||
+                                                        "Service"}
+                                                </span>
                                             </div>
                                         </SelectItem>
                                     </SelectContent>
@@ -246,7 +283,7 @@ const ServiceCreate = () => {
                                         icon="solar:refresh-broken"
                                         className="mr-2 h-4 w-4"
                                     />
-                                    Reset
+                                    {translations.reset || "Reset"}
                                 </Button>
                                 <Button
                                     type="submit"
@@ -258,8 +295,9 @@ const ServiceCreate = () => {
                                         className="h-4 w-4"
                                     />
                                     {form.processing
-                                        ? "Creating..."
-                                        : "Create Service"}
+                                        ? translations.creating || "Creating..."
+                                        : translations.create_service ||
+                                          "Create Service"}
                                 </Button>
                             </div>
                         </form>

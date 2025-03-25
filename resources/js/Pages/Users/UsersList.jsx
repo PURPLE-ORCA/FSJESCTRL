@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import { usePage } from "@inertiajs/react";
-import { Link, useForm, router } from "@inertiajs/react";
+import { Link, useForm, router,  } from "@inertiajs/react";
 import { Table } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -34,15 +34,15 @@ import { toast } from "sonner";
 import Layout from "@/Layouts/Layout";
 import { cn } from "@/lib/utils";
 import StayOut from "@/Components/StayOut";
+import { TranslationContext } from "@/context/TranslationProvider";
 
 const UsersList = () => {
     const { auth, users, roles, services, filters } = usePage().props;
     const canManageUsers = auth?.abilities?.can_manage_users;
+    const { translations } = useContext(TranslationContext);
 
     if (!canManageUsers) {
-        return (
-            <StayOut/>
-        );
+        return <StayOut />;
     }
 
     const form = useForm({
@@ -53,26 +53,34 @@ const UsersList = () => {
 
     // Table columns
     const columns = [
-        { accessorKey: "id", header: "ID" },
-        { accessorKey: "name", header: "Name" },
-        { accessorKey: "email", header: "Email" },
+        { accessorKey: "id", header: translations.id || "ID" },
+        { accessorKey: "name", header: translations.name || "Name" },
+        { accessorKey: "email", header: translations.email || "Email" },
         {
             accessorKey: "role.name",
-            header: "Role",
+            header: translations.role || "Role",
             cell: ({ row }) => (
-                <div>{row.original.role?.name || "no role"}</div>
+                <div>
+                    {row.original.role?.name ||
+                        translations.no_role ||
+                        "no role"}
+                </div>
             ),
         },
         {
             accessorKey: "service.name",
-            header: "Service",
+            header: translations.service || "Service",
             cell: ({ row }) => (
-                <div>{row.original.service?.name || "no service"}</div>
+                <div>
+                    {row.original.service?.name ||
+                        translations.no_service ||
+                        "no service"}
+                </div>
             ),
         },
         {
             accessorKey: "actions",
-            header: "Actions",
+            header: translations.actions || "Actions",
             cell: ({ row }) => (
                 <div className="flex gap-2">
                     {/* Role Update Dropdown */}
@@ -83,7 +91,11 @@ const UsersList = () => {
                         }
                     >
                         <SelectTrigger className="w-36">
-                            <SelectValue placeholder="Assign Role" />
+                            <SelectValue
+                                placeholder={
+                                    translations.assign_role || "Assign Role"
+                                }
+                            />
                         </SelectTrigger>
                         <SelectContent>
                             {roles.map((role) => (
@@ -100,27 +112,36 @@ const UsersList = () => {
                     {/* Delete Button */}
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            <Button variant="destructive">Delete</Button>
+                            <Button variant="destructive">
+                                {translations.delete || "Delete"}
+                            </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                             <AlertDialogHeader>
                                 <AlertDialogTitle>
-                                    Confirm Deletion
+                                    {translations.confirm_deletion ||
+                                        "Confirm Deletion"}
                                 </AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Are you sure you want to delete{" "}
-                                    {row.original.name}?
+                                    {translations.confirm_delete_message
+                                        ? translations.confirm_delete_message.replace(
+                                              "{name}",
+                                              row.original.name
+                                          )
+                                        : `Are you sure you want to delete ${row.original.name}?`}
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogCancel>
+                                    {translations.cancel || "Cancel"}
+                                </AlertDialogCancel>
                                 <AlertDialogAction
                                     onClick={() => handleDelete(row.original)}
                                     disabled={router.isProcessing}
                                 >
                                     {router.isProcessing
-                                        ? "Deleting..."
-                                        : "Confirm"}
+                                        ? translations.deleting || "Deleting..."
+                                        : translations.confirm || "Confirm"}
                                 </AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>
@@ -145,8 +166,9 @@ const UsersList = () => {
     return (
         <Layout>
             <div className="p-6">
-                <h1 className="text-4xl font-bold mb-4">User Management</h1>
-
+                <h1 className="text-4xl font-bold mb-4">
+                    {translations.user_management || "User Management"}
+                </h1>
                 {/* Search and Sorting */}
                 <form
                     onSubmit={(e) => {
@@ -160,7 +182,10 @@ const UsersList = () => {
                 >
                     <Input
                         type="text"
-                        placeholder="Search by name or email..."
+                        placeholder={
+                            translations.search_placeholder ||
+                            "Search by name or email..."
+                        }
                         value={form.data.search}
                         onChange={(e) => form.setData("search", e.target.value)}
                         className="max-w-sm"
@@ -175,7 +200,7 @@ const UsersList = () => {
                                 form.submit();
                             }}
                         >
-                            Sort by Name (Asc)
+                            {translations.sort_name_asc || "Sort by Name (Asc)"}
                         </Button>
                         <Button
                             onClick={() => {
@@ -186,7 +211,8 @@ const UsersList = () => {
                                 form.submit();
                             }}
                         >
-                            Sort by Email (Desc)
+                            {translations.sort_email_desc ||
+                                "Sort by Email (Desc)"}
                         </Button>
                     </div>
                 </form>

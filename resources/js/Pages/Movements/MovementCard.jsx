@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Icon } from "@iconify/react";
 import { motion, AnimatePresence } from "framer-motion";
+import { TranslationContext } from "@/context/TranslationProvider";
 
 const MovementCard = ({ movement }) => {
     const [expanded, setExpanded] = useState(false);
+    const { translations } = useContext(TranslationContext);
 
     const toggleExpand = () => {
         setExpanded((prev) => !prev);
@@ -22,11 +24,15 @@ const MovementCard = ({ movement }) => {
                         className="w-6 h-6 text-main"
                     />
                     <span className="font-bold text-lg text-gray-900 dark:text-white">
-                        {movement.from_service?.name || "N/A"}
+                        {movement.from_service?.name ||
+                            translations.na ||
+                            "N/A"}
                     </span>
-                    <span className="text-gray-500">to</span>
+                    <span className="text-gray-500">
+                        {translations.to || "to"}
+                    </span>
                     <span className="font-bold text-lg text-gray-900 dark:text-white">
-                        {movement.to_service?.name || "N/A"}
+                        {movement.to_service?.name || translations.na || "N/A"}
                     </span>
                 </div>
                 <div className="text-lg text-gray-500 dark:text-gray-400">
@@ -52,10 +58,14 @@ const MovementCard = ({ movement }) => {
                                         className="w-5 h-5 text-main mr-2"
                                     />
                                     <span className="font-semibold text-lg">
-                                        Product:
+                                        {translations.product
+                                            ? translations.product + ":"
+                                            : "Product:"}
                                     </span>
                                     <span className="ml-1 text-lg text-gray-600">
-                                        {movement.product?.name || "N/A"}
+                                        {movement.product?.name ||
+                                            translations.na ||
+                                            "N/A"}
                                     </span>
                                 </div>
                                 <div className="flex items-center">
@@ -64,7 +74,9 @@ const MovementCard = ({ movement }) => {
                                         className="w-5 h-5 text-main mr-2"
                                     />
                                     <span className="font-semibold text-lg">
-                                        Quantity:
+                                        {translations.quantity
+                                            ? translations.quantity + ":"
+                                            : "Quantity:"}
                                     </span>
                                     <span className="ml-1 text-lg text-gray-600">
                                         {movement.quantity}
@@ -76,10 +88,14 @@ const MovementCard = ({ movement }) => {
                                         className="w-5 h-5 text-main mr-2"
                                     />
                                     <span className="font-semibold text-lg">
-                                        User:
+                                        {translations.user
+                                            ? translations.user + ":"
+                                            : "User:"}
                                     </span>
                                     <span className="ml-1 text-lg text-gray-600">
-                                        {movement.user?.name || "N/A"}
+                                        {movement.user?.name ||
+                                            translations.na ||
+                                            "N/A"}
                                     </span>
                                 </div>
                                 <div className="flex items-center">
@@ -88,7 +104,9 @@ const MovementCard = ({ movement }) => {
                                         className="w-5 h-5 text-main mr-2"
                                     />
                                     <span className="font-semibold text-lg">
-                                        Date:
+                                        {translations.date
+                                            ? translations.date + ":"
+                                            : "Date:"}
                                     </span>
                                     <span className="ml-1 text-lg text-gray-600">
                                         {new Date(
@@ -102,10 +120,14 @@ const MovementCard = ({ movement }) => {
                                         className="w-5 h-5 text-main mr-2"
                                     />
                                     <span className="font-semibold text-lg">
-                                        Note:
+                                        {translations.note
+                                            ? translations.note + ":"
+                                            : "Note:"}
                                     </span>
                                     <span className="ml-1 text-lg text-gray-600">
-                                        {movement.note || "No note"}
+                                        {movement.note ||
+                                            translations.no_note ||
+                                            "No note"}
                                     </span>
                                 </div>
                             </div>

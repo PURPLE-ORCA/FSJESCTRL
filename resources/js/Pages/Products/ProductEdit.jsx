@@ -1,6 +1,5 @@
-import React from "react";
-import { usePage } from "@inertiajs/react";
-import { useForm } from "@inertiajs/react";
+import React, { useContext } from "react";
+import { usePage, Link, useForm, router } from "@inertiajs/react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -14,10 +13,14 @@ import {
 import Layout from "@/Layouts/Layout";
 import { toast } from "sonner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { TranslationContext } from "@/context/TranslationProvider";
+import StayOut from "@/Components/StayOut";
 
 const ProductEdit = () => {
     const { auth, product, services } = usePage().props;
     const canManageProducts = auth?.abilities?.can_manage_products;
+
+    const { translations } = useContext(TranslationContext);
 
     const form = useForm({
         name: product.name,
@@ -30,32 +33,7 @@ const ProductEdit = () => {
 
     if (!canManageProducts) {
         return (
-            <Layout>
-                <div className="flex items-center justify-center min-h-[60vh]">
-                    <div className="text-center p-8 bg-red-50 rounded-lg border border-red-200 max-w-md">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-12 w-12 text-red-500 mx-auto mb-4"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                            />
-                        </svg>
-                        <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                            Access Denied
-                        </h2>
-                        <p className="text-gray-600">
-                            You do not have permission to view this page.
-                        </p>
-                    </div>
-                </div>
-            </Layout>
+            <StayOut/>
         );
     }
 
@@ -68,16 +46,17 @@ const ProductEdit = () => {
         <Layout>
             <div className="max-w-4xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
                 <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-4xl mb-6">
-                    Edit Product
+                    {translations.edit_product || "Edit Product"}
                 </h1>
 
                 {form.recentlySuccessful && (
                     <Alert className="mb-6 border-l-4 border-green-500 bg-green-50">
                         <AlertTitle className="font-medium text-green-800">
-                            Success
+                            {translations.success || "Success"}
                         </AlertTitle>
                         <AlertDescription className="text-green-700">
-                            Product updated successfully!
+                            {translations.product_updated_successfully ||
+                                "Product updated successfully!"}
                         </AlertDescription>
                     </Alert>
                 )}
@@ -87,13 +66,13 @@ const ProductEdit = () => {
                     className="space-y-6 bg-transparent p-6 rounded-lg shadow-sm border border-transparent"
                 >
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                        {/* Name */}
+                        {/* Product Name */}
                         <div className="col-span-1">
                             <Label
                                 htmlFor="name"
                                 className="block text-lg font-medium text-gray-700"
                             >
-                                Product Name
+                                {translations.product_name || "Product Name"}
                             </Label>
                             <Input
                                 id="name"
@@ -117,7 +96,7 @@ const ProductEdit = () => {
                                 htmlFor="serial_number"
                                 className="block text-lg font-medium text-gray-700"
                             >
-                                Serial Number
+                                {translations.serial_number || "Serial Number"}
                             </Label>
                             <Input
                                 id="serial_number"
@@ -144,7 +123,7 @@ const ProductEdit = () => {
                                 htmlFor="supplier"
                                 className="block text-lg font-medium text-gray-700"
                             >
-                                Supplier
+                                {translations.supplier || "Supplier"}
                             </Label>
                             <Input
                                 id="supplier"
@@ -168,7 +147,7 @@ const ProductEdit = () => {
                                 htmlFor="quantity"
                                 className="block text-lg font-medium text-gray-700"
                             >
-                                Quantity
+                                {translations.quantity || "Quantity"}
                             </Label>
                             <Input
                                 id="quantity"
@@ -192,7 +171,7 @@ const ProductEdit = () => {
                                 htmlFor="price"
                                 className="block text-lg font-medium text-gray-700"
                             >
-                                Price
+                                {translations.price || "Price"}
                             </Label>
                             <div className="mt-1 relative rounded-md shadow-sm">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -218,13 +197,13 @@ const ProductEdit = () => {
                             )}
                         </div>
 
-                        {/* Service */}
+                        {/* Associated Service */}
                         <div className="col-span-1 md:col-span-2">
                             <Label
                                 htmlFor="served_to"
                                 className="block text-lg font-medium text-gray-700"
                             >
-                                Service
+                                {translations.associated_service || "Service"}
                             </Label>
                             <Select
                                 value={
@@ -240,7 +219,12 @@ const ProductEdit = () => {
                                 }
                             >
                                 <SelectTrigger className="mt-1 w-full">
-                                    <SelectValue placeholder="Select a service" />
+                                    <SelectValue
+                                        placeholder={
+                                            translations.select_a_service ||
+                                            "Select a service"
+                                        }
+                                    />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {services.map((service) => (
@@ -289,10 +273,10 @@ const ProductEdit = () => {
                                             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                                         ></path>
                                     </svg>
-                                    Saving...
+                                    {translations.saving || "Saving..."}
                                 </>
                             ) : (
-                                "Update Product"
+                                translations.update_product || "Update Product"
                             )}
                         </Button>
                     </div>

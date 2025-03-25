@@ -1,5 +1,5 @@
 // resources/js/Pages/HelpRequests/Show.jsx
-import React from "react";
+import React, { useContext } from "react";
 import { Head, Link } from "@inertiajs/react";
 import Layout from "@/Layouts/Layout";
 import {
@@ -30,8 +30,11 @@ import { Button } from "@/Components/ui/button";
 import { Separator } from "@/Components/ui/separator";
 import { ScrollArea } from "@/Components/ui/scroll-area";
 import { Avatar } from "@/Components/ui/avatar";
+import { TranslationContext } from "@/context/TranslationProvider";
 
 export default function Show({ auth, helpRequest }) {
+    const { translations } = useContext(TranslationContext);
+
     // Format date helper function
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleString();
@@ -75,18 +78,23 @@ export default function Show({ auth, helpRequest }) {
             header={
                 <div className="flex justify-between items-center">
                     <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                        Help Request Details
+                        {translations.help_request_details ||
+                            "Help Request Details"}
                     </h2>
                     <Button variant="outline" size="sm" asChild>
                         <Link href={route("help-requests.index")}>
                             <ArrowLeft className="mr-2 h-4 w-4" />
-                            Back to List
+                            {translations.back_to_list || "Back to List"}
                         </Link>
                     </Button>
                 </div>
             }
         >
-            <Head title="Help Request Details" />
+            <Head
+                title={
+                    translations.help_request_details || "Help Request Details"
+                }
+            />
 
             <div className="py-8">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
@@ -96,18 +104,21 @@ export default function Show({ auth, helpRequest }) {
                             <div className="flex items-center justify-between">
                                 <CardTitle className="text-xl flex items-center">
                                     <AlertCircle className="mr-2 h-5 w-5 text-blue-500" />
-                                    Help Request Information
+                                    {translations.help_request_information ||
+                                        "Help Request Information"}
                                 </CardTitle>
                                 <Badge
                                     className={`font-medium capitalize px-3 py-1 ${getStatusColor(
                                         helpRequest.status
                                     )}`}
+                                    variant="outline"
                                 >
                                     {helpRequest.status.replace("_", " ")}
                                 </Badge>
                             </div>
                             <CardDescription>
-                                Details about the support request
+                                {translations.details_about_support_request ||
+                                    "Details about the support request"}
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
@@ -116,7 +127,8 @@ export default function Show({ auth, helpRequest }) {
                                     <User className="h-5 w-5 text-gray-400 mt-0.5" />
                                     <div>
                                         <p className="text-sm font-medium text-gray-500">
-                                            Requested By
+                                            {translations.requested_by ||
+                                                "Requested By"}
                                         </p>
                                         <p className="font-medium text-gray-900">
                                             {helpRequest.user.name}
@@ -128,7 +140,8 @@ export default function Show({ auth, helpRequest }) {
                                     <Calendar className="h-5 w-5 text-gray-400 mt-0.5" />
                                     <div>
                                         <p className="text-sm font-medium text-gray-500">
-                                            Date Requested
+                                            {translations.date_requested ||
+                                                "Date Requested"}
                                         </p>
                                         <p className="font-medium text-gray-900">
                                             {formatDate(helpRequest.created_at)}
@@ -140,7 +153,8 @@ export default function Show({ auth, helpRequest }) {
                                 <AlertCircle className="h-5 w-5 text-gray-400 mt-0.5" />
                                 <div>
                                     <p className="text-sm font-medium text-gray-500 mb-2">
-                                        Description
+                                        {translations.description ||
+                                            "Description"}
                                     </p>
                                     <p className="text-gray-900 bg-gray-50 p-4 rounded-lg">
                                         {helpRequest.description}
@@ -155,10 +169,12 @@ export default function Show({ auth, helpRequest }) {
                         <CardHeader>
                             <CardTitle className="text-xl flex items-center">
                                 <Package className="mr-2 h-5 w-5 text-purple-500" />
-                                Product Information
+                                {translations.product_information ||
+                                    "Product Information"}
                             </CardTitle>
                             <CardDescription>
-                                Details about the related product
+                                {translations.details_about_related_product ||
+                                    "Details about the related product"}
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
@@ -167,7 +183,8 @@ export default function Show({ auth, helpRequest }) {
                                     <Package className="h-5 w-5 text-gray-400 mt-0.5" />
                                     <div>
                                         <p className="text-sm font-medium text-gray-500">
-                                            Product Name
+                                            {translations.product_name ||
+                                                "Product Name"}
                                         </p>
                                         <p className="font-medium text-gray-900">
                                             {helpRequest.product.name}
@@ -179,7 +196,8 @@ export default function Show({ auth, helpRequest }) {
                                     <Barcode className="h-5 w-5 text-gray-400 mt-0.5" />
                                     <div>
                                         <p className="text-sm font-medium text-gray-500">
-                                            Serial Number
+                                            {translations.serial_number ||
+                                                "Serial Number"}
                                         </p>
                                         <p className="font-medium text-gray-900">
                                             {helpRequest.product.serial_number}
@@ -191,7 +209,8 @@ export default function Show({ auth, helpRequest }) {
                                     <Building2 className="h-5 w-5 text-gray-400 mt-0.5" />
                                     <div>
                                         <p className="text-sm font-medium text-gray-500">
-                                            Supplier
+                                            {translations.supplier ||
+                                                "Supplier"}
                                         </p>
                                         <p className="font-medium text-gray-900">
                                             {helpRequest.product.supplier}
@@ -202,15 +221,17 @@ export default function Show({ auth, helpRequest }) {
                         </CardContent>
                     </Card>
 
-                    {/* Action History Card - Redesigned */}
+                    {/* Action History Card */}
                     <Card>
                         <CardHeader>
                             <CardTitle className="text-xl flex items-center">
                                 <ClipboardList className="mr-2 h-5 w-5 text-green-500" />
-                                Action History
+                                {translations.action_history ||
+                                    "Action History"}
                             </CardTitle>
                             <CardDescription>
-                                Timeline of actions performed on this product
+                                {translations.timeline_of_actions ||
+                                    "Timeline of actions performed on this product"}
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
@@ -219,7 +240,6 @@ export default function Show({ auth, helpRequest }) {
                                 <div className="relative space-y-4 max-h-96 overflow-y-auto p-1">
                                     {/* Timeline line */}
                                     <div className="absolute left-5 top-0 bottom-0 w-0.5 bg-gray-200"></div>
-
                                     {helpRequest.product.action_logs.map(
                                         (log) => (
                                             <div
@@ -230,7 +250,6 @@ export default function Show({ auth, helpRequest }) {
                                                 <div className="z-10 flex-shrink-0 mt-1 w-10 h-10 rounded-full bg-white flex items-center justify-center border-2 border-gray-200">
                                                     {getActionIcon(log.action)}
                                                 </div>
-
                                                 {/* Content */}
                                                 <div className="flex-grow bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:border-gray-300 transition-colors">
                                                     <div className="flex justify-between items-start">
@@ -255,7 +274,6 @@ export default function Show({ auth, helpRequest }) {
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                     <div className="mt-2 text-gray-700">
                                                         <p>{log.details}</p>
                                                     </div>
@@ -268,8 +286,8 @@ export default function Show({ auth, helpRequest }) {
                                 <div className="text-center py-12 border rounded-md bg-gray-50">
                                     <ClipboardList className="mx-auto h-12 w-12 text-gray-300" />
                                     <p className="mt-4 text-gray-500">
-                                        No action history available for this
-                                        product.
+                                        {translations.no_action_history ||
+                                            "No action history available for this product."}
                                     </p>
                                 </div>
                             )}

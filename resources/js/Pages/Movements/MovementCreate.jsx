@@ -1,6 +1,5 @@
-import React from "react";
-import { usePage } from "@inertiajs/react";
-import { Link, useForm, router } from "@inertiajs/react";
+import React, { useContext } from "react";
+import { usePage, Link, useForm, router } from "@inertiajs/react";
 import Layout from "@/Layouts/Layout";
 import jsPDF from "jspdf";
 import { Icon } from "@iconify/react";
@@ -39,6 +38,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { TranslationContext } from "@/context/TranslationProvider";
 
 const MovementCreate = () => {
     const {
@@ -48,16 +48,17 @@ const MovementCreate = () => {
         user_service_id,
     } = usePage().props;
     const canManageMovements = auth?.abilities?.can_manage_movements;
+    const { translations } = useContext(TranslationContext);
 
     const form = useForm({
         product_id: null,
-        from_service_id: parseInt(user_service_id), // Use parseInt to ensure it's a number
+        from_service_id: parseInt(user_service_id),
         to_service_id: null,
         quantity: 0,
         note: "",
     });
 
-    // Redirect unauthorized users
+    // Unauthorized: No permission to create movements
     if (!canManageMovements) {
         return (
             <Layout>
@@ -65,20 +66,25 @@ const MovementCreate = () => {
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                             <ArrowLeft className="w-6 h-6 text-yellow-500" />
-                            Access Denied
+                            {translations.access_denied || "Access Denied"}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <Alert variant="destructive">
                             <ArrowLeft className="h-4 w-4" />
-                            <AlertTitle>Permission Error</AlertTitle>
+                            <AlertTitle>
+                                {translations.permission_error ||
+                                    "Permission Error"}
+                            </AlertTitle>
                             <AlertDescription>
-                                You do not have permission to view this page.
+                                {translations.no_permission ||
+                                    "You do not have permission to view this page."}
                             </AlertDescription>
                         </Alert>
                         <Button className="mt-4 w-full" asChild>
                             <Link href={route("dashboard")}>
-                                Return to Dashboard
+                                {translations.return_to_dashboard ||
+                                    "Return to Dashboard"}
                             </Link>
                         </Button>
                     </CardContent>
@@ -87,6 +93,7 @@ const MovementCreate = () => {
         );
     }
 
+    // Unauthorized: User is not assigned to a service
     if (!user_service_id) {
         return (
             <Layout>
@@ -94,21 +101,26 @@ const MovementCreate = () => {
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                             <ArrowLeft className="w-6 h-6 text-yellow-500" />
-                            Service Required
+                            {translations.service_required ||
+                                "Service Required"}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <Alert variant="destructive">
                             <ArrowLeft className="h-4 w-4" />
-                            <AlertTitle>Missing Assignment</AlertTitle>
+                            <AlertTitle>
+                                {translations.missing_assignment ||
+                                    "Missing Assignment"}
+                            </AlertTitle>
                             <AlertDescription>
-                                You need to be assigned to a service to create
-                                movements.
+                                {translations.need_assignment ||
+                                    "You need to be assigned to a service to create movements."}
                             </AlertDescription>
                         </Alert>
                         <Button className="mt-4 w-full" asChild>
                             <Link href={route("dashboard")}>
-                                Return to Dashboard
+                                {translations.return_to_dashboard ||
+                                    "Return to Dashboard"}
                             </Link>
                         </Button>
                     </CardContent>
@@ -128,12 +140,11 @@ const MovementCreate = () => {
         const product = availableProducts.find((p) => p.id === productId);
 
         if (!product) {
-            toast.error("Product not found");
+            toast.error(translations.product_not_found || "Product not found");
             form.setData("product_id", null);
             return;
         }
 
-        // Use setData while preserving from_service_id
         form.setData({
             ...form.data,
             product_id: product.id,
@@ -146,7 +157,10 @@ const MovementCreate = () => {
 
         router.post(route("movements.store"), form.data, {
             onSuccess: () => {
-                toast.success("Movement recorded!");
+                toast.success(
+                    translations.movement_created_successfully ||
+                        "Movement created successfully!"
+                );
                 form.reset();
             },
             onError: (errors) => {
@@ -157,9 +171,8 @@ const MovementCreate = () => {
         });
     };
 
-    // Function to export the movement paper as a PDF
+    // Function to export the movement paper as a PDF with translations
     const exportMovementPaper = () => {
-        // Look up names based on IDs
         const product = availableProducts.find(
             (p) => p.id === form.data.product_id
         );
@@ -174,21 +187,26 @@ const MovementCreate = () => {
         const pageWidth = doc.internal.pageSize.getWidth();
         const pageHeight = doc.internal.pageSize.getHeight();
 
-        // Add a stylish header with a cool background color
+        // Header background
         doc.setFillColor(30, 144, 255); // DodgerBlue
         doc.rect(0, 0, pageWidth, 40, "F");
 
-        // Header title centered in white
+        // Header title with translation
         doc.setFontSize(22);
         doc.setTextColor(255, 255, 255);
-        doc.text("Movement Paper", pageWidth / 2, 25, { align: "center" });
+        doc.text(
+            translations.movement_paper || "Movement Paper",
+            pageWidth / 2,
+            25,
+            { align: "center" }
+        );
 
-        // Draw a border for the content area
+        // Content border
         doc.setLineWidth(0.5);
         doc.setDrawColor(0, 0, 0);
         doc.rect(10, 50, pageWidth - 20, 100);
 
-        // Body content
+        // Body content with translations
         doc.setFontSize(12);
         doc.setTextColor(0, 0, 0);
         const contentX = 14;
@@ -196,34 +214,52 @@ const MovementCreate = () => {
         const lineSpacing = 10;
 
         doc.text(
-            `Date: ${new Date().toLocaleDateString()}`,
+            `${
+                translations.date || "Date"
+            }: ${new Date().toLocaleDateString()}`,
             contentX,
             contentY
         );
         contentY += lineSpacing;
         doc.text(
-            `Product: ${product ? product.name : "N/A"}`,
+            `${translations.product || "Product"}: ${
+                product ? product.name : "N/A"
+            }`,
             contentX,
             contentY
         );
         contentY += lineSpacing;
         doc.text(
-            `From Service: ${fromService ? fromService.name : user_service_id}`,
+            `${translations.from_service || "From Service"}: ${
+                fromService ? fromService.name : user_service_id
+            }`,
             contentX,
             contentY
         );
         contentY += lineSpacing;
         doc.text(
-            `To Service: ${toService ? toService.name : "N/A"}`,
+            `${translations.to_service || "To Service"}: ${
+                toService ? toService.name : "N/A"
+            }`,
             contentX,
             contentY
         );
         contentY += lineSpacing;
-        doc.text(`Quantity: ${form.data.quantity}`, contentX, contentY);
+        doc.text(
+            `${translations.quantity || "Quantity"}: ${form.data.quantity}`,
+            contentX,
+            contentY
+        );
         contentY += lineSpacing;
-        doc.text(`Note: ${form.data.note || "No note"}`, contentX, contentY);
+        doc.text(
+            `${translations.note || "Note"}: ${
+                form.data.note || translations.no_note || "No note"
+            }`,
+            contentX,
+            contentY
+        );
 
-        // Footer with a bit of branding
+        // Footer branding
         doc.setFontSize(10);
         doc.setTextColor(100);
         doc.text(
@@ -245,7 +281,7 @@ const MovementCreate = () => {
                             <BreadcrumbList>
                                 <BreadcrumbItem>
                                     <BreadcrumbLink href={route("dashboard")}>
-                                        Dashboard
+                                        {translations.dashboard || "Dashboard"}
                                     </BreadcrumbLink>
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator />
@@ -253,12 +289,14 @@ const MovementCreate = () => {
                                     <BreadcrumbLink
                                         href={route("movements.index")}
                                     >
-                                        Movements
+                                        {translations.movements || "Movements"}
                                     </BreadcrumbLink>
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator />
                                 <BreadcrumbItem>
-                                    <BreadcrumbLink>Create</BreadcrumbLink>
+                                    <BreadcrumbLink>
+                                        {translations.create || "Create"}
+                                    </BreadcrumbLink>
                                 </BreadcrumbItem>
                             </BreadcrumbList>
                         </Breadcrumb>
@@ -266,16 +304,19 @@ const MovementCreate = () => {
                         <div className="flex justify-between items-center">
                             <div>
                                 <CardTitle className="text-2xl font-bold">
-                                    Create New Movement
+                                    {translations.create_new_movement ||
+                                        "Create New Movement"}
                                 </CardTitle>
                                 <CardDescription className="mt-1">
-                                    Move products between services
+                                    {translations.move_products_between_services ||
+                                        "Move products between services"}
                                 </CardDescription>
                             </div>
                             <Button variant="outline" size="sm" asChild>
                                 <Link href={route("movements.index")}>
                                     <ArrowLeft className="mr-2 h-4 w-4" />
-                                    Back to Movements
+                                    {translations.back_to_movements ||
+                                        "Back to Movements"}
                                 </Link>
                             </Button>
                         </div>
@@ -286,10 +327,11 @@ const MovementCreate = () => {
                             <Alert className="mb-6 border-l-4 border-green-500 bg-green-50">
                                 <ArrowLeft className="h-4 w-4 text-green-800" />
                                 <AlertTitle className="font-medium text-green-800">
-                                    Success
+                                    {translations.success || "Success"}
                                 </AlertTitle>
                                 <AlertDescription className="text-green-700">
-                                    Movement created successfully!
+                                    {translations.movement_created_successfully ||
+                                        "Movement created successfully!"}
                                 </AlertDescription>
                             </Alert>
                         )}
@@ -305,7 +347,7 @@ const MovementCreate = () => {
                                         htmlFor="product"
                                         className="text-base font-medium"
                                     >
-                                        Product
+                                        {translations.product || "Product"}
                                     </Label>
                                     <Select
                                         value={
@@ -325,7 +367,12 @@ const MovementCreate = () => {
                                             id="product"
                                             className="mt-1 w-full"
                                         >
-                                            <SelectValue placeholder="Select a product" />
+                                            <SelectValue
+                                                placeholder={
+                                                    translations.select_a_product ||
+                                                    "Select a product"
+                                                }
+                                            />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {availableProducts.map(
@@ -337,8 +384,10 @@ const MovementCreate = () => {
                                                         <div className="flex items-center gap-2">
                                                             <ArrowLeft className="h-4 w-4" />
                                                             <span>
-                                                                {product.name}{" "}
-                                                                (Available:{" "}
+                                                                {product.name} (
+                                                                {translations.available ||
+                                                                    "Available"}
+                                                                :{" "}
                                                                 {
                                                                     product.quantity
                                                                 }
@@ -370,7 +419,8 @@ const MovementCreate = () => {
                                         htmlFor="to_service"
                                         className="text-base font-medium"
                                     >
-                                        Destination Service
+                                        {translations.destination_service ||
+                                            "Destination Service"}
                                     </Label>
                                     <Select
                                         value={
@@ -388,7 +438,12 @@ const MovementCreate = () => {
                                             id="to_service"
                                             className="mt-1 w-full"
                                         >
-                                            <SelectValue placeholder="Select destination service" />
+                                            <SelectValue
+                                                placeholder={
+                                                    translations.select_destination_service ||
+                                                    "Select destination service"
+                                                }
+                                            />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {services
@@ -427,7 +482,8 @@ const MovementCreate = () => {
                                             htmlFor="quantity"
                                             className="text-base font-medium"
                                         >
-                                            Quantity
+                                            {translations.quantity ||
+                                                "Quantity"}
                                         </Label>
                                         <TooltipProvider>
                                             <Tooltip>
@@ -442,7 +498,8 @@ const MovementCreate = () => {
                                                 </TooltipTrigger>
                                                 <TooltipContent>
                                                     <p>
-                                                        Number of items to move
+                                                        {translations.items_to_move ||
+                                                            "Number of items to move"}
                                                     </p>
                                                 </TooltipContent>
                                             </Tooltip>
@@ -480,13 +537,16 @@ const MovementCreate = () => {
                                         htmlFor="note"
                                         className="text-base font-medium"
                                     >
-                                        Note
+                                        {translations.note || "Note"}
                                     </Label>
                                     <div className="mt-1 relative">
                                         <Input
                                             id="note"
                                             type="text"
-                                            placeholder="Add a note (optional)"
+                                            placeholder={
+                                                translations.add_note_optional ||
+                                                "Add a note (optional)"
+                                            }
                                             value={form.data.note}
                                             onChange={(e) =>
                                                 form.setData(
@@ -508,8 +568,12 @@ const MovementCreate = () => {
                                     variant="outline"
                                     onClick={exportMovementPaper}
                                 >
-                                    <Icon icon="eva:file-outline" width="24" height="24"/>
-                                    Export PDF
+                                    <Icon
+                                        icon="eva:file-outline"
+                                        width="24"
+                                        height="24"
+                                    />
+                                    {translations.export_pdf || "Export PDF"}
                                 </Button>
                                 <Button
                                     type="button"
@@ -520,7 +584,8 @@ const MovementCreate = () => {
                                     <Icon
                                         icon="solar:refresh-broken"
                                         className="mr-2 h-4 w-4"
-                                    />                                    Reset
+                                    />
+                                    {translations.reset || "Reset"}
                                 </Button>
                                 <Button
                                     type="submit"
@@ -529,12 +594,14 @@ const MovementCreate = () => {
                                     {form.processing ? (
                                         <>
                                             <ArrowLeft className="mr-2 h-4 w-4 animate-spin" />
-                                            Processing...
+                                            {translations.processing ||
+                                                "Processing..."}
                                         </>
                                     ) : (
                                         <>
                                             <ArrowLeft className="mr-2 h-4 w-4" />
-                                            Create Movement
+                                            {translations.create_movement ||
+                                                "Create Movement"}
                                         </>
                                     )}
                                 </Button>

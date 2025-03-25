@@ -57,7 +57,8 @@ export default {
                 },
             },
             fontFamily: {
-                sans: ["Figtree", ...defaultTheme.fontFamily.sans],
+                sans: ["Poppins", ...defaultTheme.fontFamily.sans],
+                arabic: ["Alexandria", "sans-serif"],
             },
             borderRadius: {
                 lg: "var(--radius)",

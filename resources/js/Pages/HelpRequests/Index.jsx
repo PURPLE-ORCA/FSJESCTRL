@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Head, Link, router, usePage } from "@inertiajs/react";
 import Layout from "@/Layouts/Layout";
 import { Icon } from "@iconify/react";
@@ -20,19 +20,17 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import DataTable from "@/Components/DataTable/DataTable";
+import { TranslationContext } from "@/context/TranslationProvider";
 
-export default function Index({
-    auth,
-    helpRequests,
-    currentFilter = "all",
-}) {
-    const [filter, setFilter] = useState(currentFilter);
+export default function Index({ auth, helpRequests, currentFilter = "all" }) {
     const { props } = usePage();
+    const [filter, setFilter] = useState(currentFilter);
+    const { translations } = useContext(TranslationContext);
 
     useEffect(() => {
         const interval = setInterval(() => {
             router.reload({ only: ["helpRequests", "pendingCount"] });
-    }, 30000);
+        }, 30000);
 
         return () => clearInterval(interval);
     }, []);
@@ -59,22 +57,22 @@ export default function Index({
         const statusMap = {
             pending: {
                 variant: "warning",
-                label: "Pending",
+                label: translations.pending || "Pending",
                 icon: "mdi:clock-outline",
             },
             in_progress: {
                 variant: "info",
-                label: "In Progress",
+                label: translations.in_progress || "In Progress",
                 icon: "mdi:progress-wrench",
             },
             resolved: {
                 variant: "success",
-                label: "Resolved",
+                label: translations.resolved || "Resolved",
                 icon: "mdi:check-circle-outline",
             },
             closed: {
                 variant: "secondary",
-                label: "Closed",
+                label: translations.closed || "Closed",
                 icon: "mdi:archive-outline",
             },
         };
@@ -103,31 +101,30 @@ export default function Index({
             pending: {
                 action: () => updateStatus(request.id, "in_progress"),
                 icon: "mdi:play",
-                label: "Start",
+                label: translations.start || "Start",
                 className: "bg-blue-600 hover:bg-blue-700 text-white",
             },
             in_progress: {
                 action: () => updateStatus(request.id, "resolved"),
                 icon: "mdi:check",
-                label: "Resolve",
+                label: translations.resolve || "Resolve",
                 className: "bg-green-600 hover:bg-green-700 text-white",
             },
             resolved: {
                 action: () => updateStatus(request.id, "closed"),
                 icon: "mdi:archive",
-                label: "Close",
+                label: translations.close || "Close",
                 className: "bg-gray-600 hover:bg-gray-700 text-white",
             },
             closed: {
                 action: () => updateStatus(request.id, "in_progress"),
                 icon: "mdi:refresh",
-                label: "Reopen",
+                label: translations.reopen || "Reopen",
                 className: "bg-orange-600 hover:bg-orange-700 text-white",
             },
         };
 
         const actionInfo = actions[request.status];
-
         return (
             <Button
                 onClick={actionInfo.action}
@@ -143,17 +140,17 @@ export default function Index({
     const columns = [
         {
             accessorKey: "user.name",
-            header: "User",
+            header: translations.user || "User",
             cell: ({ row }) => <div>{row.original.user.name}</div>,
         },
         {
             accessorKey: "product.name",
-            header: "Product",
+            header: translations.product || "Product",
             cell: ({ row }) => <div>{row.original.product.name}</div>,
         },
         {
             accessorKey: "description",
-            header: "Description",
+            header: translations.description || "Description",
             cell: ({ row }) => (
                 <div
                     className="max-w-xs truncate"
@@ -165,21 +162,19 @@ export default function Index({
         },
         {
             accessorKey: "status",
-            header: "Status",
+            header: translations.status || "Status",
             cell: ({ row }) => getStatusBadge(row.original.status),
         },
         {
             accessorKey: "created_at",
-            header: "Date",
+            header: translations.date || "Date",
             cell: ({ row }) => (
-                <div>
-                    {new Date(row.original.created_at).toLocaleString()}
-                </div>
+                <div>{new Date(row.original.created_at).toLocaleString()}</div>
             ),
         },
         {
             accessorKey: "actions",
-            header: "Actions",
+            header: translations.actions || "Actions",
             cell: ({ row }) => (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -204,7 +199,10 @@ export default function Index({
                                         width="24"
                                         height="24"
                                     />
-                                    <span>View Details</span>
+                                    <span>
+                                        {translations.view_details ||
+                                            "View Details"}
+                                    </span>
                                 </div>
                             </Link>
                         </DropdownMenuItem>
@@ -230,12 +228,12 @@ export default function Index({
                                 />
                                 <span>
                                     {row.original.status === "pending"
-                                        ? "Start"
+                                        ? translations.start || "Start"
                                         : row.original.status === "in_progress"
-                                        ? "Resolve"
+                                        ? translations.resolve || "Resolve"
                                         : row.original.status === "resolved"
-                                        ? "Close"
-                                        : "Reopen"}
+                                        ? translations.close || "Close"
+                                        : translations.reopen || "Reopen"}
                                 </span>
                             </div>
                         </DropdownMenuItem>
@@ -246,26 +244,38 @@ export default function Index({
     ];
 
     const sortOptions = [
-        { value: "created_at", label: "Date" },
-        { value: "status", label: "Status" },
-        { value: "user.name", label: "User" },
-        { value: "product.name", label: "Product" },
+        { value: "created_at", label: translations.date || "Date" },
+        { value: "status", label: translations.status || "Status" },
+        { value: "user.name", label: translations.user || "User" },
+        { value: "product.name", label: translations.product || "Product" },
     ];
 
     const filterOptions = [
-        { value: "all", label: "All Statuses", icon: "mdi:filter-variant" },
-        { value: "pending", label: "Pending", icon: "mdi:clock-outline" },
+        {
+            value: "all",
+            label: translations.all_statuses || "All Statuses",
+            icon: "mdi:filter-variant",
+        },
+        {
+            value: "pending",
+            label: translations.pending || "Pending",
+            icon: "mdi:clock-outline",
+        },
         {
             value: "in_progress",
-            label: "In Progress",
+            label: translations.in_progress || "In Progress",
             icon: "mdi:progress-wrench",
         },
         {
             value: "resolved",
-            label: "Resolved",
+            label: translations.resolved || "Resolved",
             icon: "mdi:check-circle-outline",
         },
-        { value: "closed", label: "Closed", icon: "mdi:archive-outline" },
+        {
+            value: "closed",
+            label: translations.closed || "Closed",
+            icon: "mdi:archive-outline",
+        },
     ];
 
     return (
@@ -279,7 +289,12 @@ export default function Index({
                                 onValueChange={handleFilterChange}
                             >
                                 <SelectTrigger className="w-[180px] border-gray-300 focus:ring-indigo-500 focus:border-indigo-500">
-                                    <SelectValue placeholder="Filter by status" />
+                                    <SelectValue
+                                        placeholder={
+                                            translations.filter_by_status ||
+                                            "Filter by status"
+                                        }
+                                    />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup>
@@ -309,10 +324,19 @@ export default function Index({
                                     columns={columns}
                                     filters={{ status: filter }}
                                     routeName="help-requests.index"
-                                    title="Help Requests"
+                                    title={
+                                        translations.help_requests ||
+                                        "Help Requests"
+                                    }
                                     sortOptions={sortOptions}
-                                    searchPlaceholder="Search by user or product..."
-                                    emptyMessage="No help requests found"
+                                    searchPlaceholder={
+                                        translations.search_by_user_or_product ||
+                                        "Search by user or product..."
+                                    }
+                                    emptyMessage={
+                                        translations.no_help_requests_found ||
+                                        "No help requests found"
+                                    }
                                     showHeader={false}
                                     className="border rounded-lg"
                                 />
@@ -325,8 +349,10 @@ export default function Index({
                                 />
                                 <p className="mt-2 text-gray-600 text-sm">
                                     {filter === "all"
-                                        ? "No help requests found."
-                                        : `No ${filter.replace(
+                                        ? translations.no_help_requests_found ||
+                                          "No help requests found."
+                                        : translations.no_filtered_help_requests ||
+                                          `No ${filter.replace(
                                               "_",
                                               " "
                                           )} help requests found.`}

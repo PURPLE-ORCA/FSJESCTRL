@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { TranslationContext } from "@/context/TranslationProvider";
 import { usePage } from "@inertiajs/react";
 import { Link, useForm, router } from "@inertiajs/react";
 import { Input } from "@/components/ui/input";
@@ -14,18 +15,16 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import StayOut from "@/Components/StayOut";
 
 const ServiceEdit = () => {
     const { auth, service } = usePage().props;
     const canManageServices = auth?.abilities?.can_manage_services;
+    const { translations } = useContext(TranslationContext);
 
     if (!canManageServices) {
         return (
-            <Layout>
-                <div className="text-center text-2xl font-bold mx-4 my-20">
-                    You do not have permission to view this page.
-                </div>
-            </Layout>
+            <StayOut/>
         );
     }
 
@@ -38,14 +37,15 @@ const ServiceEdit = () => {
     // In ServiceEdit.jsx
     const handleSubmit = (e) => {
         e.preventDefault();
-        router.put(route("services.update", service.id), form.data, {
-        });
+        router.put(route("services.update", service.id), form.data, {});
     };
 
     return (
         <Layout>
             <div className="p-6 max-w-2xl mx-auto">
-                <h1 className="text-3xl font-bold mb-4">Edit Service</h1>
+                <h1 className="text-3xl font-bold mb-4">
+                    {translations.edit_service || "Edit Service"}
+                </h1>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     {/* Name */}
@@ -54,7 +54,7 @@ const ServiceEdit = () => {
                             htmlFor="name"
                             className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                         >
-                            Name
+                            {translations.name || "Name"}
                         </Label>
                         <Input
                             id="name"
@@ -78,7 +78,7 @@ const ServiceEdit = () => {
                             htmlFor="description"
                             className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                         >
-                            Description
+                            {translations.description || "Description"}
                         </Label>
                         <Input
                             id="description"
@@ -101,24 +101,29 @@ const ServiceEdit = () => {
                             htmlFor="type"
                             className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                         >
-                            Type
+                            {translations.type || "Type"}
                         </Label>
                         <Select
                             id="type"
                             value={form.data.type}
-                            onChange={(e) =>
-                                form.setData("type", e.target.value)
-                            }
+                            onChange={(value) => form.setData("type", value)}
                             className="w-full p-2 border rounded-md"
                         >
                             <SelectTrigger className="mt-1 w-full">
-                                <SelectValue placeholder="Select a type" />
+                                <SelectValue
+                                    placeholder={
+                                        translations.select_a_type ||
+                                        "Select a type"
+                                    }
+                                />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="magazine">
-                                    Magazine
+                                    {translations.magazine || "Magazine"}
                                 </SelectItem>
-                                <SelectItem value="service">Service</SelectItem>
+                                <SelectItem value="service">
+                                    {translations.service || "Service"}
+                                </SelectItem>
                             </SelectContent>
                         </Select>
                         {form.errors.type && (
@@ -128,9 +133,10 @@ const ServiceEdit = () => {
                         )}
                     </div>
 
-                    {/* Submit Button */}
                     <Button type="submit" disabled={form.processing}>
-                        {form.processing ? "Saving..." : "Update Service"}
+                        {form.processing
+                            ? translations.saving || "Saving..."
+                            : translations.update_service || "Update Service"}
                     </Button>
                 </form>
             </div>

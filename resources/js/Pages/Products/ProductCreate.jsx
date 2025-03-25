@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { TranslationContext } from "@/context/TranslationProvider";
 import { usePage } from "@inertiajs/react";
 import { Link, useForm } from "@inertiajs/react";
 import Layout from "@/Layouts/Layout";
@@ -40,6 +41,7 @@ import {
 const ProductCreate = () => {
     const { auth, services } = usePage().props;
     const canManageProducts = auth?.abilities?.can_manage_products;
+    const { translations } = useContext(TranslationContext);
 
     const form = useForm({
         name: "",
@@ -61,7 +63,7 @@ const ProductCreate = () => {
                                 icon="solar:shield-warning-broken"
                                 className="w-6 h-6 text-yellow-500"
                             />
-                            Access Denied
+                            {translations.access_denied || "Access Denied"}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -70,16 +72,21 @@ const ProductCreate = () => {
                                 icon="solar:lock-keyhole-broken"
                                 className="h-4 w-4"
                             />
-                            <AlertTitle>Permission Error</AlertTitle>
+                            <AlertTitle>
+                                {translations.permission_error ||
+                                    "Permission Error"}
+                            </AlertTitle>
                             <AlertDescription>
-                                You do not have permission to view this page.
+                                {translations.no_permission_view ||
+                                    "You do not have permission to view this page."}
                             </AlertDescription>
+                            <Button className="mt-4 w-full" asChild>
+                                <Link href={route("dashboard")}>
+                                    {translations.return_to_dashboard ||
+                                        "Return to Dashboard"}
+                                </Link>
+                            </Button>
                         </Alert>
-                        <Button className="mt-4 w-full" asChild>
-                            <Link href={route("dashboard")}>
-                                Return to Dashboard
-                            </Link>
-                        </Button>
                     </CardContent>
                 </Card>
             </Layout>
@@ -103,7 +110,7 @@ const ProductCreate = () => {
                             <BreadcrumbList>
                                 <BreadcrumbItem>
                                     <BreadcrumbLink href={route("dashboard")}>
-                                        Dashboard
+                                        {translations.dashboard || "Dashboard"}
                                     </BreadcrumbLink>
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator />
@@ -111,12 +118,14 @@ const ProductCreate = () => {
                                     <BreadcrumbLink
                                         href={route("products.index")}
                                     >
-                                        Products
+                                        {translations.products || "Products"}
                                     </BreadcrumbLink>
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator />
                                 <BreadcrumbItem>
-                                    <BreadcrumbLink>Create</BreadcrumbLink>
+                                    <BreadcrumbLink>
+                                        {translations.create || "Create"}
+                                    </BreadcrumbLink>
                                 </BreadcrumbItem>
                             </BreadcrumbList>
                         </Breadcrumb>
@@ -124,21 +133,24 @@ const ProductCreate = () => {
                         <div className="flex justify-between items-center">
                             <div>
                                 <CardTitle className="text-2xl font-bold">
-                                    Add New Product
+                                    {translations.add_new_product ||
+                                        "Add New Product"}
                                 </CardTitle>
                                 <CardDescription className="mt-1">
-                                    Create a new product in the inventory
+                                    {translations.create_product_inventory ||
+                                        "Create a new product in the inventory"}
                                 </CardDescription>
+                                <Button variant="outline" size="sm" asChild>
+                                    <Link href={route("products.index")}>
+                                        <Icon
+                                            icon="solar:arrow-left-broken"
+                                            className="mr-2 h-4 w-4"
+                                        />
+                                        {translations.back_to_products ||
+                                            "Back to Products"}
+                                    </Link>
+                                </Button>
                             </div>
-                            <Button variant="outline" size="sm" asChild>
-                                <Link href={route("products.index")}>
-                                    <Icon
-                                        icon="solar:arrow-left-broken"
-                                        className="mr-2 h-4 w-4"
-                                    />
-                                    Back to Products
-                                </Link>
-                            </Button>
                         </div>
                     </CardHeader>
 
@@ -150,10 +162,11 @@ const ProductCreate = () => {
                                     className="h-4 w-4 text-green-800"
                                 />
                                 <AlertTitle className="font-medium text-green-800">
-                                    Success
+                                    {translations.success || "Success"}
                                 </AlertTitle>
                                 <AlertDescription className="text-green-700">
-                                    Product created successfully!
+                                    {translations.product_created_successfully ||
+                                        "Product created successfully!"}
                                 </AlertDescription>
                             </Alert>
                         )}
@@ -169,11 +182,15 @@ const ProductCreate = () => {
                                         htmlFor="name"
                                         className="text-base font-medium"
                                     >
-                                        Product Name
+                                        {translations.product_name ||
+                                            "Product Name"}
                                     </Label>
                                     <Input
                                         id="name"
-                                        placeholder="Enter product name"
+                                        placeholder={
+                                            translations.enter_product_name ||
+                                            "Enter product name"
+                                        }
                                         value={form.data.name}
                                         onChange={(e) =>
                                             form.setData("name", e.target.value)
@@ -197,11 +214,15 @@ const ProductCreate = () => {
                                         htmlFor="serial_number"
                                         className="text-base font-medium"
                                     >
-                                        Serial Number
+                                        {translations.serial_number ||
+                                            "Serial Number"}
                                     </Label>
                                     <Input
                                         id="serial_number"
-                                        placeholder="Enter serial number"
+                                        placeholder={
+                                            translations.enter_serial_number ||
+                                            "Enter serial number"
+                                        }
                                         value={form.data.serial_number}
                                         onChange={(e) =>
                                             form.setData(
@@ -211,6 +232,7 @@ const ProductCreate = () => {
                                         }
                                         className="mt-1"
                                     />
+
                                     {form.errors.serial_number && (
                                         <p className="mt-1 text-sm text-red-600 flex items-center gap-1">
                                             <Icon
@@ -228,11 +250,14 @@ const ProductCreate = () => {
                                         htmlFor="supplier"
                                         className="text-base font-medium"
                                     >
-                                        Supplier
+                                        {translations.supplier || "Supplier"}
                                     </Label>
                                     <Input
                                         id="supplier"
-                                        placeholder="Enter supplier name"
+                                        placeholder={
+                                            translations.enter_supplier_name ||
+                                            "Enter supplier name"
+                                        }
                                         value={form.data.supplier}
                                         onChange={(e) =>
                                             form.setData(
@@ -242,6 +267,7 @@ const ProductCreate = () => {
                                         }
                                         className="mt-1"
                                     />
+
                                     {form.errors.supplier && (
                                         <p className="mt-1 text-sm text-red-600 flex items-center gap-1">
                                             <Icon
@@ -260,7 +286,8 @@ const ProductCreate = () => {
                                             htmlFor="quantity"
                                             className="text-base font-medium"
                                         >
-                                            Quantity
+                                            {translations.quantity ||
+                                                "Quantity"}
                                         </Label>
                                         <TooltipProvider>
                                             <Tooltip>
@@ -278,7 +305,10 @@ const ProductCreate = () => {
                                                 </TooltipTrigger>
                                                 <TooltipContent>
                                                     <p>
-                                                        Number of items in stock
+                                                        <p>
+                                                            {translations.items_in_stock ||
+                                                                "Number of items in stock"}
+                                                        </p>
                                                     </p>
                                                 </TooltipContent>
                                             </Tooltip>
@@ -322,7 +352,7 @@ const ProductCreate = () => {
                                         htmlFor="price"
                                         className="text-base font-medium"
                                     >
-                                        Price
+                                        {translations.price || "Price"}
                                     </Label>
                                     <div className="mt-1 relative">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -369,7 +399,8 @@ const ProductCreate = () => {
                                         htmlFor="served_to"
                                         className="text-base font-medium"
                                     >
-                                        Associated Service
+                                        {translations.associated_service ||
+                                            "Associated Service"}
                                     </Label>
                                     <Select
                                         value={
@@ -387,7 +418,12 @@ const ProductCreate = () => {
                                             id="served_to"
                                             className="mt-1 w-full"
                                         >
-                                            <SelectValue placeholder="Select a service" />
+                                            <SelectValue
+                                                placeholder={
+                                                    translations.select_a_service ||
+                                                    "Select a service"
+                                                }
+                                            />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {services.map((service) => (
@@ -436,7 +472,7 @@ const ProductCreate = () => {
                                         icon="solar:refresh-broken"
                                         className="mr-2 h-4 w-4"
                                     />
-                                    Reset
+                                    {translations.reset || "Reset"}
                                 </Button>
                                 <Button
                                     type="submit"
@@ -448,7 +484,7 @@ const ProductCreate = () => {
                                                 icon="solar:refresh-circle-broken"
                                                 className="mr-2 h-4 w-4 animate-spin"
                                             />
-                                            Saving...
+                                            {translations.saving || "Saving..."}
                                         </>
                                     ) : (
                                         <>
@@ -456,7 +492,8 @@ const ProductCreate = () => {
                                                 icon="solar:add-circle-broken"
                                                 className="mr-2 h-4 w-4"
                                             />
-                                            Create Product
+                                            {translations.create_product ||
+                                                "Create Product"}
                                         </>
                                     )}
                                 </Button>

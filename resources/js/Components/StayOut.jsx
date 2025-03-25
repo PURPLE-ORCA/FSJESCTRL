@@ -1,11 +1,14 @@
+import { TranslationContext } from '@/context/TranslationProvider';
 import Layout from '@/Layouts/Layout';
-import React from 'react'
+import React, { useContext } from 'react'
 
 const StayOut = () => {
+    const { translations } = useContext(TranslationContext);
+    
   return (
       <Layout>
           <div className="text-center text-2xl font-bold mx-4 my-20">
-              You do not have permission to view this page.
+              {translations.no_permission}
           </div>
       </Layout>
   );

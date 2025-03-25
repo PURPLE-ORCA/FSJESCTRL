@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link, usePage } from "@inertiajs/react";
 import { Icon } from "@iconify/react";
 import {
@@ -21,6 +21,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import ThemeToggler from "@/Components/ThemeToggler";
 import NotificationBadge from "@/Components/NotificationBadge";
+import { TranslationContext } from "@/context/TranslationProvider";
 
 const Navbar = ({pendingCount = 0}) => {
     const { auth } = usePage().props;
@@ -28,50 +29,50 @@ const Navbar = ({pendingCount = 0}) => {
 
     const mainNavItems = [
         {
-            name: "Dashboard",
+            key: "dashboard",
             icon: "material-symbols:dashboard",
             route: "dashboard",
         },
         {
-            name: "Users",
+            key: "users",
             icon: "material-symbols:person",
             route: "users.index",
         },
         {
-            name: "Services",
+            key: "services",
             icon: "material-symbols:home-repair-service",
             children: [
-                { name: "All Services", route: "services.index" },
-                { name: "Add Service", route: "services.create" },
+                { key: "all_services", route: "services.index" },
+                { key: "add_service", route: "services.create" },
             ],
         },
         {
-            name: "Products",
+            key: "products",
             icon: "material-symbols:inventory-2",
             children: [
-                { name: "All Products", route: "products.index" },
-                { name: "Add Product", route: "products.create" },
+                { key: "all_products", route: "products.index" },
+                { key: "add_product", route: "products.create" },
             ],
         },
         {
-            name: "Movements",
+            key: "movements",
             icon: "material-symbols:swap-horiz",
             children: [
-                { name: "All Movements", route: "movements.index" },
-                { name: "Add Movement", route: "movements.create" },
+                { key: "all_movements", route: "movements.index" },
+                { key: "add_movement", route: "movements.create" },
             ],
         },
         {
-            name: "Actions",
+            key: "actions",
             icon: "mdi:interaction-tap",
             route: "actions.index",
         },
         {
-            name: "Interventions",
+            key: "interventions",
             icon: "la:screwdriver",
             children: [
-                { name: "All Help requests", route: "help-requests.index" },
-                { name: "request Help", route: "help-requests.create" },
+                { key: "all_help_requests", route: "help-requests.index" },
+                { key: "request_help", route: "help-requests.create" },
             ],
         },
     ];
@@ -84,6 +85,21 @@ const Navbar = ({pendingCount = 0}) => {
             .join("")
             .toUpperCase();
     };
+
+    const { translations, switchLanguage } = useContext(TranslationContext);
+    const lang = localStorage.getItem("lang") || "fr"; // or however you prefer
+    const locals = [
+        {
+            locale: "fr",
+            flag: "france.png",
+            label: "Français",
+        },
+        {
+            locale: "ar",
+            flag: "saudi-arabia.png",
+            label: "العربية",
+        },
+    ];
 
     return (
         <nav className="border-b bg-background">
@@ -116,7 +132,7 @@ const Navbar = ({pendingCount = 0}) => {
                                                 icon={item.icon}
                                                 className="h-4 w-4 mr-1"
                                             />
-                                            {item.name}
+                                            {translations[item.key] || item.key}
                                             <ChevronDown className="h-4 w-4" />
                                         </Button>
                                     </DropdownMenuTrigger>
@@ -126,14 +142,15 @@ const Navbar = ({pendingCount = 0}) => {
                                     >
                                         {item.children.map((child) => (
                                             <DropdownMenuItem
-                                                key={child.name}
+                                                key={child.key}
                                                 asChild
                                             >
                                                 <Link
                                                     href={route(child.route)}
                                                     className="w-full cursor-pointer"
                                                 >
-                                                    {child.name}
+                                                    {translations[child.key] ||
+                                                        child.key}
                                                 </Link>
                                             </DropdownMenuItem>
                                         ))}
@@ -141,7 +158,7 @@ const Navbar = ({pendingCount = 0}) => {
                                 </DropdownMenu>
                             ) : (
                                 <Button
-                                    key={item.name}
+                                    key={item.key}
                                     variant="ghost"
                                     asChild
                                     className={`text-sm ${
@@ -158,7 +175,7 @@ const Navbar = ({pendingCount = 0}) => {
                                             icon={item.icon}
                                             className="h-4 w-4"
                                         />
-                                        {item.name}
+                                        {translations[item.key] || item.key}
                                     </Link>
                                 </Button>
                             )
@@ -169,38 +186,48 @@ const Navbar = ({pendingCount = 0}) => {
                     <div className="flex items-center gap-2">
                         <ThemeToggler />
 
-                        {/* Notifications */}
-                        {/* <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    className="relative"
-                                >
-                                    <Bell className="h-5 w-5" />
-                                    <Badge className="absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-[10px]">
-                                        3
-                                    </Badge>
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-80">
-                                <div className="flex justify-between items-center px-4 py-2 border-b">
-                                    <span className="font-medium">
-                                        Notifications
-                                    </span>
+                        <div className="relative">
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
                                     <Button
                                         variant="ghost"
-                                        size="sm"
-                                        className="text-xs"
+                                        className="inline-flex items-center"
                                     >
-                                        Mark all as read
+                                        <Icon
+                                            icon="fa-solid:language"
+                                            className="h-4 w-4"
+                                        />
                                     </Button>
-                                </div>
-                                <div className="py-2 px-4 text-sm text-muted-foreground">
-                                    No new notifications
-                                </div>
-                            </DropdownMenuContent>
-                        </DropdownMenu> */}
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent
+                                    align="end"
+                                    className="w-48"
+                                >
+                                    {locals.map((pay) => (
+                                        <DropdownMenuItem
+                                            key={pay.locale}
+                                            onClick={() =>
+                                                switchLanguage(pay.locale)
+                                            }
+                                            className={`flex justify-between items-center ${
+                                                pay.locale === "ar"
+                                                    ? "font-arabic"
+                                                    : ""
+                                            }`}
+                                        >
+                                            <span>{pay.label}</span>
+                                            {pay.locale === lang && (
+                                                <Icon
+                                                    icon="fa-solid:check"
+                                                    className="h-4 w-4 text-white"
+                                                />
+                                            )}
+                                        </DropdownMenuItem>
+                                    ))}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </div>
+
                         <NotificationBadge initialCount={pendingCount} />
 
                         {/* User Menu (Desktop) */}
@@ -241,7 +268,10 @@ const Navbar = ({pendingCount = 0}) => {
                                             className="flex cursor-pointer"
                                         >
                                             <Settings className="mr-2 h-4 w-4" />
-                                            <span>Settings</span>
+                                            <span>
+                                                {translations.settings ||
+                                                    "Settings"}
+                                            </span>
                                         </Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem asChild>
@@ -252,7 +282,10 @@ const Navbar = ({pendingCount = 0}) => {
                                             className="flex w-full cursor-pointer"
                                         >
                                             <LogOut className="mr-2 h-4 w-4" />
-                                            <span>Log out</span>
+                                            <span>
+                                                {translations.logout ||
+                                                    "Log out"}
+                                            </span>
                                         </Link>
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
