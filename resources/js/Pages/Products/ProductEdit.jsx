@@ -27,7 +27,6 @@ const ProductEdit = () => {
         serial_number: product.serial_number,
         supplier: product.supplier,
         price: product.price,
-        served_to: product.served_to?.toString() || "",
     });
 
     if (!canManageProducts) {
@@ -168,53 +167,6 @@ const ProductEdit = () => {
                             {form.errors.price && (
                                 <p className="mt-1 text-sm text-red-600">
                                     {form.errors.price}
-                                </p>
-                            )}
-                        </div>
-
-                        {/* Associated Service */}
-                        <div className="col-span-1 md:col-span-2">
-                            <Label
-                                htmlFor="served_to"
-                                className="block text-lg font-medium text-gray-700"
-                            >
-                                {translations.associated_service || "Service"}
-                            </Label>
-                            <Select
-                                value={
-                                    form.data.served_to
-                                        ? form.data.served_to.toString()
-                                        : ""
-                                }
-                                onValueChange={(value) =>
-                                    form.setData(
-                                        "served_to",
-                                        value ? parseInt(value) : null
-                                    )
-                                }
-                            >
-                                <SelectTrigger className="mt-1 w-full">
-                                    <SelectValue
-                                        placeholder={
-                                            translations.select_a_service ||
-                                            "Select a service"
-                                        }
-                                    />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {services.map((service) => (
-                                        <SelectItem
-                                            key={service.id}
-                                            value={service.id.toString()}
-                                        >
-                                            {service.name}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                            {form.errors.served_to && (
-                                <p className="mt-1 text-sm text-red-600">
-                                    {form.errors.served_to}
                                 </p>
                             )}
                         </div>

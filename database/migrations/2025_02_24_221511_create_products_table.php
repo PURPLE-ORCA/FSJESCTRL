@@ -14,7 +14,6 @@ return new class extends Migration
             $table->string('serial_number', 100)->unique();
             $table->string('supplier', 150);
             $table->decimal('price', 10, 2);
-            $table->foreignId('served_to')->nullable()->constrained('services');
             $table->timestamps();
         });
     }

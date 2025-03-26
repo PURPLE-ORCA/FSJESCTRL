@@ -101,27 +101,34 @@ const MovementCreate = () => {
         );
     }
 
-    // Filter products available in user's service
-    const availableProducts = allProducts.filter(
-        (product) =>
-            product.served_to &&
-            product.served_to.toString() === user_service_id.toString()
-    );
+const availableProducts = allProducts.filter(
+    (product) => product.current_location?.id === user_service_id
+);
 
-    const handleProductSelect = (productId) => {
-        const product = availableProducts.find((p) => p.id === productId);
+const handleProductSelect = (productId) => {
+    const product = availableProducts.find((p) => p.id === productId);
 
-        if (!product) {
-            toast.error(translations.product_not_found || "Product not found");
-            form.setData("product_id", null);
-            return;
-        }
+    if (!product) {
+        toast.error(translations.product_not_found || "Product not found");
+        form.setData("product_id", null);
+        return;
+    }
 
-        form.setData({
-            ...form.data,
-            product_id: product.id,
-        });
-    };
+    if (product.current_location?.id !== user_service_id) {
+        toast.error(
+            translations.product_not_in_service ||
+                "Product is not assigned to your service"
+        );
+        form.setData("product_id", null);
+        return;
+    }
+
+    form.setData({
+        ...form.data,
+        product_id: product.id,
+    });
+};
+
 
     const handleSubmit = (e) => {
         e.preventDefault();

@@ -13,7 +13,7 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Product::query()->with('service'); // Eager-load service
+$query = Product::query()->with('movements'); // Load movements instead
 
         // Search
         $query->when($request->search, function($q, $search) {

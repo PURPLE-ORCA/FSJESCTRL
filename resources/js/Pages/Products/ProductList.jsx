@@ -75,9 +75,15 @@ const columns = [
         ),
     },
     {
-        accessorKey: "service.name",
-        header: translations.served_to || "Served To",
-        cell: ({ row }) => <div>{row.original.service?.name || "N/A"}</div>,
+        accessorKey: "current_location",
+        header: translations.current_location || "Current Location",
+        cell: ({ row }) => (
+            <div>
+                {row.original.current_location
+                    ? row.original.current_location.name
+                    : "N/A"}
+            </div>
+        ),
     },
     {
         accessorKey: "actions",

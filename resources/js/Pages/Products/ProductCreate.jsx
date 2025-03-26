@@ -50,7 +50,6 @@ const ProductCreate = () => {
         supplier: "",
         quantity: 1,
         price: 0,
-        served_to: null,
     });
 
     // Redirect unauthorized users
@@ -356,73 +355,6 @@ const ProductCreate = () => {
                                                 className="h-4 w-4"
                                             />
                                             {form.errors.price}
-                                        </p>
-                                    )}
-                                </div>
-
-                                {/* Service */}
-                                <div className="col-span-1 md:col-span-2">
-                                    <Label
-                                        htmlFor="served_to"
-                                        className="text-base font-medium"
-                                    >
-                                        {translations.associated_service ||
-                                            "Associated Service"}
-                                    </Label>
-                                    <Select
-                                        value={
-                                            form.data.served_to?.toString() ||
-                                            ""
-                                        }
-                                        onValueChange={(value) =>
-                                            form.setData(
-                                                "served_to",
-                                                value ? parseInt(value) : null
-                                            )
-                                        }
-                                    >
-                                        <SelectTrigger
-                                            id="served_to"
-                                            className="mt-1 w-full"
-                                        >
-                                            <SelectValue
-                                                placeholder={
-                                                    translations.select_a_service ||
-                                                    "Select a service"
-                                                }
-                                            />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {services.map((service) => (
-                                                <SelectItem
-                                                    key={service.id}
-                                                    value={service.id.toString()}
-                                                >
-                                                    <div className="flex items-center gap-2">
-                                                        <Icon
-                                                            icon={
-                                                                service.type ===
-                                                                "magazine"
-                                                                    ? "solar:book-broken"
-                                                                    : "solar:widget-broken"
-                                                            }
-                                                            className="h-4 w-4"
-                                                        />
-                                                        <span>
-                                                            {service.name}
-                                                        </span>
-                                                    </div>
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                    {form.errors.served_to && (
-                                        <p className="mt-1 text-sm text-red-600 flex items-center gap-1">
-                                            <Icon
-                                                icon="solar:danger-triangle-broken"
-                                                className="h-4 w-4"
-                                            />
-                                            {form.errors.served_to}
                                         </p>
                                     )}
                                 </div>

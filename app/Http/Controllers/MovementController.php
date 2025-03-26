@@ -79,52 +79,57 @@ class MovementController extends Controller
 
     // Ensure user has a service assigned
         abort_if(!$user->service_id, 403, 'You need to be assigned to a service');
+    $products = Product::whereHas('movements', function ($query) use ($user) {
+        $query->latest('movement_date')->where('to_service_id', $user->service_id);
+    })->orWhereDoesntHave('movements')->get(); 
 
-            return Inertia::render('Movements/MovementCreate', [
-            'products' => Product::where('served_to', $user->service_id)->get(),
-                'services' => Service::all(),
+        return Inertia::render('Movements/MovementCreate', [
+        'products' => $products,
+            'services' => Service::all(),
             'user_service_id' => $user->service_id, 
-            ]);
-    }
-    public function store(Request $request)
-    {
-        $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'from_service_id' => [
-                'required',
-                'integer',
-                'exists:services,id',
-                Rule::in([$request->user()->service_id])
-            ],
-            'to_service_id' => [
-                'required',
-                'integer',
-                'exists:services,id',
-                'different:from_service_id'
-            ],
-            'note' => 'nullable|string',
-        ]);
-        $product = Product::findOrFail($request->product_id);
-
-        // Ensure the product is currently in the from_service
-        if ($product->served_to !== $request->from_service_id) {
-            return Redirect::back()->withErrors(['from_service_id' => 'Product is not assigned to the selected source service']);
-        }
-
-        // Update product's service
-        $product->update(['served_to' => $request->to_service_id]);
-
-        // Create movement record
-        Movement::create([
-            'product_id' => $request->product_id,
-            'from_service_id' => $request->from_service_id,
-            'to_service_id' => $request->to_service_id,
-            'user_id' => Auth::id(),
-            'note' => $request->note,
         ]);
 
-        return Redirect::route('movements.index')->with('success', 'Movement recorded successfully!');
     }
+public function store(Request $request)
+{
+    $product = Product::findOrFail($request->product_id);
+    $currentLocation = $product->current_location; // FIXED: Use attribute instead of method
+
+    if (!$currentLocation || $currentLocation['id'] !== $request->from_service_id) {
+        return Redirect::back()->withErrors([
+            'product_id' => 'Product is not assigned to the selected source service.',
+        ]);
+    }
+
+    $request->validate([
+        'product_id' => 'required|exists:products,id',
+        'from_service_id' => [
+            'required',
+            'integer',
+            'exists:services,id',
+            Rule::in([$request->user()->service_id])
+        ],
+        'to_service_id' => [
+            'required',
+            'integer',
+            'exists:services,id',
+            'different:from_service_id'
+        ],
+        'note' => 'nullable|string',
+    ]);
+
+    // Create movement record
+    Movement::create([
+        'product_id' => $request->product_id,
+        'from_service_id' => $request->from_service_id,
+        'to_service_id' => $request->to_service_id,
+        'user_id' => Auth::id(),
+        'note' => $request->note,
+    ]);
+
+    return Redirect::route('movements.index')->with('success', 'Movement recorded successfully!');
+}
+
     public function show(Movement $movement)
     {
         //

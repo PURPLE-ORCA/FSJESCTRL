@@ -17,22 +17,11 @@ class Product extends Model
         'price',
     ];
 
-    /**
-     * Get stock movements for this product.
-     */
-
-     public function service()
-{
-    return $this->belongsTo(Service::class, 'served_to');
-}
     public function movements()
     {
         return $this->hasMany(Movement::class);
     }
 
-       /**
-     * Get action logs for this product.
-     */
     public function actionLogs()
     {
         return $this->hasMany(Action::class);
@@ -40,17 +29,34 @@ class Product extends Model
 
      /**
      * Get the current service location of the product.
-     * assuming the most recent stock movement determines the current location.
+     * the most recent stock movement determines the current location.
      */
-    public function currentLocation()
-    {
-        $latestMovement = $this->Movements()->latest('movement_date')->first();
+    // public function currentLocation()
+    // {
+    //     $latestMovement = $this->Movements()->latest('movement_date')->first();
         
-        if ($latestMovement) {
-            return Service::find($latestMovement->to_service_id);
-        }
+    //     if ($latestMovement) {
+    //         return Service::find($latestMovement->to_service_id);
+    //     }
         
-        // Default to the magazine if no movements exist
-        return Service::where('type', 'magazine')->first();
+    //     // Default to the magazine if no movements exist
+    //     return Service::where('type', 'magazine')->first();
+    // }
+
+    protected $appends = ['current_location'];
+
+public function getCurrentLocationAttribute()
+{
+    $latestMovement = $this->movements()->latest('movement_date')->first();
+
+    if ($latestMovement) {
+        $service = Service::find($latestMovement->to_service_id);
+        return $service ? ['id' => $service->id, 'name' => $service->name] : null;
     }
+
+    // Default to the magazine service if no movements exist
+    $defaultService = Service::where('type', 'magazine')->first();
+    return $defaultService ? ['id' => $defaultService->id, 'name' => $defaultService->name] : null;
+}
+
 }
