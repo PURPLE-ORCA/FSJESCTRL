@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
@@ -16,16 +13,12 @@ return new class extends Migration
             $table->string('name', 150);
             $table->string('serial_number', 100)->unique();
             $table->string('supplier', 150);
-            $table->unsignedInteger('quantity')->nullable()->default(1);
             $table->decimal('price', 10, 2);
             $table->foreignId('served_to')->nullable()->constrained('services');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('products');

@@ -37,6 +37,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
+import StayOut from "@/Components/StayOut";
 
 const ProductCreate = () => {
     const { auth, services } = usePage().props;
@@ -47,7 +48,7 @@ const ProductCreate = () => {
         name: "",
         serial_number: "",
         supplier: "",
-        quantity: 0,
+        quantity: 1,
         price: 0,
         served_to: null,
     });
@@ -55,41 +56,7 @@ const ProductCreate = () => {
     // Redirect unauthorized users
     if (!canManageProducts) {
         return (
-            <Layout>
-                <Card className="max-w-md mx-auto my-20">
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <Icon
-                                icon="solar:shield-warning-broken"
-                                className="w-6 h-6 text-yellow-500"
-                            />
-                            {translations.access_denied || "Access Denied"}
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <Alert variant="destructive">
-                            <Icon
-                                icon="solar:lock-keyhole-broken"
-                                className="h-4 w-4"
-                            />
-                            <AlertTitle>
-                                {translations.permission_error ||
-                                    "Permission Error"}
-                            </AlertTitle>
-                            <AlertDescription>
-                                {translations.no_permission_view ||
-                                    "You do not have permission to view this page."}
-                            </AlertDescription>
-                            <Button className="mt-4 w-full" asChild>
-                                <Link href={route("dashboard")}>
-                                    {translations.return_to_dashboard ||
-                                        "Return to Dashboard"}
-                                </Link>
-                            </Button>
-                        </Alert>
-                    </CardContent>
-                </Card>
-            </Layout>
+            <StayOut/>
         );
     }
 

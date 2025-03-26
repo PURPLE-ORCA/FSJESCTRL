@@ -47,7 +47,6 @@ const sortOptions = [
     { value: "name", label: translations.name || "Name" },
     { value: "price", label: translations.price || "Price" },
     { value: "supplier", label: translations.supplier || "Supplier" },
-    { value: "quantity", label: translations.quantity || "Quantity" },
     { value: "id", label: translations.id || "ID" },
     {
         value: "serial_number",
@@ -64,11 +63,6 @@ const columns = [
         header: translations.serial_number || "Serial Number",
     },
     { accessorKey: "supplier", header: translations.supplier || "Supplier" },
-    {
-        accessorKey: "quantity",
-        header: translations.quantity || "Quantity",
-        cell: ({ row }) => <div>{row.original.quantity}</div>,
-    },
     {
         accessorKey: "price",
         header: translations.price || "Price",

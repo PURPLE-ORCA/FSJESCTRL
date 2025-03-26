@@ -26,7 +26,6 @@ const ProductEdit = () => {
         name: product.name,
         serial_number: product.serial_number,
         supplier: product.supplier,
-        quantity: product.quantity,
         price: product.price,
         served_to: product.served_to?.toString() || "",
     });
@@ -137,30 +136,6 @@ const ProductEdit = () => {
                             {form.errors.supplier && (
                                 <p className="mt-1 text-sm text-red-600">
                                     {form.errors.supplier}
-                                </p>
-                            )}
-                        </div>
-
-                        {/* Quantity */}
-                        <div className="col-span-1">
-                            <Label
-                                htmlFor="quantity"
-                                className="block text-lg font-medium text-gray-700"
-                            >
-                                {translations.quantity || "Quantity"}
-                            </Label>
-                            <Input
-                                id="quantity"
-                                type="number"
-                                value={form.data.quantity}
-                                onChange={(e) =>
-                                    form.setData("quantity", e.target.value)
-                                }
-                                className="mt-1 shadow-sm"
-                            />
-                            {form.errors.quantity && (
-                                <p className="mt-1 text-sm text-red-600">
-                                    {form.errors.quantity}
                                 </p>
                             )}
                         </div>

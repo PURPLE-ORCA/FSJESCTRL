@@ -14,7 +14,6 @@ class Product extends Model
         'name',
         'serial_number',
         'supplier',
-        'quantity',
         'price',
     ];
 
