@@ -2,7 +2,6 @@ import React, { useState, useContext } from "react";
 import { Link, usePage } from "@inertiajs/react";
 import { Icon } from "@iconify/react";
 import {
-    Bell,
     Menu,
     ChevronDown,
     LogOut,
@@ -18,7 +17,6 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import ThemeToggler from "@/Components/ThemeToggler";
 import NotificationBadge from "@/Components/NotificationBadge";
 import { TranslationContext } from "@/context/TranslationProvider";
@@ -63,21 +61,16 @@ const Navbar = ({pendingCount = 0}) => {
             ],
         },
         {
-            key: "actions",
-            icon: "mdi:interaction-tap",
-            route: "actions.index",
-        },
-        {
             key: "interventions",
             icon: "la:screwdriver",
             children: [
                 { key: "all_help_requests", route: "help-requests.index" },
+                { key: "actions_history", route: "actions.index" },
                 { key: "request_help", route: "help-requests.create" },
             ],
         },
     ];
 
-    // Get user initials for avatar fallback
     const getInitials = (name) => {
         return name
             .split(" ")
@@ -87,7 +80,7 @@ const Navbar = ({pendingCount = 0}) => {
     };
 
     const { translations, switchLanguage } = useContext(TranslationContext);
-    const lang = localStorage.getItem("lang") || "fr"; // or however you prefer
+    const lang = localStorage.getItem("lang") || "fr"; 
     const locals = [
         {
             locale: "fr",
@@ -105,15 +98,17 @@ const Navbar = ({pendingCount = 0}) => {
         <nav className="border-b bg-background">
             <div className="mx-auto px-4 md:px-6">
                 <div className="flex h-16 items-center justify-between">
-                    {/* Logo */}
+
                     <div className="flex items-center">
                         <Link href="/" className="flex items-center">
                             <Icon
-                                icon="material-symbols:dashboard-customize"
-                                className="h-8 w-8 text-primary"
+                                icon="fluent:control-button-24-filled"
+                                width="24"
+                                height="24"
+                                className="color: #fff"
                             />
                             <span className="ml-2 font-semibold text-xl">
-                                DashControl
+                                FSJESCTRL
                             </span>
                         </Link>
                     </div>

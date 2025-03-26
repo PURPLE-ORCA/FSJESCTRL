@@ -5,8 +5,6 @@ import jsPDF from "jspdf";
 import { Icon } from "@iconify/react";
 import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
-
-// Shadcn UI components
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -32,12 +30,6 @@ import {
     BreadcrumbList,
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { TranslationContext } from "@/context/TranslationProvider";
 import StayOut from "@/Components/StayOut";
 
@@ -58,14 +50,12 @@ const MovementCreate = () => {
         note: "",
     });
 
-    // Unauthorized: No permission to create movements
     if (!canManageMovements) {
         return (
             <StayOut/>
         );
     }
 
-    // Unauthorized: User is not assigned to a service
     if (!user_service_id) {
         return (
             <Layout>
@@ -101,34 +91,33 @@ const MovementCreate = () => {
         );
     }
 
-const availableProducts = allProducts.filter(
-    (product) => product.current_location?.id === user_service_id
-);
+    const availableProducts = allProducts.filter(
+        (product) => product.current_location?.id === user_service_id
+    );
 
-const handleProductSelect = (productId) => {
-    const product = availableProducts.find((p) => p.id === productId);
+    const handleProductSelect = (productId) => {
+        const product = availableProducts.find((p) => p.id === productId);
 
-    if (!product) {
-        toast.error(translations.product_not_found || "Product not found");
-        form.setData("product_id", null);
-        return;
-    }
+        if (!product) {
+            toast.error(translations.product_not_found || "Product not found");
+            form.setData("product_id", null);
+            return;
+        }
 
-    if (product.current_location?.id !== user_service_id) {
-        toast.error(
-            translations.product_not_in_service ||
-                "Product is not assigned to your service"
-        );
-        form.setData("product_id", null);
-        return;
-    }
+        if (product.current_location?.id !== user_service_id) {
+            toast.error(
+                translations.product_not_in_service ||
+                    "Product is not assigned to your service"
+            );
+            form.setData("product_id", null);
+            return;
+        }
 
-    form.setData({
-        ...form.data,
-        product_id: product.id,
-    });
-};
-
+        form.setData({
+            ...form.data,
+            product_id: product.id,
+        });
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -149,7 +138,6 @@ const handleProductSelect = (productId) => {
         });
     };
 
-    // Function to export the movement paper as a PDF with translations
     const exportMovementPaper = () => {
         const product = availableProducts.find(
             (p) => p.id === form.data.product_id
@@ -235,7 +223,7 @@ const handleProductSelect = (productId) => {
         doc.setFontSize(10);
         doc.setTextColor(100);
         doc.text(
-            "Powered by EL MOUSSAOUI MOHAMMED",
+            "Designed and developed by EL MOUSSAOUI MOHAMMED",
             pageWidth / 2,
             pageHeight - 10,
             { align: "center" }

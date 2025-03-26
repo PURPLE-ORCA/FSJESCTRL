@@ -59,6 +59,8 @@ const ActionDataExport = ({ data }) => {
         try {
             // Create a new jsPDF instance
             const doc = new jsPDF("landscape");
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const pageHeight = doc.internal.pageSize.getHeight();
 
             // Set title
             doc.text("Actions List", 14, 10);
@@ -93,6 +95,16 @@ const ActionDataExport = ({ data }) => {
                 styles: { fontSize: 8, cellPadding: 1 },
                 headStyles: { fillColor: [70, 70, 70] },
             });
+
+            // Footer branding
+            doc.setFontSize(10);
+            doc.setTextColor(100);
+            doc.text(
+                "Designed and developed by EL MOUSSAOUI MOHAMMED",
+                pageWidth / 2,
+                pageHeight - 10,
+                { align: "center" }
+            );
 
             // Save the PDF
             doc.save("actions.pdf");

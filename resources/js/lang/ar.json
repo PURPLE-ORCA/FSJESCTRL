@@ -10,10 +10,11 @@
     "movements": "الحركات",
     "all_movements": "كل الحركات",
     "add_movement": "إضافة حركة",
-    "actions": "الإجراءات",
+    "actions": "التدخلات",
     "interventions": "التدخلات",
     "all_help_requests": "كل طلبات المساعدة",
     "request_help": "طلب المساعدة",
+    "actions_history": "سجل التدخلات",
     "settings": "الإعدادات",
     "logout": "تسجيل الخروج",
     "user_management": "إدارة المستخدمين",
@@ -138,7 +139,7 @@
     "date_requested": "تاريخ الطلب",
     "product_information": "معلومات المنتج",
     "details_about_related_product": "تفاصيل حول المنتج ذي الصلة",
-    "action_history": "سجل الإجراءات",
+    "action_history": "سجل التدخلات",
     "timeline_of_actions": "الجدول الزمني للإجراءات على هذا المنتج",
     "no_action_history": "لا يوجد سجل للإجراءات لهذا المنتج"
 }

@@ -1,5 +1,7 @@
 import { Head, Link } from "@inertiajs/react";
 import { ArrowRightCircle, Box, Clipboard, BarChart3 } from "lucide-react";
+import { Icon } from "@iconify/react";
+
 
 export default function Welcome({ auth }) {
     return (
@@ -10,9 +12,14 @@ export default function Welcome({ auth }) {
                     <header className="w-full px-6 py-4 backdrop-blur-md border-b border-main sticky top-0 z-10">
                         <div className="max-w-7xl mx-auto flex justify-between items-center">
                             <div className="flex items-center space-x-2">
-                                <Box className="w-6 h-6 text-main" />
+                                <Icon
+                                    icon="fluent:control-button-24-filled"
+                                    width="24"
+                                    height="24"
+                                    className="color: #fff"
+                                />{" "}
                                 <span className="text-xl font-bold tracking-tight">
-                                    DashControl
+                                    FSJESCTRL
                                 </span>
                             </div>
                             <nav className="flex items-center space-x-4">

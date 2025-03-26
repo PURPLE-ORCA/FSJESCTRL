@@ -19,11 +19,10 @@ export default function NotificationBadge({ initialCount = 0 }) {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            // Fetch the latest count
             fetch(route("help-requests.pending-count"))
                 .then((response) => response.json())
                 .then((data) => setCount(data.count));
-        }, 30000); // Every 30 seconds
+        }, 3000); // Every 3 seconds
 
         return () => clearInterval(interval);
     }, []);

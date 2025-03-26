@@ -88,14 +88,6 @@ class HelpRequestController extends Controller
         
         $helpRequest->update(['status' => $newStatus]);
         
-        // Record action in the Action log
-        $product = $helpRequest->product;
-        $product->actionLogs()->create([
-            'user_id' => Auth::id(),
-            'action' => 'Status Change',
-            'details' => "Help request status changed from '{$oldStatus}' to '{$newStatus}'",
-        ]);
-        
         return redirect()->back()->with('success', 'Status updated successfully.');
     }
     

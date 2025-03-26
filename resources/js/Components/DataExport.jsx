@@ -61,6 +61,8 @@ const DataExport = ({ data }) => {
 
     const exportToPDF = () => {
         const doc = new jsPDF();
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
         const headers = [
             [
                 "Product",
@@ -86,6 +88,16 @@ const DataExport = ({ data }) => {
             body: rows,
             startY: 20,
         });
+
+        // Footer branding
+        doc.setFontSize(10);
+        doc.setTextColor(100);
+        doc.text(
+            "Designed and developed by EL MOUSSAOUI MOHAMMED",
+            pageWidth / 2,
+            pageHeight - 10,
+            { align: "center" }
+        );
         doc.save("movements.pdf");
     };
 
