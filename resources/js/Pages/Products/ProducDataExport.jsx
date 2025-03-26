@@ -13,7 +13,6 @@ const ProductDataExport = ({ data }) => {
             "Name",
             "Serial Number",
             "Supplier",
-            "Quantity",
             "Price",
             "Served To",
         ];
@@ -22,7 +21,6 @@ const ProductDataExport = ({ data }) => {
             item.name,
             item.serial_number || "N/A",
             item.supplier || "N/A",
-            item.quantity,
             typeof item.price === "number"
                 ? `$${item.price.toFixed(2)}`
                 : item.price || "N/A",
@@ -50,7 +48,6 @@ const ProductDataExport = ({ data }) => {
             Name: item.name,
             "Serial Number": item.serial_number || "N/A",
             Supplier: item.supplier || "N/A",
-            Quantity: item.quantity,
             Price:
                 typeof item.price === "number"
                     ? `$${item.price.toFixed(2)}`
@@ -79,7 +76,6 @@ const ProductDataExport = ({ data }) => {
                     item.name || "",
                     item.serial_number || "",
                     item.supplier || "",
-                    item.quantity || "",
                     typeof item.price === "number"
                         ? `$${item.price.toFixed(2)}`
                         : item.price || "",
@@ -95,7 +91,6 @@ const ProductDataExport = ({ data }) => {
                         "Name",
                         "Serial Number",
                         "Supplier",
-                        "Quantity",
                         "Price",
                         "Served To",
                     ],

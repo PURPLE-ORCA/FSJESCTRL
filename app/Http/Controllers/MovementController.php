@@ -42,9 +42,6 @@ class MovementController extends Controller
                       ->orderBy('products.name', $sortOrder)
                       ->select('movements.*');
                 break;
-            case 'quantity':
-                $query->orderBy('quantity', $sortOrder);
-                break;
             default:
                 $query->orderBy('movement_date', $sortOrder);
                 break;
@@ -105,7 +102,6 @@ class MovementController extends Controller
                 'exists:services,id',
                 'different:from_service_id'
             ],
-            'quantity' => 'required|integer|min:1',
             'note' => 'nullable|string',
         ]);
         $product = Product::findOrFail($request->product_id);
@@ -123,7 +119,6 @@ class MovementController extends Controller
             'product_id' => $request->product_id,
             'from_service_id' => $request->from_service_id,
             'to_service_id' => $request->to_service_id,
-            'quantity' => $request->quantity,
             'user_id' => Auth::id(),
             'note' => $request->note,
         ]);

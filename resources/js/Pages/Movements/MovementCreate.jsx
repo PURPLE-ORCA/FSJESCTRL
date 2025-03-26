@@ -39,6 +39,7 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { TranslationContext } from "@/context/TranslationProvider";
+import StayOut from "@/Components/StayOut";
 
 const MovementCreate = () => {
     const {
@@ -54,42 +55,13 @@ const MovementCreate = () => {
         product_id: null,
         from_service_id: parseInt(user_service_id),
         to_service_id: null,
-        quantity: 0,
         note: "",
     });
 
     // Unauthorized: No permission to create movements
     if (!canManageMovements) {
         return (
-            <Layout>
-                <Card className="max-w-md mx-auto my-20">
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <ArrowLeft className="w-6 h-6 text-yellow-500" />
-                            {translations.access_denied || "Access Denied"}
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <Alert variant="destructive">
-                            <ArrowLeft className="h-4 w-4" />
-                            <AlertTitle>
-                                {translations.permission_error ||
-                                    "Permission Error"}
-                            </AlertTitle>
-                            <AlertDescription>
-                                {translations.no_permission ||
-                                    "You do not have permission to view this page."}
-                            </AlertDescription>
-                        </Alert>
-                        <Button className="mt-4 w-full" asChild>
-                            <Link href={route("dashboard")}>
-                                {translations.return_to_dashboard ||
-                                    "Return to Dashboard"}
-                            </Link>
-                        </Button>
-                    </CardContent>
-                </Card>
-            </Layout>
+            <StayOut/>
         );
     }
 
@@ -148,7 +120,6 @@ const MovementCreate = () => {
         form.setData({
             ...form.data,
             product_id: product.id,
-            quantity: product.quantity,
         });
     };
 
@@ -241,12 +212,6 @@ const MovementCreate = () => {
             `${translations.to_service || "To Service"}: ${
                 toService ? toService.name : "N/A"
             }`,
-            contentX,
-            contentY
-        );
-        contentY += lineSpacing;
-        doc.text(
-            `${translations.quantity || "Quantity"}: ${form.data.quantity}`,
             contentX,
             contentY
         );
@@ -471,62 +436,6 @@ const MovementCreate = () => {
                                         <p className="mt-1 text-sm text-red-600 flex items-center gap-1">
                                             <ArrowLeft className="h-4 w-4" />
                                             {form.errors.to_service_id}
-                                        </p>
-                                    )}
-                                </div>
-
-                                {/* Quantity */}
-                                <div className="col-span-1">
-                                    <div className="flex items-center justify-between">
-                                        <Label
-                                            htmlFor="quantity"
-                                            className="text-base font-medium"
-                                        >
-                                            {translations.quantity ||
-                                                "Quantity"}
-                                        </Label>
-                                        <TooltipProvider>
-                                            <Tooltip>
-                                                <TooltipTrigger asChild>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        className="h-6 w-6"
-                                                    >
-                                                        <ArrowLeft className="h-4 w-4" />
-                                                    </Button>
-                                                </TooltipTrigger>
-                                                <TooltipContent>
-                                                    <p>
-                                                        {translations.items_to_move ||
-                                                            "Number of items to move"}
-                                                    </p>
-                                                </TooltipContent>
-                                            </Tooltip>
-                                        </TooltipProvider>
-                                    </div>
-                                    <div className="mt-1 relative">
-                                        <Input
-                                            id="quantity"
-                                            type="number"
-                                            min="1"
-                                            placeholder="0"
-                                            value={form.data.quantity}
-                                            onChange={(e) => {
-                                                const value =
-                                                    parseInt(e.target.value) ||
-                                                    0;
-                                                form.setData("quantity", value);
-                                            }}
-                                        />
-                                        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                            <ArrowLeft className="h-4 w-4 text-gray-400" />
-                                        </div>
-                                    </div>
-                                    {form.errors.quantity && (
-                                        <p className="mt-1 text-sm text-red-600 flex items-center gap-1">
-                                            <ArrowLeft className="h-4 w-4" />
-                                            {form.errors.quantity}
                                         </p>
                                     )}
                                 </div>

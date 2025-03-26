@@ -70,20 +70,6 @@ const MovementCard = ({ movement }) => {
                                 </div>
                                 <div className="flex items-center">
                                     <Icon
-                                        icon="mdi:counter"
-                                        className="w-5 h-5 text-main mr-2"
-                                    />
-                                    <span className="font-semibold text-lg">
-                                        {translations.quantity
-                                            ? translations.quantity + ":"
-                                            : "Quantity:"}
-                                    </span>
-                                    <span className="ml-1 text-lg text-gray-600">
-                                        {movement.quantity}
-                                    </span>
-                                </div>
-                                <div className="flex items-center">
-                                    <Icon
                                         icon="mdi:account"
                                         className="w-5 h-5 text-main mr-2"
                                     />

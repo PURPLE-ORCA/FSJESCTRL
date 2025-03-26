@@ -208,7 +208,6 @@ class DatabaseSeeder extends Seeder
                 'product_id' => 1, // Mop
                 'from_service_id' => 1, // Cleaning Service
                 'to_service_id' => 3, // Maintenance Service
-                'quantity' => 10,
                 'movement_date' => now(),
                 'user_id' => 1, // Admin User
                 'note' => 'Moved 10 mops to Maintenance Service',
@@ -217,7 +216,6 @@ class DatabaseSeeder extends Seeder
                 'product_id' => 2, // Broom
                 'from_service_id' => 1, // Cleaning Service
                 'to_service_id' => 3, // Maintenance Service
-                'quantity' => 5,
                 'movement_date' => now(),
                 'user_id' => 2, // Editor User
                 'note' => 'Moved 5 brooms to Maintenance Service',

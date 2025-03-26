@@ -24,7 +24,6 @@ const MovementList = () => {
             label: translations.product_name || "Product Name",
             value: "product_name",
         },
-        { label: translations.quantity || "Quantity", value: "quantity" },
     ];
 
     // Define filter options with translations

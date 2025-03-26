@@ -14,7 +14,6 @@ class Movement extends Model
         'product_id',
         'from_service_id',
         'to_service_id',
-        'quantity',
         'movement_date',
         'user_id',
         'note',

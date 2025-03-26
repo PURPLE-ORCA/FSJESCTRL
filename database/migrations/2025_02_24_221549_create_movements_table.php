@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained('products');
             $table->foreignId('from_service_id')->constrained('services');
             $table->foreignId('to_service_id')->constrained('services');
-            $table->unsignedInteger('quantity');
             $table->timestamp('movement_date')->useCurrent();
             $table->foreignId('user_id')->constrained();
             $table->text('note')->nullable();
