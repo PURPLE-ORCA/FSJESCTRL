@@ -9,7 +9,6 @@ FSJESStockManager est construit avec **Laravel, Inertia.js, React et PostgreSQL*
 - **Base de données :** PostgreSQL
 - **Style :** Tailwind CSS
 - **Authentification :** Laravel Breeze
-- **Mise en cache :** Redis (optionnel)
 
 ## Structure du Projet
 ```
