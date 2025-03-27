@@ -57,6 +57,7 @@
     "reset": "إعادة تعيين",
     "creating": "جارٍ الإنشاء...",
     "create_service": "إنشاء خدمة",
+    "action_create": "تسجيل تدخل",
     "service_created_successfully": "تم إنشاء الخدمة بنجاح",
     "failed_to_create_service": "فشل في إنشاء الخدمة",
     "product_list": "قائمة المنتجات",
@@ -83,7 +84,7 @@
     "associated_service": "الخدمة المرتبطة",
     "select_a_service": "اختر خدمة",
     "saving": "جارٍ الحفظ...",
-    "create_product": "إنشاء المنتج",
+    "create_product": "إنشاء منتج",
     "edit_service": "تعديل الخدمة",
     "update_service": "تحديث الخدمة",
     "edit_product": "تعديل المنتج",
@@ -116,7 +117,7 @@
     "add_note_optional": "أضف ملاحظة (اختياري)",
     "export_pdf": "تصدير PDF",
     "processing": "جاري المعالجة...",
-    "create_movement": "إنشاء الحركة",
+    "create_movement": "إنشاء حركة",
     "to": "إلى",
     "user": "المستخدم",
     "na": "غير متوفر",
@@ -141,5 +142,8 @@
     "details_about_related_product": "تفاصيل حول المنتج ذي الصلة",
     "action_history": "سجل التدخلات",
     "timeline_of_actions": "الجدول الزمني للإجراءات على هذا المنتج",
-    "no_action_history": "لا يوجد سجل للإجراءات لهذا المنتج"
+    "no_action_history": "لا يوجد سجل للإجراءات لهذا المنتج",
+    "recent_movements": "الحركات الأخيرة",
+    "top_products": "أفضل المنتجات",
+    "top5_products": "أفضل 5 منتجات"
 }

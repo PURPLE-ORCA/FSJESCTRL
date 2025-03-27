@@ -29,6 +29,11 @@ class Service extends Model
     {
         return $this->hasMany(Movement::class, 'to_service_id');
     }
+    
+    public function movements()
+    {
+        return $this->outgoingMovements()->union($this->incomingMovements());
+    }
 
     public function isMagazine(): bool
     {

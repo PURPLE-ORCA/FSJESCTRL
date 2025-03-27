@@ -1,7 +1,34 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import 'react-datepicker/dist/react-datepicker.css';
 
+.stat-card {
+  @apply bg-white p-6 rounded-lg shadow flex flex-col items-center;
+}
+
+.stat-card h2 {
+  @apply text-3xl font-bold text-gray-800 mb-2;
+}
+
+.stat-card span {
+  @apply text-gray-500 text-sm;
+}
+table {
+  @apply w-full text-sm;
+}
+
+th {
+  @apply font-medium text-gray-500 uppercase tracking-wider;
+}
+
+td, th {
+  @apply px-3 py-2;
+}
+
+tr:hover {
+  @apply bg-gray-50;
+}
 @layer base {
   :root {
     --background: 0 0% 100%;

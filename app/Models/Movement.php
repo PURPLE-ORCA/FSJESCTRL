@@ -52,6 +52,16 @@ class Movement extends Model
         return $this->belongsTo(Service::class, 'to_service_id');
     }
 
+    public function from_service()
+    {
+        return $this->belongsTo(Service::class, 'from_service_id');
+    }
+
+    // Define to_service relationship
+    public function to_service()
+    {
+        return $this->belongsTo(Service::class, 'to_service_id');
+    }
     /**
      * Get the user who initiated the movement.
      */

@@ -57,6 +57,7 @@
     "reset": "Réinitialiser",
     "creating": "Création...",
     "create_service": "Créer un service",
+    "action_create": "Enregistrer l'intervention",
     "service_created_successfully": "Service créé avec succès",
     "failed_to_create_service": "Échec de la création du service",
     "product_list": "Liste des produits",
@@ -141,5 +142,8 @@
     "details_about_related_product": "Détails concernant le produit associé",
     "action_history": "Historique des actions",
     "timeline_of_actions": "Chronologie des actions effectuées sur ce produit",
-    "no_action_history": "Aucun historique d'action disponible pour ce produit"
+    "no_action_history": "Aucun historique d'action disponible pour ce produit",
+    "recent_movements": "Mouvements récents",
+    "top_products": "Top Produits",
+    "top5_products": "Top 5 Produits"
 }

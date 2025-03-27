@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ActionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HelpRequestController;
 use App\Http\Controllers\MovementController;
 use App\Http\Controllers\ProfileController;
@@ -20,9 +21,13 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return Inertia::render('Dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/movements-analysis', [DashboardController::class, 'movementsAnalysis'])->name('dashboard.movements-analysis');
+    Route::get('/dashboard/most-active-users', [DashboardController::class, 'mostActiveUsers'])->name('dashboard.most-active-users');
+    Route::get('/dashboard/help-requests-insights', [DashboardController::class, 'helpRequestsInsights'])->name('dashboard.help-requests-insights');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
