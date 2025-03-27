@@ -1,29 +1,31 @@
-# Developer Documentation
+# Documentation Développeur
 
 ## Introduction
-FSJESCTRL is built with **Laravel, Inertia.js, React, and PostgreSQL**. This guide provides an overview of the architecture, database schema, API endpoints, and caching strategies.
+FSJESStockManager est construit avec **Laravel, Inertia.js, React et PostgreSQL**. Ce guide fournit une vue d'ensemble de l'architecture, du schéma de base de données, des points de terminaison API et des stratégies de mise en cache.
 
-## Tech Stack
-- **Backend:** Laravel 11 (PHP 8.1+)
-- **Frontend:** React with Inertia.js
-- **Database:** PostgreSQL
-- **Styling:** Tailwind CSS
-- **Authentication:** Laravel Breeze
+## Stack Technologique
+- **Backend :** Laravel 12 (PHP 8.1+)
+- **Frontend :** React avec Inertia.js
+- **Base de données :** PostgreSQL
+- **Style :** Tailwind CSS
+- **Authentification :** Laravel Breeze
+- **Mise en cache :** Redis (optionnel)
 
-## Project Structure
+## Structure du Projet
 ```
-FSJESCTRL/
-│── app/              # Laravel backend logic
-│── database/         # Migrations and seeders
-│── resources/js/     # React frontend components
+FSJESStockManager/
+│── app/              # Logique backend Laravel
+│── database/         # Migrations et seeders
+│── resources/js/     # Composants frontend React
 │── routes/          
-│   ├── web.php       # Web routes
-│── public/           # Public assets
-│── storage/          # Logs & uploaded files
-│── .env.example      # Environment variables
+│   ├── web.php       # Routes web
+│   ├── api.php       # Routes API
+│── public/           # Fichiers publics
+│── storage/          # Logs et fichiers uploadés
+│── .env.example      # Variables d'environnement
 ```
 
-## Database Schema
+## Schéma de Base de Données
 ### Tables
 - **services** (id, name, description, type, timestamps)
 - **products** (id, name, serial_number, supplier, price, timestamps)
@@ -33,47 +35,48 @@ FSJESCTRL/
 - **notifications** (id, user_id, type, message, is_read, read_at, timestamps)
 - **help_requests** (id, user_id, product_id, description, status, timestamps)
 
-## API Endpoints
-### Authentication
-- `POST /login` → Authenticate user
-- `POST /logout` → Logout user
+## Points de terminaison API
+### Authentification
+- `POST /login` → Authentifier un utilisateur
+- `POST /logout` → Déconnecter un utilisateur
 
-### Stock Management
-- `GET /products` → List all products
-- `POST /products` → Create a new product
-- `PUT /products/{id}` → Update a product
-- `DELETE /products/{id}` → Delete a product
+### Gestion du Stock
+- `GET /products` → Lister tous les produits
+- `POST /products` → Créer un nouveau produit
+- `PUT /products/{id}` → Mettre à jour un produit
+- `DELETE /products/{id}` → Supprimer un produit
 
 ### Services
-- `GET /services` → List all services
-- `POST /services` → Create a new service
-- `PUT /services/{id}` → Update a service
-- `DELETE /services/{id}` → Delete a service
+- `GET /services` → Lister tous les services
+- `POST /services` → Créer un nouveau service
+- `PUT /services/{id}` → Mettre à jour un service
+- `DELETE /services/{id}` → Supprimer un service
 
-### Movements
-- `GET /movements` → View all movements
-- `POST /movements` → Create a movement
-- `GET /movements/export` → Export movement data
+### Mouvements
+- `GET /movements` → Voir tous les mouvements
+- `POST /movements` → Enregistrer un mouvement
+- `GET /movements/export` → Exporter les données des mouvements
 
 ### Actions
-- `GET /actions` → View all actions
-- `POST /actions` → Log a new action
+- `GET /actions` → Voir toutes les actions
+- `POST /actions` → Enregistrer une nouvelle action
 
-### Help Requests
-- `GET /help-requests` → View all requests
-- `POST /help-requests` → Submit a request
-- `PUT /help-requests/{id}/status` → Update request status
-- `GET /help-requests/pending-count` → Get pending request count
-- `POST /help-requests/mark-as-read` → Mark all as read
+### Demandes d'Assistance
+- `GET /help-requests` → Voir toutes les demandes
+- `POST /help-requests` → Soumettre une demande
+- `PUT /help-requests/{id}/status` → Mettre à jour le statut d'une demande
+- `GET /help-requests/pending-count` → Nombre de demandes en attente
+- `POST /help-requests/mark-as-read` → Marquer toutes les demandes comme lues
 
-## Caching Strategy
-- **Stock Data:** Cached for **5 minutes** using Laravel Cache.
+## Stratégie de Mise en Cache
+- **Données du Stock :** Mise en cache pour **5 minutes** via Laravel Cache.
+- **Analytique :** Mise en cache avec mises à jour quotidiennes via Redis.
 
-## Development Setup
-1. Clone the repository and install dependencies.
-2. Set up the `.env` file with correct database credentials.
-3. Run migrations and seed data: `php artisan migrate --seed`
-4. Start the local server: `php artisan serve`
+## Configuration pour le Développement
+1. Cloner le dépôt et installer les dépendances.
+2. Configurer le fichier `.env` avec les informations de la base de données.
+3. Exécuter les migrations et insérer les données : `php artisan migrate --seed`
+4. Démarrer le serveur local : `php artisan serve`
 
 ---
-
+Pour plus de détails sur l'installation, consultez le [Guide d'Installation](installation-guide.md).

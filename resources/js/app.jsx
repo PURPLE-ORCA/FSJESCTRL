@@ -21,6 +21,15 @@ createInertiaApp({
 
         root.render(
             <TranslationProvider>
+                <p className="text-center text-muted font-italic bg-gradient-to-br from-main to-black text-white">
+                    DEVELOPPED BY{" "}
+                    <a
+                        href="https://github.com/PURPLE-ORCA"
+                        className="text-purple-400 hover:text-purple-500"
+                    >
+                        EL MOUSSAOUI MOHAMMED
+                    </a>
+                </p>
                 <App {...props} />
             </TranslationProvider>
         );

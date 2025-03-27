@@ -1,35 +1,38 @@
-DEVELOPED AND POWERED BY EL MOUSSAOUI MOHAMMED
+**DÉVELOPPÉ ET PROPULSÉ PAR EL MOUSSAOUI MOHAMMED**
 
-# FSJESStockManager Documentation
+# Documentation de FSJESStockManager
 
-## Table of Contents
+## Table des Matières
+
 - [Introduction](#introduction)
-- [Installation Guide](docs/installation-guide.md)
-- [User Guide](docs/user-guide.md)
-- [Developer Docs](docs/developer-docs.md)
+- [Guide d'Installation](docs/installation-guide.md)
+- [Guide Utilisateur](docs/user-guide.md)
+- [Documentation Développeur](docs/developer-docs.md)
 
 ---
 
 ## Introduction
-FSJESStockManager is an inventory management web application built with Laravel, Inertia.js, and React. It provides role-based access, stock tracking, analytics, notifications, and an IT service ticketing system.
 
-### Features
-- Role-based access control
-- Stock management (add, update, delete items with search and filtering options)
-- Products situation tracking
-- Help request tracking
-- Exporting data and requests documents 
-- Inertia.js partial reloads for notifications
+FSJESStockManager est une application web de gestion des stocks développée avec Laravel, Inertia.js et React. Elle offre un contrôle d'accès basé sur les rôles, un suivi des stocks, des analyses, des notifications et un système de gestion des demandes d'assistance informatique.
+
+### Fonctionnalités
+
+- Gestion des accès basée sur les rôles
+- Gestion des stocks (ajout, mise à jour, suppression avec options de recherche et de filtrage)
+- Suivi de la situation des produits
+- Gestion des demandes d'assistance
+- Exportation des données et des documents de demande
+- Rechargements partiels d’Inertia.js pour les notifications
 
 ---
 
 ## Documentation
-### Installation Guide
-Refer to [Installation Guide](docs/installation-guide.md) for setup instructions.
 
-### User Guide
-Refer to [User Guide](docs/user-guide.md) for detailed usage instructions.
+### Guide d'Installation
+Consultez le [Guide d'Installation](docs/installation-guide.md) pour les instructions de configuration.
 
-### Developer Docs
-Refer to [Developer Docs](docs/developer-docs.md) for technical details and API documentation.
+### Guide Utilisateur
+Consultez le [Guide Utilisateur](docs/user-guide.md) pour des instructions détaillées sur l'utilisation de l'application.
 
+### Documentation Développeur
+Consultez la [Documentation Développeur](docs/developer-docs.md) pour des détails techniques et la documentation API.

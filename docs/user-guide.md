@@ -1,98 +1,99 @@
-# User Guide
+# Guide Utilisateur
 
 ## Introduction
-FSJESCTRL is an inventory management system designed to help you track stock, manage user roles, and generate analytics.
+FSJESCTRL est un système de gestion des stocks conçu pour vous aider à suivre l'inventaire, gérer les rôles des utilisateurs et générer des analyses.
 
-## Getting Started
+## Premiers Pas
 
-### Logging In
-1. Open the browser and go to `http://127.0.0.1:8000/login`.
-2. Enter the credentials and click **Login**.
+### Connexion
+1. Ouvrez votre navigateur et accédez à `http://127.0.0.1:8000/login`.
+2. Entrez vos identifiants et cliquez sur **Connexion**.
 
-### Dashboard Overview
-Once logged in, you will see an overview of:
-- **Quick access links**
-- **Levels**
-- **Recent Transactions**
-- **Top proudcts**
+### Aperçu du Tableau de Bord
+Une fois connecté, vous verrez un aperçu comprenant :
+- **Liens d'accès rapide**
+- **Niveaux**
+- **Transactions récentes**
+- **Produits les plus utilisés**
 
-### Navigation Bar Overview
-The navigation bar contain three parts: Brand, Navigation Links and Tools.
-- **Navigation Links** : Links to the Management pages pages.
-- **Tools** : have a Light/Dark Theme toggler, Language togller, Notifications panel and account settings.
+### Aperçu de la Barre de Navigation
+La barre de navigation est composée de trois parties : la Marque, les Liens de Navigation et les Outils.
+- **Liens de Navigation** : Liens vers les pages de gestion.
+- **Outils** : Inclut un basculeur de thème clair/sombre, un sélecteur de langue, un panneau de notifications et les paramètres du compte.
 
-## Managing Users
+## Gestion des Utilisateurs
 
-### Updating a User
-1. Click the roles dropdown to get the roles.
-2. Click on the role you wanna give to the user.
+### Modifier un Utilisateur
+1. Cliquez sur le menu déroulant des rôles pour afficher les rôles disponibles.
+2. Sélectionnez le rôle que vous souhaitez attribuer à l'utilisateur.
 
-### Deleting a User
-1. Locate the User in the **Users List**.
-2. Click the **Delete** button.
-3. Confirm the deletion.
+### Supprimer un Utilisateur
+1. Trouvez l'utilisateur dans la **Liste des Utilisateurs**.
+2. Cliquez sur le bouton **Supprimer**.
+3. Confirmez la suppression.
 
-## Managing Services
+## Gestion des Services
 
-### Adding a New Service
-1. Navigate to **Services**.
-2. Click **Add New Service**.
-3. Fill in the service details (name, description etc.).
-4. Click **Save the service**.
+### Ajouter un Nouveau Service
+1. Accédez à **Services**.
+2. Cliquez sur **Ajouter un Nouveau Service**.
+3. Remplissez les détails du service (nom, description, etc.).
+4. Cliquez sur **Enregistrer le Service**.
 
-### Updating a Service
-1. In the **Services List**, find the service to edit.
-2. Click **Edit**.
-3. Modify the necessary details.
-4. Click **Update**.
+### Modifier un Service
+1. Dans la **Liste des Services**, trouvez le service à modifier.
+2. Cliquez sur **Modifier**.
+3. Apportez les modifications nécessaires.
+4. Cliquez sur **Mettre à Jour**.
 
-### Deleting a Service
-1. Locate the service in the **Services List**.
-2. Click the **Delete** button.
-3. Confirm the deletion.
+### Supprimer un Service
+1. Trouvez le service dans la **Liste des Services**.
+2. Cliquez sur le bouton **Supprimer**.
+3. Confirmez la suppression.
 
-## Managing Stock
+## Gestion des Stocks
 
-### Adding a New Item
-1. Navigate to **Prouducts**.
-2. Click **Add New Product**.
-3. Fill in the item details (name, serial number, category, etc.).
-4. Click **Save the product**.
+### Ajouter un Nouveau Produit
+1. Accédez à **Produits**.
+2. Cliquez sur **Ajouter un Nouveau Produit**.
+3. Remplissez les détails du produit (nom, numéro de série, catégorie, etc.).
+4. Cliquez sur **Enregistrer le Produit**.
 
-### Updating an Item
-1. In the **Stock List**, find the item to edit.
-2. Click **Edit**.
-3. Modify the necessary details.
-4. Click **Update**.
+### Modifier un Produit
+1. Dans la **Liste des Stocks**, trouvez le produit à modifier.
+2. Cliquez sur **Modifier**.
+3. Apportez les modifications nécessaires.
+4. Cliquez sur **Mettre à Jour**.
 
-### Deleting an Item
-1. Locate the item in the **Stock List**.
-2. Click the **Delete** button.
-3. Confirm the deletion.
+### Supprimer un Produit
+1. Trouvez le produit dans la **Liste des Stocks**.
+2. Cliquez sur le bouton **Supprimer**.
+3. Confirmez la suppression.
 
-## Managing Transactions
+## Gestion des Transactions
 
-### Adding a New Transaction
-1. Navigate to **Transactions**.
-2. Click **Add New Transaction**.
-3. Fill in the transaction details (product, to wich service, etc.).
-4. Click **Save the Transaction**.
+### Ajouter une Nouvelle Transaction
+1. Accédez à **Transactions**.
+2. Cliquez sur **Ajouter une Nouvelle Transaction**.
+3. Remplissez les détails de la transaction (produit, service concerné, etc.).
+4. Cliquez sur **Enregistrer la Transaction**.
 
-## Ticketing system
+## Système de Tickets
 
-### Adding a New help request
-1. Navigate to **Hrequest help**.
-2. Fill in the request details (product, problem description, etc.).
-3. Click **Requst help**.
--- When help is requested you get a notification instantaly.
+### Ajouter une Nouvelle Demande d'Assistance
+1. Accédez à **Demander de l'Aide**.
+2. Remplissez les détails de la demande (produit, description du problème, etc.).
+3. Cliquez sur **Demander de l'Aide**.
 
-### Managing help request
-1. Navigate to **Help requests** to see the overview of the help requests, it contain all the request and product information with the actions log history on that product.
-2. You can edit the request status to [pending, started, solved or closed]
+--- Lorsqu'une demande d'aide est envoyée, vous recevez une notification instantanément.
 
+### Gérer les Demandes d'Assistance
+1. Accédez à **Demandes d'Aide** pour voir un aperçu des demandes. Cette page affiche toutes les demandes avec les informations sur les produits et l'historique des actions.
+2. Vous pouvez modifier le statut de la demande en **[En attente, En cours, Résolu, Fermé]**.
 
-## Data Export 
-1. All Data list give a data export option with CSV, Excel and PDF on top of the tables.
-2. You can export raw data or use Filters, Sort and search to customize the data.
+## Exportation des Données
+1. Toutes les listes de données offrent une option d'exportation au format **CSV, Excel ou PDF**.
+2. Vous pouvez exporter les données brutes ou utiliser des **Filtres, le Tri et la Recherche** pour personnaliser l'exportation.
 
 ---
+
